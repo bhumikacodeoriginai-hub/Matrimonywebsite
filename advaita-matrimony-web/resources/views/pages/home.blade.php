@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Advaita Matrimony | Where Every Heart Finds Its Match')
+@section('title', 'Advaita Matrimony | Two Journeys. One Beginning.')
 
 @php
     $images = config('advaita_images');
@@ -219,8 +219,14 @@
         .profile-frame, .profile-frame:nth-child(2), .profile-frame:nth-child(3), .profile-frame:hover, .profile-frame:nth-child(2):hover, .profile-frame:nth-child(3):hover, .community-card { transform: none; transition: none; }
         .profile-frame-image img, .community-card img, .story-card img { transition: none; }
     }
+    .journey-signature-home { position: relative; width: min(330px, 82%); height: 54px; margin: 1.15rem 0 .25rem; opacity: .92; }
+    .journey-signature-home::before, .journey-signature-home::after { content: ''; position: absolute; top: 50%; width: 55%; height: 28px; border-top: 1px solid rgba(231,207,161,.88); }
+    .journey-signature-home::before { right: 50%; border-radius: 100% 0 0 0; transform: translateY(-50%) rotate(8deg); transform-origin: right center; }
+    .journey-signature-home::after { left: 50%; border-radius: 0 100% 0 0; transform: translateY(-50%) rotate(-8deg); transform-origin: left center; }
+    .journey-signature-home span { position: absolute; top: 50%; left: 50%; width: 7px; height: 7px; border-radius: 50%; background: var(--color-gold-300); box-shadow: 0 0 0 9px rgba(231,207,161,.15); transform: translate(-50%, -50%); }
+    .journey-caption-home { color: rgba(255,252,248,.64); font-size: .62rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+    @media (prefers-reduced-motion: reduce) { .journey-signature-home::before, .journey-signature-home::after { transform: translateY(-50%); } }
 </style>
-@endpush
 
 @section('content')
 <div class="home-page">
@@ -250,7 +256,9 @@
             </div>
             <div class="hero-copy">
                 <p class="eyebrow text-gold-300 mb-6">India's inclusive matrimony</p>
-                <h1 class="hero-title serif"><span class="hero-title-line">Where every</span><span class="hero-title-line"><em>heart</em> finds</span><span class="hero-title-line">its match.</span></h1>
+                <h1 class="hero-title serif"><span class="hero-title-line">Two</span><span class="hero-title-line"><em>journeys.</em></span><span class="hero-title-line">One beginning.</span></h1>
+                <div class="journey-signature-home" aria-hidden="true"><span></span></div>
+                <p class="journey-caption-home">Meet with intention, not pressure.</p>
                 <p class="mt-8 max-w-lg text-base sm:text-lg leading-relaxed text-white/72">A thoughtful place to meet someone who understands your values, your family, and the life you want to build together.</p>
                 <div class="mt-9 flex flex-wrap gap-3">
                     <a href="{{ route('register') }}" class="btn-premium btn-gold-premium btn-lg magnetic-home">Begin your story <span aria-hidden="true">↗</span></a>

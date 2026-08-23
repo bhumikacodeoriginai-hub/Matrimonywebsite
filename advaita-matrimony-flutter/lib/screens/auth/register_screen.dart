@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../theme/app_theme.dart';
+import '../../widgets/journey_line.dart';
+import '../../widgets/advaita_mark.dart';
 import '../home/home_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -38,28 +40,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFF1E40AF), Color(0xFF7C3AED)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
+          gradient: AppColors.primaryGradient,
         ),
         child: SafeArea(
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(24),
             child: Column(
               children: [
-                const SizedBox(height: 20),
-                const Text('Create Account', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white)),
-                const SizedBox(height: 8),
-                const Text('Start your journey to find your perfect match', style: TextStyle(color: Colors.white70, fontSize: 14)),
-                const SizedBox(height: 30),
+                const AdvaitaMark(onDark: true),
+                const SizedBox(height: 22),
+                Text('Begin with intention', style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.w600)),
+                const SizedBox(height: 6),
+                const Text('Two journeys. One beginning.', style: TextStyle(color: AppColors.goldLight, fontSize: 13, letterSpacing: .3)),
+                const Padding(padding: EdgeInsets.symmetric(vertical: 6), child: JourneyLine(height: 62, animate: true)),
 
                 // Registration Form
                 Container(
                   padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.surface,
                     borderRadius: BorderRadius.circular(24),
                     boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 30, offset: const Offset(0, 10))],
                   ),

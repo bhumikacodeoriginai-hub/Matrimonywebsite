@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/subscription_provider.dart';
 import '../../theme/app_theme.dart';
+import '../../widgets/journey_line.dart';
 
 class SubscriptionScreen extends StatefulWidget {
   const SubscriptionScreen({super.key});
@@ -40,13 +41,14 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                     gradient: AppColors.primaryGradient,
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: const Column(
+                  child: Column(
                     children: [
-                      Icon(Icons.workspace_premium, size: 48, color: Colors.white),
-                      SizedBox(height: 12),
-                      Text('Upgrade to Premium', style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
-                      SizedBox(height: 6),
-                      Text('Unlock all features & find your match faster',
+                      const Icon(Icons.workspace_premium, size: 48, color: Colors.white),
+                      const SizedBox(height: 12),
+                      Text('A more intentional membership', style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Colors.white, fontWeight: FontWeight.w600)),
+                      const SizedBox(height: 6),
+                      const JourneyLine(height: 48, animate: true),
+                      const Text('Unlock all features & find your match faster',
                           style: TextStyle(color: Colors.white70, fontSize: 14), textAlign: TextAlign.center),
                     ],
                   ),

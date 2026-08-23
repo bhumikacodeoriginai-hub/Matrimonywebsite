@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import '../../providers/auth_provider.dart';
 import '../../theme/app_theme.dart';
+import '../../widgets/journey_line.dart';
+import '../../widgets/advaita_mark.dart';
 import '../home/home_screen.dart';
 import 'register_screen.dart';
 
@@ -31,6 +33,10 @@ class _LoginScreenState extends State<LoginScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildEditorialHeader(textTheme),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: JourneyLine(height: 72, animate: true),
+              ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 24, 20, 32),
                 child: Column(
@@ -108,19 +114,13 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 Row(
                   children: [
-                    Container(
-                      width: 42,
-                      height: 42,
-                      decoration: BoxDecoration(color: AppColors.goldLight, borderRadius: BorderRadius.circular(12)),
-                      alignment: Alignment.center,
-                      child: Text('A', style: textTheme.headlineSmall?.copyWith(color: AppColors.primaryDark, fontWeight: FontWeight.w700)),
-                    ),
-                    const SizedBox(width: 12),
-                    Text('ADVAITA', style: textTheme.labelLarge?.copyWith(color: AppColors.goldLight, letterSpacing: 2.4, fontWeight: FontWeight.w700)),
+                    const AdvaitaMark(compact: true, onDark: true),
                   ],
                 ),
                 const SizedBox(height: 18),
-                Text('Where every heart finds its match.', style: textTheme.headlineMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.w500, height: 1.02)),
+                Text('Two journeys.\nOne beginning.', style: textTheme.headlineMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.w500, height: 1.02)),
+                const SizedBox(height: 8),
+                Text('A more thoughtful way to meet.', style: textTheme.bodySmall?.copyWith(color: Colors.white70)),
               ],
             ),
           ),

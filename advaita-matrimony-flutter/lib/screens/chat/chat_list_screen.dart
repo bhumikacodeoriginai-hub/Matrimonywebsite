@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/chat_provider.dart';
 import '../../theme/app_theme.dart';
+import '../../widgets/journey_line.dart';
 
 class ChatListScreen extends StatefulWidget {
   const ChatListScreen({super.key});
@@ -21,7 +22,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Messages'),
+        title: const Text('Conversations'),
         actions: [
           IconButton(icon: const Icon(Icons.search), onPressed: () {}),
         ],
@@ -39,7 +40,8 @@ class _ChatListScreenState extends State<ChatListScreen> {
                 children: [
                   Icon(Icons.chat_bubble_outline, size: 80, color: Colors.grey.shade300),
                   const SizedBox(height: 20),
-                  const Text('No conversations yet', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+                  const Padding(padding: EdgeInsets.symmetric(horizontal: 32), child: JourneyLine(height: 56, animate: true)),
+                  const Text('No conversations yet', style: TextStyle(fontSize: 21, fontWeight: FontWeight.w600)),
                   const SizedBox(height: 8),
                   Text('Accept an interest to start chatting', style: TextStyle(color: Colors.grey.shade500)),
                 ],

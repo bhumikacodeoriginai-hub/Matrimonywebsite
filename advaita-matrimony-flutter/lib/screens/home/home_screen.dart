@@ -5,6 +5,8 @@ import '../../providers/auth_provider.dart';
 import '../../providers/match_provider.dart';
 import '../../providers/chat_provider.dart';
 import '../../theme/app_theme.dart';
+import '../../widgets/advaita_mark.dart';
+import '../../widgets/journey_line.dart';
 import '../search/search_screen.dart';
 import '../matches/matches_screen.dart';
 import '../chat/chat_list_screen.dart';
@@ -140,27 +142,7 @@ class _HomeTabState extends State<_HomeTab> {
             floating: true,
             surfaceTintColor: Colors.transparent,
             backgroundColor: AppColors.background.withOpacity(0.96),
-            title: Row(
-              children: [
-                Container(
-                  width: 36,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    gradient: AppColors.primaryGradient,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Center(child: Text('A', style: TextStyle(color: AppColors.goldLight, fontWeight: FontWeight.bold, fontSize: 20, fontStyle: FontStyle.italic))),
-                ),
-                const SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Advaita', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 21)),
-                    const Text('M A T R I M O N Y', style: TextStyle(fontSize: 8, color: AppColors.textSecondary, letterSpacing: 1.4, fontWeight: FontWeight.w700)),
-                  ],
-                ),
-              ],
-            ),
+            title: const AdvaitaMark(),
             actions: [
               IconButton(
                 icon: const Icon(Icons.notifications_outlined),
@@ -184,15 +166,12 @@ class _HomeTabState extends State<_HomeTab> {
                 builder: (_, auth, __) => Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Hi ${auth.userData?['name']?.split(' ').first ?? 'User'}! 👋',
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: AppColors.background, fontSize: 28),
-                    ),
+                    Text('Hi ${auth.userData?['name']?.split(' ').first ?? 'there'}', style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: AppColors.background, fontSize: 30)),
                     const SizedBox(height: 4),
-                    const Text(
-                      'Your next chapter could begin today',
-                      style: TextStyle(color: AppColors.goldLight, fontSize: 13, letterSpacing: 0.2),
-                    ),
+                    const Text('Two journeys. One beginning.', style: TextStyle(color: AppColors.goldLight, fontSize: 13, letterSpacing: .3)),
+                    const SizedBox(height: 2),
+                    const Text('Your next chapter could begin today.', style: TextStyle(color: Colors.white70, fontSize: 12)),
+                    const JourneyLine(height: 48, animate: true),
                     const SizedBox(height: 16),
                     Row(
                       children: [
@@ -224,7 +203,7 @@ class _HomeTabState extends State<_HomeTab> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Browse by Community', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 22)),
+                  Text('Explore communities', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 23)),
                   const SizedBox(height: 12),
                   Row(
                     children: [
@@ -249,7 +228,7 @@ class _HomeTabState extends State<_HomeTab> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Curated for You', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 23)),
+                  Text('A considered introduction', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 23)),
                   TextButton(onPressed: () {}, child: const Text('View All')),
                 ],
               ),

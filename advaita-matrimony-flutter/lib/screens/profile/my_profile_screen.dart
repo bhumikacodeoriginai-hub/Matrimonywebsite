@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../theme/app_theme.dart';
+import '../../widgets/journey_line.dart';
 import '../../localization/app_localizations.dart';
 import '../auth/login_screen.dart';
 
@@ -57,6 +58,7 @@ class MyProfileScreen extends StatelessWidget {
                       Text(user?['name'] ?? 'User', style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
                       const SizedBox(height: 4),
                       Text(user?['unique_id'] ?? '', style: const TextStyle(color: Colors.white70, fontSize: 13)),
+                      const Padding(padding: EdgeInsets.symmetric(horizontal: 20), child: JourneyLine(height: 48, animate: true)),
                       const SizedBox(height: 12),
 
                       // Premium Badge

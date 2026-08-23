@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../theme/app_theme.dart';
+import '../../widgets/journey_line.dart';
 
 class MatchesScreen extends StatefulWidget {
   const MatchesScreen({super.key});
@@ -53,9 +54,10 @@ class _MatchesScreenState extends State<MatchesScreen> with SingleTickerProvider
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          const Padding(padding: EdgeInsets.symmetric(horizontal: 28), child: JourneyLine(height: 56, animate: true)),
           Icon(icon, size: 80, color: Colors.grey.shade300),
           const SizedBox(height: 20),
-          Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+          Text(title, style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 21)),
           const SizedBox(height: 8),
           Text(subtitle, style: TextStyle(color: Colors.grey.shade500), textAlign: TextAlign.center),
         ],

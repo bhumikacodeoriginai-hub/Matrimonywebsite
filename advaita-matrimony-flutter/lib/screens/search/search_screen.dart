@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/match_provider.dart';
 import '../../theme/app_theme.dart';
+import '../../widgets/journey_line.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -30,7 +31,7 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Search Profiles'),
+        title: const Text('Find with intention'),
         actions: [
           IconButton(
             icon: Icon(_showFilters ? Icons.filter_alt : Icons.filter_alt_outlined),
@@ -40,6 +41,7 @@ class _SearchScreenState extends State<SearchScreen> {
       ),
       body: Column(
         children: [
+          const Padding(padding: EdgeInsets.fromLTRB(20, 0, 20, 2), child: JourneyLine(height: 42, animate: true)),
           // Search Filters
           if (_showFilters)
             Container(
@@ -99,7 +101,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     min: 18,
                     max: 65,
                     divisions: 47,
-                    activeColor: AppColors.primary,
+                    activeColor: AppColors.gold,
                     onChanged: (v) => setState(() => _ageRange = v),
                   ),
 
@@ -151,8 +153,9 @@ class _SearchScreenState extends State<SearchScreen> {
                       children: [
                         Icon(Icons.search, size: 80, color: Colors.grey.shade300),
                         const SizedBox(height: 16),
-                        Text('Use the filters above to search profiles',
-                            style: TextStyle(color: Colors.grey.shade500, fontSize: 16)),
+                        Text('Start with the filters that matter to you', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600)),
+                        const SizedBox(height: 8),
+                        Text('Your next considered introduction is a few choices away.', textAlign: TextAlign.center, style: TextStyle(color: AppColors.textSecondary, fontSize: 13)),
                       ],
                     ),
                   );

@@ -3,9 +3,11 @@ import 'package:google_fonts/google_fonts.dart';
 
 /// Shared editorial-luxury design tokens used across the Advaita app.
 class AppColors {
+  // Core Advaita palette: trust, warmth, dignity, and a clear visual signature.
   static const Color primary = Color(0xFF54234C);
-  static const Color primaryLight = Color(0xFF6D2F63);
-  static const Color primaryDark = Color(0xFF2A1526);
+  static const Color primaryLight = Color(0xFF793B65);
+  static const Color primaryDark = Color(0xFF32152D);
+  static const Color wine = Color(0xFF793B65);
 
   static const Color accent = Color(0xFFD4577E);
   static const Color accentLight = Color(0xFFE8688F);
@@ -13,7 +15,8 @@ class AppColors {
   static const Color gold = Color(0xFFC19A5B);
   static const Color goldLight = Color(0xFFE7CFA1);
   static const Color rose = Color(0xFFD4577E);
-  static const Color green = Color(0xFF4C9B78);
+  static const Color sage = Color(0xFF4C9B78);
+  static const Color green = sage;
   static const Color orange = Color(0xFFBE7048);
 
   static const Color background = Color(0xFFFBF7F1);
@@ -23,6 +26,7 @@ class AppColors {
   static const Color textHint = Color(0xFFA69BA2);
   static const Color divider = Color(0xFFE9DDD3);
   static const Color cardBg = Color(0xFFFFFCF8);
+  static const Color charcoal = Color(0xFF1C1420);
 
   static const Color categoryGeneral = Color(0xFFD4577E);
   static const Color categoryPhysical = Color(0xFF6D2F63);
@@ -30,13 +34,19 @@ class AppColors {
   static const Color categoryVitiligo = Color(0xFFC19A5B);
 
   static const LinearGradient primaryGradient = LinearGradient(
-    colors: [Color(0xFF2A1526), Color(0xFF54234C), Color(0xFF6D2F63)],
+    colors: [primaryDark, primary, wine],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
 
   static const LinearGradient goldGradient = LinearGradient(
-    colors: [Color(0xFFE7CFA1), Color(0xFFC19A5B)],
+    colors: [goldLight, gold],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+
+  static const LinearGradient ivoryGradient = LinearGradient(
+    colors: [Color(0xFFFFFCF8), Color(0xFFF2E9DD), Color(0xFFF8E8E7)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
@@ -47,6 +57,34 @@ class AppColors {
     end: Alignment.bottomRight,
   );
 }
+
+class AppSpacing {
+  static const double xs = 4;
+  static const double sm = 8;
+  static const double md = 16;
+  static const double lg = 24;
+  static const double xl = 32;
+  static const double xxl = 48;
+  static const double section = 64;
+}
+
+class AppRadii {
+  static const double sm = 10;
+  static const double md = 16;
+  static const double lg = 24;
+  static const double xl = 32;
+  static const double pill = 999;
+}
+
+class AppMotion {
+  static const Duration micro = Duration(milliseconds: 160);
+  static const Duration standard = Duration(milliseconds: 280);
+  static const Duration reveal = Duration(milliseconds: 440);
+  static const Duration cinematic = Duration(milliseconds: 800);
+  static const Curve easeOut = Curves.easeOutCubic;
+  static const Curve easeInOut = Curves.easeInOutCubic;
+}
+
 
 class AppTheme {
   static TextTheme _textTheme(TextTheme base) {
@@ -81,6 +119,17 @@ class AppTheme {
       scaffoldBackgroundColor: AppColors.background,
       colorScheme: scheme,
       textTheme: _textTheme(ThemeData.light().textTheme),
+      visualDensity: VisualDensity.standard,
+      splashFactory: InkSparkle.splashFactory,
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: {
+          TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.linux: FadeUpwardsPageTransitionsBuilder(),
+          TargetPlatform.macOS: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.windows: FadeUpwardsPageTransitionsBuilder(),
+        },
+      ),
       appBarTheme: AppBarTheme(
         backgroundColor: AppColors.background.withOpacity(0.94),
         foregroundColor: AppColors.textPrimary,
@@ -97,8 +146,9 @@ class AppTheme {
         color: AppColors.surface,
         elevation: 0,
         shadowColor: AppColors.primary.withOpacity(0.12),
+        margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(AppRadii.lg),
           side: const BorderSide(color: AppColors.divider),
         ),
       ),
@@ -108,7 +158,7 @@ class AppTheme {
           foregroundColor: AppColors.background,
           elevation: 0,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadii.md)),
           textStyle: GoogleFonts.plusJakartaSans(fontSize: 15, fontWeight: FontWeight.w700),
         ),
       ),
@@ -117,7 +167,7 @@ class AppTheme {
           foregroundColor: AppColors.primary,
           side: const BorderSide(color: AppColors.divider, width: 1.2),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 15),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadii.md)),
           textStyle: GoogleFonts.plusJakartaSans(fontSize: 15, fontWeight: FontWeight.w700),
         ),
       ),

@@ -1,208 +1,46 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Admin Dashboard')
+@section('title', 'Dashboard')
+
+@php
+    $categoryCounts = $stats['category_breakdown'] ?? [];
+    $maxCategory = max(1, ...array_values($categoryCounts));
+@endphp
 
 @section('content')
 <div class="space-y-8">
-    <!-- Welcome Header -->
-    <div class="flex justify-between items-center">
-        <div>
-            <h1 class="text-3xl font-bold text-gray-900">Dashboard Overview</h1>
-            <p class="text-gray-600 mt-1">Welcome back, Admin. Here's what's happening on Advaita Matrimony.</p>
-        </div>
-        <div class="flex space-x-3">
-            <button class="px-4 py-2 bg-primary-50 text-primary-700 rounded-lg font-medium hover:bg-primary-100">
-                <i class="fas fa-download mr-2"></i>Export Report
-            </button>
-            <a href="/admin/profiles/pending" class="px-4 py-2 bg-orange-500 text-white rounded-lg font-medium hover:bg-orange-600 relative">
-                <i class="fas fa-user-clock mr-2"></i>Pending Approvals
-                @if($stats['pending_approval'] > 0)
-                    <span class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">{{ $stats['pending_approval'] }}</span>
-                @endif
-            </a>
-        </div>
-    </div>
+    <section class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5">
+        <div><p class="text-[11px] uppercase tracking-[.18em] text-gold-600 font-bold">Today at a glance</p><h2 class="admin-display text-5xl leading-none text-ink mt-3">Keep the community<br><em class="text-plum-700">moving with care.</em></h2><p class="text-sm text-ivory-600 mt-4 max-w-xl">Review the moments that need human attention first: new profiles, protected photos, verification, and member safety.</p></div>
+        <a href="{{ route('admin.profiles.pending') }}" class="btn btn-primary self-start lg:self-auto"><i class="fa-solid fa-user-check"></i> Review approvals @if(($stats['pending_approval'] ?? 0) > 0)<span class="bg-gold-300 text-plum-900 rounded-full px-2 py-1 text-xs">{{ $stats['pending_approval'] }}</span>@endif</a>
+    </section>
 
-    <!-- Stats Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm text-gray-500">Total Users</p>
-                    <p class="text-3xl font-bold text-gray-900 mt-1">{{ number_format($stats['total_users']) }}</p>
-                </div>
-                <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                    <i class="fas fa-users text-blue-600 text-xl"></i>
-                </div>
-            </div>
-            <p class="text-xs text-green-600 mt-3"><i class="fas fa-arrow-up mr-1"></i>+{{ $stats['today_registrations'] }} today</p>
-        </div>
+    <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4" aria-label="Key metrics">
+        <div class="admin-card admin-kpi p-5"><p class="text-xs text-ivory-600">Members</p><p class="admin-display text-4xl text-ink mt-2">{{ number_format($stats['total_users'] ?? 0) }}</p><p class="text-xs text-trust mt-2">{{ $stats['today_registrations'] ?? 0 }} joined today</p></div>
+        <div class="admin-card admin-kpi p-5"><p class="text-xs text-ivory-600">Awaiting review</p><p class="admin-display text-4xl text-ink mt-2">{{ number_format($stats['pending_approval'] ?? 0) }}</p><a href="{{ route('admin.profiles.pending') }}" class="text-xs text-plum-700 font-semibold mt-2 inline-block">Open queue →</a></div>
+        <div class="admin-card admin-kpi p-5"><p class="text-xs text-ivory-600">Premium members</p><p class="admin-display text-4xl text-ink mt-2">{{ number_format($stats['premium_users'] ?? 0) }}</p><p class="text-xs text-ivory-600 mt-2">Current active plans</p></div>
+        <div class="admin-card admin-kpi p-5"><p class="text-xs text-ivory-600">This month's revenue</p><p class="admin-display text-4xl text-ink mt-2">₹{{ number_format($stats['monthly_revenue'] ?? 0) }}</p><p class="text-xs text-ivory-600 mt-2">All time ₹{{ number_format($stats['total_revenue'] ?? 0) }}</p></div>
+        <div class="admin-card admin-kpi p-5"><p class="text-xs text-ivory-600">Accepted interests</p><p class="admin-display text-4xl text-ink mt-2">{{ number_format($stats['total_matches'] ?? 0) }}</p><p class="text-xs text-trust mt-2">{{ number_format($stats['active_today'] ?? 0) }} active today</p></div>
+    </section>
 
-        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm text-gray-500">Pending Approval</p>
-                    <p class="text-3xl font-bold text-orange-600 mt-1">{{ $stats['pending_approval'] }}</p>
-                </div>
-                <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
-                    <i class="fas fa-clock text-orange-600 text-xl"></i>
-                </div>
+    <section class="grid xl:grid-cols-[1.1fr_.9fr] gap-6">
+        <div class="admin-card p-6 sm:p-8">
+            <div class="flex items-start justify-between gap-4"><div><p class="text-[10px] uppercase tracking-[.16em] text-gold-600 font-bold">Community shape</p><h3 class="admin-display text-3xl text-ink mt-2">Who is finding Advaita?</h3></div><a href="{{ route('admin.members') }}" class="text-xs font-semibold text-plum-700">View members →</a></div>
+            <div class="mt-8 space-y-5">
+                @foreach([['label' => 'General', 'key' => 'general', 'color' => 'bg-rose-500'], ['label' => 'Divyangjan', 'key' => 'physically_challenged', 'color' => 'bg-plum-700'], ['label' => 'Hearing & speech', 'key' => 'hearing_speech', 'color' => 'bg-trust'], ['label' => 'Vitiligo', 'key' => 'vitiligo', 'color' => 'bg-gold-500']] as $category)
+                    @php $count = $categoryCounts[$category['key']] ?? 0; @endphp
+                    <div><div class="flex items-center justify-between mb-2"><span class="text-sm font-semibold text-ink">{{ $category['label'] }}</span><span class="text-sm text-ivory-600">{{ number_format($count) }}</span></div><div class="h-2 bg-ivory-200 overflow-hidden"><div class="h-full {{ $category['color'] }}" style="width: {{ min(100, ($count / $maxCategory) * 100) }}%"></div></div></div>
+                @endforeach
             </div>
-            <a href="/admin/profiles/pending" class="text-xs text-primary-600 mt-3 inline-block hover:underline">Review now →</a>
+            <p class="text-xs text-ivory-600 mt-7 pt-5 border-t border-ivory-300">These counts come from the existing profile category data. No presentation-layer estimates are added.</p>
         </div>
+        <div class="admin-card p-6 sm:p-8 bg-plum-900 text-white"><p class="text-[10px] uppercase tracking-[.16em] text-gold-300 font-bold">Trust queue</p><h3 class="admin-display text-4xl text-white mt-3">Small actions<br><em class="text-gold-300">build confidence.</em></h3><div class="mt-8 space-y-3"><a href="{{ route('admin.profiles.pending') }}" class="flex items-center justify-between gap-4 border-t border-white/15 py-4 text-sm hover:text-gold-300"><span><i class="fa-solid fa-user-check w-6 text-gold-300"></i>Profiles awaiting approval</span><strong>{{ $stats['pending_approval'] ?? 0 }} →</strong></a><a href="{{ route('admin.photos.pending') }}" class="flex items-center justify-between gap-4 border-t border-white/15 py-4 text-sm hover:text-gold-300"><span><i class="fa-solid fa-image w-6 text-gold-300"></i>Photos awaiting review</span><strong>{{ $stats['pending_photos'] ?? 0 }} →</strong></a><a href="{{ route('admin.udid') }}" class="flex items-center justify-between gap-4 border-y border-white/15 py-4 text-sm hover:text-gold-300"><span><i class="fa-solid fa-id-card w-6 text-gold-300"></i>UDID verification</span><strong>Open →</strong></a></div></div>
+    </section>
 
-        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm text-gray-500">Premium Members</p>
-                    <p class="text-3xl font-bold text-purple-600 mt-1">{{ $stats['premium_users'] }}</p>
-                </div>
-                <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-                    <i class="fas fa-crown text-purple-600 text-xl"></i>
-                </div>
-            </div>
-        </div>
+    <section class="grid xl:grid-cols-2 gap-6">
+        <div class="admin-card overflow-hidden"><div class="p-6 flex items-end justify-between"><div><p class="text-[10px] uppercase tracking-[.16em] text-gold-600 font-bold">Latest movement</p><h3 class="admin-display text-3xl text-ink mt-2">New members</h3></div><a href="{{ route('admin.members') }}" class="text-xs text-plum-700 font-semibold">All members →</a></div><div class="overflow-x-auto"><table class="admin-table min-w-full text-left"><thead><tr><th class="px-6 pb-3">Member</th><th class="px-6 pb-3">Category</th><th class="px-6 pb-3">Status</th><th class="px-6 pb-3">Joined</th></tr></thead><tbody>@forelse($recentRegistrations as $user)<tr><td class="px-6 py-4"><p class="font-semibold text-sm text-ink">{{ $user->name }}</p><p class="text-xs text-ivory-600">{{ $user->unique_id }}</p></td><td class="px-6 py-4 text-xs text-ivory-600">{{ $user->profile?->category_display_name ?? ucfirst(str_replace('_', ' ', $user->profile?->profile_category ?? 'General')) }}</td><td class="px-6 py-4"><span class="text-xs font-semibold {{ $user->profile_status === 'pending' ? 'text-amber-700' : 'text-trust' }}">{{ ucfirst($user->profile_status) }}</span></td><td class="px-6 py-4 text-xs text-ivory-600">{{ $user->created_at->diffForHumans() }}</td></tr>@empty<tr><td colspan="4" class="px-6 py-10 text-center text-sm text-ivory-600">No registrations to review yet.</td></tr>@endforelse</tbody></table></div></div>
+        <div class="admin-card overflow-hidden"><div class="p-6 flex items-end justify-between"><div><p class="text-[10px] uppercase tracking-[.16em] text-gold-600 font-bold">Revenue movement</p><h3 class="admin-display text-3xl text-ink mt-2">Recent payments</h3></div><a href="{{ route('admin.analytics') }}" class="text-xs text-plum-700 font-semibold">Open analytics →</a></div><div class="overflow-x-auto"><table class="admin-table min-w-full text-left"><thead><tr><th class="px-6 pb-3">Member</th><th class="px-6 pb-3">Plan</th><th class="px-6 pb-3">Amount</th></tr></thead><tbody>@forelse($recentPayments as $payment)<tr><td class="px-6 py-4"><p class="font-semibold text-sm text-ink">{{ $payment->user->name }}</p><p class="text-xs text-ivory-600">{{ $payment->created_at->diffForHumans() }}</p></td><td class="px-6 py-4 text-xs text-ivory-600">{{ $payment->package?->name ?? 'N/A' }}</td><td class="px-6 py-4 text-sm font-semibold text-trust">₹{{ number_format($payment->amount) }}</td></tr>@empty<tr><td colspan="3" class="px-6 py-10 text-center text-sm text-ivory-600">No completed payments yet.</td></tr>@endforelse</tbody></table></div></div>
+    </section>
 
-        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm text-gray-500">Monthly Revenue</p>
-                    <p class="text-3xl font-bold text-green-600 mt-1">₹{{ number_format($stats['monthly_revenue']) }}</p>
-                </div>
-                <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                    <i class="fas fa-rupee-sign text-green-600 text-xl"></i>
-                </div>
-            </div>
-            <p class="text-xs text-gray-500 mt-3">Total: ₹{{ number_format($stats['total_revenue']) }}</p>
-        </div>
-
-        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm text-gray-500">Successful Matches</p>
-                    <p class="text-3xl font-bold text-rose-600 mt-1">{{ $stats['total_matches'] }}</p>
-                </div>
-                <div class="w-12 h-12 bg-rose-100 rounded-xl flex items-center justify-center">
-                    <i class="fas fa-heart text-rose-600 text-xl"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Category Breakdown -->
-    <div class="grid md:grid-cols-4 gap-6">
-        <div class="bg-gradient-to-br from-rose-500 to-rose-600 rounded-2xl p-6 text-white">
-            <i class="fas fa-heart text-2xl mb-3 opacity-80"></i>
-            <p class="text-sm opacity-80">General</p>
-            <p class="text-2xl font-bold">{{ $stats['category_breakdown']['general'] }}</p>
-        </div>
-        <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 text-white">
-            <i class="fas fa-wheelchair text-2xl mb-3 opacity-80"></i>
-            <p class="text-sm opacity-80">Divyangjan</p>
-            <p class="text-2xl font-bold">{{ $stats['category_breakdown']['physically_challenged'] }}</p>
-        </div>
-        <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-6 text-white">
-            <i class="fas fa-sign-language text-2xl mb-3 opacity-80"></i>
-            <p class="text-sm opacity-80">Hearing & Speech</p>
-            <p class="text-2xl font-bold">{{ $stats['category_breakdown']['hearing_speech'] }}</p>
-        </div>
-        <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-6 text-white">
-            <i class="fas fa-star text-2xl mb-3 opacity-80"></i>
-            <p class="text-sm opacity-80">Vitiligo</p>
-            <p class="text-2xl font-bold">{{ $stats['category_breakdown']['vitiligo'] }}</p>
-        </div>
-    </div>
-
-    <!-- Recent Activity -->
-    <div class="grid lg:grid-cols-2 gap-8">
-        <!-- Recent Registrations -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100">
-            <div class="p-6 border-b border-gray-100">
-                <h3 class="text-lg font-bold text-gray-900"><i class="fas fa-user-plus mr-2 text-primary-600"></i>Recent Registrations</h3>
-            </div>
-            <div class="p-6">
-                <div class="space-y-4">
-                    @foreach($recentRegistrations as $user)
-                    <div class="flex items-center justify-between py-2">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
-                                <i class="fas fa-user text-gray-400"></i>
-                            </div>
-                            <div>
-                                <p class="font-medium text-gray-900 text-sm">{{ $user->name }}</p>
-                                <p class="text-xs text-gray-500">{{ $user->unique_id }} • {{ $user->profile?->category_display_name ?? 'General' }}</p>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <span class="px-2 py-1 text-xs rounded-full {{ $user->profile_status === 'pending' ? 'bg-orange-100 text-orange-700' : 'bg-green-100 text-green-700' }}">
-                                {{ ucfirst($user->profile_status) }}
-                            </span>
-                            <p class="text-xs text-gray-400 mt-1">{{ $user->created_at->diffForHumans() }}</p>
-                        </div>
-                    </div>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-
-        <!-- Recent Payments -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100">
-            <div class="p-6 border-b border-gray-100">
-                <h3 class="text-lg font-bold text-gray-900"><i class="fas fa-rupee-sign mr-2 text-green-600"></i>Recent Payments</h3>
-            </div>
-            <div class="p-6">
-                <div class="space-y-4">
-                    @foreach($recentPayments as $payment)
-                    <div class="flex items-center justify-between py-2">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                                <i class="fas fa-check text-green-600"></i>
-                            </div>
-                            <div>
-                                <p class="font-medium text-gray-900 text-sm">{{ $payment->user->name }}</p>
-                                <p class="text-xs text-gray-500">{{ $payment->package?->name ?? 'N/A' }} • {{ ucfirst($payment->payment_gateway) }}</p>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <p class="font-bold text-green-600">₹{{ number_format($payment->amount) }}</p>
-                            <p class="text-xs text-gray-400">{{ $payment->created_at->diffForHumans() }}</p>
-                        </div>
-                    </div>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Quick Actions -->
-    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-        <h3 class="text-lg font-bold text-gray-900 mb-4"><i class="fas fa-bolt mr-2 text-gold-500"></i>Quick Actions</h3>
-        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            <a href="/admin/profiles/pending" class="flex flex-col items-center p-4 rounded-xl bg-orange-50 hover:bg-orange-100 transition-colors">
-                <i class="fas fa-user-check text-xl text-orange-600 mb-2"></i>
-                <span class="text-xs font-medium text-gray-700">Approve Profiles</span>
-            </a>
-            <a href="/admin/photos/pending" class="flex flex-col items-center p-4 rounded-xl bg-blue-50 hover:bg-blue-100 transition-colors">
-                <i class="fas fa-image text-xl text-blue-600 mb-2"></i>
-                <span class="text-xs font-medium text-gray-700">Approve Photos</span>
-            </a>
-            <a href="/admin/packages" class="flex flex-col items-center p-4 rounded-xl bg-purple-50 hover:bg-purple-100 transition-colors">
-                <i class="fas fa-box text-xl text-purple-600 mb-2"></i>
-                <span class="text-xs font-medium text-gray-700">Manage Plans</span>
-            </a>
-            <a href="/admin/banners" class="flex flex-col items-center p-4 rounded-xl bg-green-50 hover:bg-green-100 transition-colors">
-                <i class="fas fa-image text-xl text-green-600 mb-2"></i>
-                <span class="text-xs font-medium text-gray-700">Edit Banners</span>
-            </a>
-            <a href="/admin/pages" class="flex flex-col items-center p-4 rounded-xl bg-rose-50 hover:bg-rose-100 transition-colors">
-                <i class="fas fa-file-alt text-xl text-rose-600 mb-2"></i>
-                <span class="text-xs font-medium text-gray-700">Legal Pages</span>
-            </a>
-            <a href="/admin/settings" class="flex flex-col items-center p-4 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors">
-                <i class="fas fa-cog text-xl text-gray-600 mb-2"></i>
-                <span class="text-xs font-medium text-gray-700">Settings</span>
-            </a>
-        </div>
-    </div>
+    <section class="admin-card p-6"><div class="flex items-center justify-between mb-5"><div><p class="text-[10px] uppercase tracking-[.16em] text-gold-600 font-bold">Shortcuts</p><h3 class="admin-display text-3xl text-ink mt-2">What needs your attention?</h3></div></div><div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3"><a href="{{ route('admin.profiles.pending') }}" class="p-4 border border-ivory-300 hover:border-plum-300 transition-colors"><i class="fa-solid fa-user-check text-plum-700"></i><span class="block text-xs font-semibold mt-3">Profiles</span></a><a href="{{ route('admin.photos.pending') }}" class="p-4 border border-ivory-300 hover:border-plum-300 transition-colors"><i class="fa-solid fa-images text-plum-700"></i><span class="block text-xs font-semibold mt-3">Photos</span></a><a href="{{ route('admin.members') }}" class="p-4 border border-ivory-300 hover:border-plum-300 transition-colors"><i class="fa-solid fa-users text-plum-700"></i><span class="block text-xs font-semibold mt-3">Members</span></a><a href="{{ route('admin.udid') }}" class="p-4 border border-ivory-300 hover:border-plum-300 transition-colors"><i class="fa-solid fa-id-card text-plum-700"></i><span class="block text-xs font-semibold mt-3">UDID</span></a><a href="{{ route('admin.reports') }}" class="p-4 border border-ivory-300 hover:border-plum-300 transition-colors"><i class="fa-solid fa-flag text-plum-700"></i><span class="block text-xs font-semibold mt-3">Reports</span></a><a href="{{ route('admin.settings') }}" class="p-4 border border-ivory-300 hover:border-plum-300 transition-colors"><i class="fa-solid fa-sliders text-plum-700"></i><span class="block text-xs font-semibold mt-3">Settings</span></a></div></section>
 </div>
 @endsection

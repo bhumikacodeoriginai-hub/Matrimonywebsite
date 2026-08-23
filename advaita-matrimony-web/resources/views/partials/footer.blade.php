@@ -57,7 +57,7 @@
                     <span class="lang-kn">ಹುಡುಕಿ</span>
                 </h4>
                 <ul class="space-y-3">
-                    <li><a href="{{ route('search') }}" class="text-ivory-300 hover:text-gold-300 transition-colors text-sm">
+                    <li><a href="{{ route('register') }}?intent=discover" class="text-ivory-300 hover:text-gold-300 transition-colors text-sm">
                         <span class="lang-en">Search Profiles</span>
                         <span class="lang-kn">ಪ್ರೊಫೈಲ್‌ಗಳನ್ನು ಹುಡುಕಿ</span>
                     </a></li>
@@ -91,22 +91,22 @@
                     <span class="lang-kn">ಸಮುದಾಯಗಳು</span>
                 </h4>
                 <ul class="space-y-3">
-                    <li><a href="{{ route('search') }}?category=general" class="text-ivory-300 hover:text-gold-300 transition-colors text-sm">
+                    <li><a href="{{ route('register') }}?intent=discover&category=general" class="text-ivory-300 hover:text-gold-300 transition-colors text-sm">
                         <i class="fas fa-heart text-rose-400 mr-2"></i>
                         <span class="lang-en">General</span>
                         <span class="lang-kn">ಸಾಮಾನ್ಯ</span>
                     </a></li>
-                    <li><a href="{{ route('search') }}?category=divyangjan" class="text-ivory-300 hover:text-gold-300 transition-colors text-sm">
+                    <li><a href="{{ route('register') }}?intent=discover&category=divyangjan" class="text-ivory-300 hover:text-gold-300 transition-colors text-sm">
                         <i class="fas fa-wheelchair text-plum-300 mr-2"></i>
                         <span class="lang-en">Divyangjan</span>
                         <span class="lang-kn">ದಿವ್ಯಾಂಗಜನ</span>
                     </a></li>
-                    <li><a href="{{ route('search') }}?category=hearing_speech" class="text-ivory-300 hover:text-gold-300 transition-colors text-sm">
+                    <li><a href="{{ route('register') }}?intent=discover&category=hearing_speech" class="text-ivory-300 hover:text-gold-300 transition-colors text-sm">
                         <i class="fas fa-sign-language text-gold-400 mr-2"></i>
                         <span class="lang-en">Hearing & Speech</span>
                         <span class="lang-kn">ಶ್ರವಣ ಮತ್ತು ಮಾತು</span>
                     </a></li>
-                    <li><a href="{{ route('search') }}?category=vitiligo" class="text-ivory-300 hover:text-gold-300 transition-colors text-sm">
+                    <li><a href="{{ route('register') }}?intent=discover&category=vitiligo" class="text-ivory-300 hover:text-gold-300 transition-colors text-sm">
                         <i class="fas fa-star text-amber-400 mr-2"></i>
                         <span class="lang-en">Vitiligo</span>
                         <span class="lang-kn">ವಿಟಿಲಿಗೊ</span>
@@ -136,12 +136,12 @@
                         <span class="lang-en">Refund Policy</span>
                         <span class="lang-kn">ಹಣ ಮರಳಿ ನೀತಿ</span>
                     </a></li>
-                    <li><a href="{{ route('report-abuse') }}" class="text-ivory-300 hover:text-gold-300 transition-colors text-sm">
+                    <li><a href="{{ route('contact') }}?subject=report-abuse" class="text-ivory-300 hover:text-gold-300 transition-colors text-sm">
                         <i class="fas fa-flag text-rose-400 mr-2"></i>
                         <span class="lang-en">Report Abuse</span>
                         <span class="lang-kn">ದುರುಳುತನ ವರದಿ ಮಾಡಿ</span>
                     </a></li>
-                    <li><a href="{{ route('faq') }}" class="text-ivory-300 hover:text-gold-300 transition-colors text-sm">
+                    <li><a href="{{ route('contact') }}#faq" class="text-ivory-300 hover:text-gold-300 transition-colors text-sm">
                         <i class="fas fa-circle-question text-plum-300 mr-2"></i>
                         <span class="lang-en">FAQ</span>
                         <span class="lang-kn">ಪ್ರಶ್ನೆಗಳು</span>

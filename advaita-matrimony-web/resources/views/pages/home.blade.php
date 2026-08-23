@@ -1,533 +1,377 @@
 @extends('layouts.app')
 
-@section('title', 'Advaita Matrimony - India\'s Most Inclusive Matrimonial Platform')
+@section('title', 'Advaita Matrimony | Where Every Heart Finds Its Match')
+
+@php
+    $images = config('advaita_images');
+    $featuredProfiles = collect($featuredProfiles ?? []);
+@endphp
+
+@push('styles')
+<style>
+    /* Homepage v3: editorial match journey, not a dashboard/template */
+    .home-page { background: var(--color-ivory); overflow: hidden; }
+    .home-page .eyebrow { color: var(--color-gold-600); font-size: .7rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+    .home-page .serif { font-family: var(--font-display); }
+    .hero-editorial { min-height: min(860px, 100vh); background: var(--color-plum-900); color: var(--color-ivory-light); position: relative; isolation: isolate; }
+    .hero-editorial::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(42,21,38,.98) 0%, rgba(42,21,38,.86) 43%, rgba(42,21,38,.2) 78%, rgba(42,21,38,.34) 100%); }
+    .hero-photo { position: absolute; inset: 0 0 0 38%; z-index: -2; overflow: hidden; }
+    .hero-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center; opacity: .9; }
+    .hero-topline { border-bottom: 1px solid rgba(231,207,161,.26); }
+    .hero-copy { max-width: 640px; padding: 11rem 0 8rem; }
+    .hero-title { font-size: clamp(3.5rem, 7vw, 7.2rem); line-height: .88; letter-spacing: -.045em; font-weight: 400; }
+    .hero-title em { color: var(--color-gold-300); font-weight: 500; }
+    .hero-intent { background: rgba(255,252,248,.97); color: var(--color-ink); box-shadow: 0 24px 60px rgba(20,8,20,.28); }
+    .hero-intent select { min-height: 50px; border: 1px solid var(--color-ivory-300); border-radius: 8px; background: var(--color-ivory-light); padding: .8rem .9rem; color: var(--color-ink); font: inherit; font-size: .85rem; }
+    .hero-intent select:focus { outline: 2px solid var(--color-gold-400); outline-offset: 1px; }
+    .trust-line { border-top: 1px solid var(--color-ivory-300); border-bottom: 1px solid var(--color-ivory-300); background: var(--color-ivory-light); }
+    .trust-item { display: flex; align-items: center; gap: .8rem; padding: 1.45rem 0; }
+    .trust-item + .trust-item { border-left: 1px solid var(--color-ivory-300); padding-left: 2rem; }
+    .trust-mark { color: var(--color-plum-700); font-family: var(--font-display); font-size: 1.8rem; line-height: 1; }
+    .editorial-section { padding: 7rem 0; }
+    .section-intro { max-width: 680px; }
+    .section-title { color: var(--color-ink); font: 400 clamp(2.7rem, 5vw, 5.4rem)/.92 var(--font-display); letter-spacing: -.04em; }
+    .section-title em { color: var(--color-plum-600); }
+    .section-copy { color: var(--color-ivory-600); font-size: 1rem; line-height: 1.8; }
+    .discovery-panel { display: grid; grid-template-columns: 1.1fr .9fr; margin-top: 4rem; background: var(--color-plum-800); color: var(--color-ivory-light); min-height: 460px; }
+    .discovery-visual { position: relative; min-height: 460px; overflow: hidden; }
+    .discovery-visual img { width: 100%; height: 100%; object-fit: cover; object-position: center; opacity: .8; }
+    .discovery-visual::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(42,21,38,.1), rgba(42,21,38,.78)); }
+    .discovery-caption { position: absolute; left: 2rem; bottom: 2rem; z-index: 1; max-width: 300px; }
+    .discovery-content { display: flex; flex-direction: column; justify-content: center; padding: clamp(2rem, 5vw, 5rem); }
+    .discovery-content h3 { color: var(--color-gold-300); font: 400 clamp(2.2rem, 4vw, 4rem)/.95 var(--font-display); letter-spacing: -.035em; }
+    .discovery-row { display: flex; align-items: center; gap: 1rem; border-top: 1px solid rgba(255,255,255,.18); padding: 1rem 0; }
+    .discovery-row:last-of-type { border-bottom: 1px solid rgba(255,255,255,.18); }
+    .discovery-number { color: var(--color-gold-400); font: 500 1.5rem var(--font-display); width: 2rem; }
+    .profile-rail { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; margin-top: 3.5rem; }
+    .profile-frame { background: var(--color-white); border: 1px solid var(--color-ivory-300); }
+    .profile-frame-image { aspect-ratio: 4/5; overflow: hidden; position: relative; background: var(--color-plum-50); }
+    .profile-frame-image img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s var(--transition-smooth); }
+    .profile-frame:hover .profile-frame-image img { transform: scale(1.04); }
+    .profile-frame-copy { padding: 1.25rem; }
+    .profile-frame-copy h3 { font: 500 1.65rem/1 var(--font-display); color: var(--color-ink); }
+    .profile-frame-copy p { font-size: .8rem; margin: .35rem 0 0; color: var(--color-ivory-600); }
+    .profile-placeholder { height: 100%; display: grid; place-items: center; padding: 2rem; text-align: center; color: var(--color-plum-700); }
+    .profile-placeholder span { display: block; font: 400 2.2rem/1 var(--font-display); }
+    .profile-placeholder small { display: block; margin-top: .75rem; color: var(--color-ivory-600); font-size: .78rem; line-height: 1.5; }
+    .community-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--color-ivory-300); margin-top: 4rem; border: 1px solid var(--color-ivory-300); }
+    .community-card { min-height: 370px; background: var(--color-ivory-light); position: relative; overflow: hidden; display: flex; align-items: end; }
+    .community-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: saturate(.84); transition: transform .7s var(--transition-smooth); }
+    .community-card:hover img { transform: scale(1.04); }
+    .community-card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(28,20,32,.9), rgba(28,20,32,.02) 72%); }
+    .community-copy { position: relative; z-index: 1; padding: 1.7rem; color: var(--color-white); }
+    .community-copy h3 { font: 500 2rem/1 var(--font-display); margin: .45rem 0; }
+    .community-copy p { color: rgba(255,255,255,.76); max-width: 350px; font-size: .84rem; line-height: 1.55; }
+    .text-link { color: var(--color-gold-500); font-weight: 700; font-size: .78rem; letter-spacing: .03em; }
+    .text-link:hover { color: var(--color-plum-600); }
+    .principles-section { background: var(--color-plum-900); color: var(--color-ivory-light); }
+    .principles-section .section-title { color: var(--color-ivory-light); }
+    .principles-section .section-title em { color: var(--color-gold-300); }
+    .principles-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin-top: 4rem; border-top: 1px solid rgba(231,207,161,.25); }
+    .principle { padding: 2.2rem 2rem 2.2rem 0; border-bottom: 1px solid rgba(231,207,161,.25); }
+    .principle:nth-child(3n+2), .principle:nth-child(3n+3) { padding-left: 2rem; border-left: 1px solid rgba(231,207,161,.25); }
+    .principle-index { color: var(--color-gold-400); font-size: .72rem; letter-spacing: .12em; }
+    .principle h3 { font: 500 1.8rem/1 var(--font-display); margin: 1.25rem 0 .65rem; }
+    .principle p { color: rgba(255,252,248,.64); font-size: .84rem; line-height: 1.65; margin: 0; }
+    .privacy-layout { display: grid; grid-template-columns: .95fr 1.05fr; min-height: 540px; background: var(--color-white); border: 1px solid var(--color-ivory-300); }
+    .privacy-photo { min-height: 540px; overflow: hidden; }
+    .privacy-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .privacy-copy { padding: clamp(2rem, 5vw, 5rem); display: flex; flex-direction: column; justify-content: center; }
+    .privacy-list { margin: 2rem 0; border-top: 1px solid var(--color-ivory-300); }
+    .privacy-list div { display: flex; align-items: flex-start; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--color-ivory-300); }
+    .privacy-list strong { display: block; color: var(--color-ink); font-size: .86rem; }
+    .privacy-list span { display: block; color: var(--color-ivory-600); font-size: .78rem; margin-top: .2rem; }
+    .privacy-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--color-trust); margin-top: .45rem; flex: 0 0 auto; }
+    .story-grid { display: grid; grid-template-columns: 1.25fr .75fr; gap: 1.25rem; margin-top: 3.5rem; }
+    .story-card { position: relative; overflow: hidden; min-height: 560px; background: var(--color-plum-800); }
+    .story-card.small { min-height: 270px; }
+    .story-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .7s var(--transition-smooth); }
+    .story-card:hover img { transform: scale(1.04); }
+    .story-card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(28,20,32,.88), rgba(28,20,32,.02) 70%); }
+    .story-copy { position: absolute; z-index: 1; left: 1.75rem; right: 1.75rem; bottom: 1.75rem; color: var(--color-white); }
+    .story-copy p { color: rgba(255,255,255,.82); font: italic 1.35rem/1.15 var(--font-display); max-width: 520px; margin: .75rem 0 0; }
+    .story-column { display: grid; gap: 1.25rem; }
+    .app-section { background: var(--color-ivory-200); }
+    .app-showcase { display: grid; grid-template-columns: .9fr 1.1fr; gap: 3rem; align-items: center; }
+    .phone-cluster { display: flex; justify-content: center; align-items: flex-end; min-height: 440px; }
+    .phone { width: 175px; height: 365px; border: 7px solid var(--color-ink); border-radius: 28px; background: var(--color-white); box-shadow: 16px 18px 0 rgba(84,35,76,.14); overflow: hidden; transform: rotate(-7deg); }
+    .phone + .phone { margin-left: -38px; transform: rotate(7deg) translateY(-35px); border-color: var(--color-plum-700); }
+    .phone-screen { height: 100%; padding: 1rem .8rem; background: var(--color-ivory-light); }
+    .phone-bar { height: 8px; width: 44px; border-radius: 10px; background: var(--color-ink); margin: 0 auto 1.4rem; }
+    .phone-photo { height: 150px; overflow: hidden; background: var(--color-plum-100); }
+    .phone-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .phone-line { height: 8px; border-radius: 8px; background: var(--color-ivory-300); margin-top: .7rem; }
+    .phone-line.short { width: 58%; }
+    .phone-pill { display: inline-block; margin-top: 1rem; padding: .4rem .55rem; background: var(--color-gold-200); color: var(--color-plum-800); border-radius: 99px; font-size: .52rem; font-weight: 700; }
+    .faq-list { max-width: 860px; margin: 3rem auto 0; border-top: 1px solid var(--color-ivory-300); }
+    .faq-list details { border-bottom: 1px solid var(--color-ivory-300); }
+    .faq-list summary { cursor: pointer; list-style: none; padding: 1.35rem 0; display: flex; justify-content: space-between; align-items: center; font: 500 1.35rem var(--font-display); color: var(--color-ink); }
+    .faq-list summary::-webkit-details-marker { display: none; }
+    .faq-list summary::after { content: '+'; font: 400 1.5rem var(--font-body); color: var(--color-plum-600); }
+    .faq-list details[open] summary::after { content: '−'; }
+    .faq-list details p { max-width: 680px; font-size: .88rem; line-height: 1.7; padding: 0 2rem 1.35rem 0; margin: 0; }
+    .final-cta { position: relative; min-height: 540px; display: flex; align-items: center; color: var(--color-white); background: var(--color-plum-900); overflow: hidden; }
+    .final-cta img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 45%; opacity: .42; }
+    .final-cta::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(42,21,38,.96), rgba(42,21,38,.45)); }
+    .final-cta-content { position: relative; z-index: 1; max-width: 650px; }
+    .final-cta h2 { font: 400 clamp(3rem, 6vw, 6.5rem)/.88 var(--font-display); letter-spacing: -.045em; }
+    .reveal-home { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s var(--transition-smooth); }
+    .reveal-home.is-visible { opacity: 1; transform: none; }
+    @media (max-width: 900px) {
+        .hero-photo { inset: 0; opacity: .5; }
+        .hero-editorial::after { background: linear-gradient(90deg, rgba(42,21,38,.96), rgba(42,21,38,.62)); }
+        .hero-copy { padding: 9rem 0 5rem; }
+        .trust-item + .trust-item { padding-left: 1rem; }
+        .discovery-panel, .privacy-layout, .app-showcase { grid-template-columns: 1fr; }
+        .discovery-visual, .privacy-photo { min-height: 360px; }
+        .story-grid { grid-template-columns: 1fr; }
+        .story-column { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+        .editorial-section { padding: 4.5rem 0; }
+        .hero-title { font-size: clamp(3.4rem, 17vw, 5.2rem); }
+        .hero-intent { margin-top: 2rem; }
+        .trust-line .grid { grid-template-columns: 1fr 1fr; }
+        .trust-item { padding: 1rem 0; }
+        .trust-item + .trust-item { border-left: 0; padding-left: 0; }
+        .profile-rail, .community-layout, .principles-grid { grid-template-columns: 1fr; }
+        .community-card { min-height: 330px; }
+        .principles-grid { border-top: 1px solid rgba(231,207,161,.25); }
+        .principle, .principle:nth-child(3n+2), .principle:nth-child(3n+3) { padding: 1.75rem 0; border-left: 0; }
+        .story-column { grid-template-columns: 1fr; }
+        .story-card, .story-card.small { min-height: 390px; }
+        .phone-cluster { transform: scale(.82); margin: -2rem 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .reveal-home { opacity: 1; transform: none; }
+        .profile-frame-image img, .community-card img, .story-card img { transition: none; }
+    }
+</style>
+@endpush
 
 @section('content')
-<!-- ============ HERO SECTION ============ -->
-<section class="relative min-h-screen flex items-center gradient-bg hero-pattern overflow-hidden">
-    <!-- Floating decorative elements -->
-    <div class="absolute top-20 left-10 w-72 h-72 bg-white/5 rounded-full blur-3xl animate-pulse-slow"></div>
-    <div class="absolute bottom-20 right-10 w-96 h-96 bg-accent-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
-    <div class="absolute top-40 right-40 w-4 h-4 bg-gold-400 rounded-full animate-float"></div>
-    <div class="absolute bottom-40 left-40 w-3 h-3 bg-rose-400 rounded-full animate-float" style="animation-delay: 1s;"></div>
-
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 relative z-10">
-        <div class="grid lg:grid-cols-2 gap-12 items-center">
-            <!-- Left Content -->
-            <div class="text-white animate-slide-up">
-                <div class="inline-flex items-center px-4 py-2 bg-white/10 rounded-full backdrop-blur-sm mb-6">
-                    <span class="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></span>
-                    <span class="text-sm font-medium">India's #1 Inclusive Matrimony Platform</span>
-                </div>
-
-                <h1 class="text-5xl lg:text-7xl font-bold font-playfair leading-tight mb-6">
-                    Where Every
-                    <span class="block text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-rose-400">
-                        Heart Finds
-                    </span>
-                    Its Match
-                </h1>
-
-                <p class="text-xl text-white/80 mb-8 leading-relaxed max-w-lg">
-                    We celebrate uniqueness. Whether you're differently-abled, living with vitiligo, or seeking a life partner from the general community — your perfect match is here.
+<div class="home-page">
+    <!-- HERO: a confident first impression, not a feature collage -->
+    <section class="hero-editorial">
+        <div class="hero-photo" aria-hidden="true">
+            <picture>
+                <source media="(max-width: 640px)" srcset="{{ $images['hero']['mobile'] }}">
+                <img src="{{ $images['hero']['desktop'] }}" alt="">
+            </picture>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="hero-topline py-4 flex items-center justify-between gap-4 text-xs text-gold-300/90">
+                <span class="tracking-[.18em] uppercase">Advaita / A more human way to meet</span>
+                <span class="hidden sm:block">English · ಕನ್ನಡ</span>
+            </div>
+            <div class="hero-copy">
+                <p class="eyebrow text-gold-300 mb-6">India's inclusive matrimony</p>
+                <h1 class="hero-title serif">Where every<br><em>heart</em> finds<br>its match.</h1>
+                <p class="mt-8 max-w-lg text-base sm:text-lg leading-relaxed text-white/72">
+                    A thoughtful place to meet someone who understands your values, your family, and the life you want to build together.
                 </p>
-
-                <!-- Quick Search Form -->
-                <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 mb-8">
-                    <h3 class="text-lg font-semibold mb-4">Quick Search</h3>
-                    <form action="/search" method="GET" class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                        <select name="gender" class="px-4 py-3 rounded-xl bg-white/20 border border-white/30 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-gold-400">
-                            <option value="" class="text-gray-900">I'm looking for</option>
-                            <option value="female" class="text-gray-900">Bride</option>
-                            <option value="male" class="text-gray-900">Groom</option>
+                <div class="mt-9 flex flex-wrap gap-3">
+                    <a href="{{ route('register') }}" class="btn-premium btn-gold-premium btn-lg">Begin your story <span aria-hidden="true">↗</span></a>
+                    <a href="#discover" class="inline-flex items-center px-5 py-3 text-sm font-semibold text-white/88 hover:text-gold-300 transition-colors">See how it works <span class="ml-2" aria-hidden="true">↓</span></a>
+                </div>
+                <div class="hero-intent mt-12 max-w-2xl p-5 sm:p-6">
+                    <div class="flex items-start justify-between gap-4 mb-4">
+                        <div>
+                            <p class="eyebrow text-plum-700">Start with intention</p>
+                            <h2 class="serif text-2xl sm:text-3xl text-ink mt-1">Who would you like to meet?</h2>
+                        </div>
+                        <span class="text-xs text-ivory-600 mt-1">Step 1 of 1</span>
+                    </div>
+                    <form action="{{ route('register') }}" method="GET" class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                        <label class="sr-only" for="home-gender">Looking for</label>
+                        <select id="home-gender" name="gender">
+                            <option value="">Looking for</option>
+                            <option value="female">A bride</option>
+                            <option value="male">A groom</option>
                         </select>
-                        <select name="min_age" class="px-4 py-3 rounded-xl bg-white/20 border border-white/30 text-white focus:outline-none focus:ring-2 focus:ring-gold-400">
-                            <option value="" class="text-gray-900">Age From</option>
-                            @for($i = 18; $i <= 60; $i++)
-                                <option value="{{ $i }}" class="text-gray-900">{{ $i }} yrs</option>
-                            @endfor
+                        <label class="sr-only" for="home-location">Location</label>
+                        <select id="home-location" name="location">
+                            <option value="">Any location</option>
+                            <option value="Bengaluru">Bengaluru</option>
+                            <option value="Mumbai">Mumbai</option>
+                            <option value="Chennai">Chennai</option>
+                            <option value="Hyderabad">Hyderabad</option>
                         </select>
-                        <select name="max_age" class="px-4 py-3 rounded-xl bg-white/20 border border-white/30 text-white focus:outline-none focus:ring-2 focus:ring-gold-400">
-                            <option value="" class="text-gray-900">Age To</option>
-                            @for($i = 18; $i <= 60; $i++)
-                                <option value="{{ $i }}" class="text-gray-900">{{ $i }} yrs</option>
-                            @endfor
-                        </select>
-                        <select name="profile_category" class="px-4 py-3 rounded-xl bg-white/20 border border-white/30 text-white focus:outline-none focus:ring-2 focus:ring-gold-400">
-                            <option value="" class="text-gray-900">Community</option>
-                            <option value="general" class="text-gray-900">General</option>
-                            <option value="physically_challenged" class="text-gray-900">Divyangjan</option>
-                            <option value="hearing_speech_impaired" class="text-gray-900">Hearing & Speech</option>
-                            <option value="vitiligo_skin_condition" class="text-gray-900">Vitiligo</option>
-                        </select>
-                        <button type="submit" class="col-span-2 md:col-span-4 py-3.5 bg-gradient-to-r from-gold-500 to-rose-500 text-white rounded-xl font-bold text-lg hover:from-gold-600 hover:to-rose-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02]">
-                            <i class="fas fa-search mr-2"></i> Search Profiles
-                        </button>
+                        <button type="submit" class="btn-premium btn-primary-premium min-h-[50px]">Explore matches <span aria-hidden="true">→</span></button>
                     </form>
-                </div>
-
-                <!-- Stats -->
-                <div class="flex space-x-8">
-                    <div class="text-center">
-                        <div class="text-3xl font-bold text-gold-400">10K+</div>
-                        <div class="text-sm text-white/60">Active Profiles</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-3xl font-bold text-rose-400">500+</div>
-                        <div class="text-sm text-white/60">Successful Matches</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-3xl font-bold text-green-400">100%</div>
-                        <div class="text-sm text-white/60">Verified Profiles</div>
-                    </div>
+                    <p class="mt-3 text-xs text-ivory-600">You can refine your preferences after creating your private profile.</p>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <!-- Right - Illustration/Images -->
-            <div class="hidden lg:block relative">
-                <div class="relative">
-                    <!-- Floating cards -->
-                    <div class="absolute -top-10 -left-10 bg-white rounded-2xl shadow-2xl p-4 animate-float z-20">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                                <i class="fas fa-check-circle text-green-500 text-xl"></i>
-                            </div>
-                            <div>
-                                <p class="font-semibold text-gray-900 text-sm">Profile Verified!</p>
-                                <p class="text-xs text-gray-500">UDID Certificate Approved</p>
-                            </div>
+    <!-- TRUST: quiet proof, no invented numbers -->
+    <section class="trust-line" aria-label="Advaita trust commitments">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 lg:grid-cols-4 gap-x-5">
+            <div class="trust-item"><span class="trust-mark">01</span><div><strong class="block text-sm text-ink">Human review</strong><span class="text-xs text-ivory-600">Profiles are reviewed before approval.</span></div></div>
+            <div class="trust-item"><span class="trust-mark">02</span><div><strong class="block text-sm text-ink">Privacy by choice</strong><span class="text-xs text-ivory-600">You decide who sees your photos.</span></div></div>
+            <div class="trust-item"><span class="trust-mark">03</span><div><strong class="block text-sm text-ink">Inclusive by design</strong><span class="text-xs text-ivory-600">Every community belongs here.</span></div></div>
+            <div class="trust-item"><span class="trust-mark">04</span><div><strong class="block text-sm text-ink">Secure conversations</strong><span class="text-xs text-ivory-600">Connect at your own pace.</span></div></div>
+        </div>
+    </section>
+
+    <!-- DISCOVERY -->
+    <section class="editorial-section" id="discover">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="section-intro reveal-home">
+                <p class="eyebrow">A calmer beginning</p>
+                <h2 class="section-title mt-4">Less browsing.<br><em>More belonging.</em></h2>
+                <p class="section-copy mt-6">Advaita is designed around the conversations that matter — not endless swiping. Begin with what you value, see the context behind a match, and take the next step when it feels right.</p>
+            </div>
+            <div class="discovery-panel reveal-home">
+                <div class="discovery-visual">
+                    <img src="{{ $images['communities']['general']['image'] }}" alt="{{ $images['communities']['general']['alt'] }}" loading="lazy">
+                    <div class="discovery-caption">
+                        <p class="eyebrow text-gold-300">The Advaita approach</p>
+                        <p class="serif text-3xl leading-none mt-2">A meaningful introduction starts with context.</p>
+                    </div>
+                </div>
+                <div class="discovery-content">
+                    <h3>Meet with<br>more clarity.</h3>
+                    <div class="mt-8">
+                        <div class="discovery-row"><span class="discovery-number">01</span><span class="text-sm text-white/78">Tell us what matters in a partner.</span></div>
+                        <div class="discovery-row"><span class="discovery-number">02</span><span class="text-sm text-white/78">Explore people through shared values and life details.</span></div>
+                        <div class="discovery-row"><span class="discovery-number">03</span><span class="text-sm text-white/78">Connect privately, with no pressure to perform.</span></div>
+                    </div>
+                    <a href="{{ route('register') }}" class="btn-premium btn-gold-premium self-start mt-8">Create a private profile <span aria-hidden="true">↗</span></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROFILE PREVIEWS: data-aware and honest fallback -->
+    <section class="editorial-section pt-0">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5">
+                <div class="section-intro reveal-home">
+                    <p class="eyebrow">A glimpse of discovery</p>
+                    <h2 class="section-title mt-4">Profiles with a<br><em>point of view.</em></h2>
+                </div>
+                <a href="{{ route('register') }}" class="text-link reveal-home">Join to explore profiles <span aria-hidden="true">↗</span></a>
+            </div>
+            <div class="profile-rail reveal-home">
+                @forelse($featuredProfiles as $profile)
+                    @php
+                        $profileName = data_get($profile, 'name', 'Advaita member');
+                        $profileImage = data_get($profile, 'primary_photo.url') ?: data_get($profile, 'primaryPhoto.url');
+                        $profileMeta = collect([data_get($profile, 'profile.city'), data_get($profile, 'profile.occupation')])->filter()->implode(' · ');
+                    @endphp
+                    <article class="profile-frame">
+                        <div class="profile-frame-image">
+                            @if($profileImage)
+                                <img src="{{ $profileImage }}" alt="{{ $profileName }}" loading="lazy">
+                            @else
+                                <div class="profile-placeholder"><div><span>Photo protected</span><small>This member has chosen to share their photo privately.</small></div></div>
+                            @endif
                         </div>
-                    </div>
-
-                    <div class="absolute -bottom-5 -right-5 bg-white rounded-2xl shadow-2xl p-4 animate-float z-20" style="animation-delay: 1.5s;">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-12 h-12 bg-rose-100 rounded-full flex items-center justify-center heartbeat">
-                                <i class="fas fa-heart text-rose-500 text-xl"></i>
-                            </div>
-                            <div>
-                                <p class="font-semibold text-gray-900 text-sm">New Match Found!</p>
-                                <p class="text-xs text-gray-500">95% Compatible</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Main visual -->
-                    <div class="w-full h-[500px] bg-gradient-to-br from-white/20 to-white/5 rounded-3xl backdrop-blur-sm border border-white/20 flex items-center justify-center">
-                        <div class="text-center p-8">
-                            <div class="w-32 h-32 mx-auto mb-6 bg-gradient-to-br from-gold-400 to-rose-500 rounded-full flex items-center justify-center">
-                                <i class="fas fa-heart text-white text-5xl"></i>
-                            </div>
-                            <h3 class="text-white text-2xl font-bold mb-2">Find Love Today</h3>
-                            <p class="text-white/70">Join thousands who found their soulmate</p>
-                        </div>
-                    </div>
-                </div>
+                        <div class="profile-frame-copy"><h3>{{ $profileName }}</h3><p>{{ $profileMeta ?: 'Profile details available after joining' }}</p></div>
+                    </article>
+                @empty
+                    <article class="profile-frame"><div class="profile-frame-image"><div class="profile-placeholder"><div><span>Start with values</span><small>See people through the details that shape their everyday life.</small></div></div></div><div class="profile-frame-copy"><h3>Shared values</h3><p>A more meaningful way to discover.</p></div></article>
+                    <article class="profile-frame"><div class="profile-frame-image"><div class="profile-placeholder"><div><span>Privacy first</span><small>Protected photos stay protected until a member chooses to share them.</small></div></div></div><div class="profile-frame-copy"><h3>At your pace</h3><p>Connection without pressure.</p></div></article>
+                    <article class="profile-frame"><div class="profile-frame-image"><div class="profile-placeholder"><div><span>Your story</span><small>Build a profile that feels like you, not a checklist.</small></div></div></div><div class="profile-frame-copy"><h3>Be understood</h3><p>Begin with a private profile.</p></div></article>
+                @endforelse
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Wave divider -->
-    <div class="absolute bottom-0 left-0 right-0">
-        <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 120L60 105C120 90 240 60 360 45C480 30 600 30 720 37.5C840 45 960 60 1080 67.5C1200 75 1320 75 1380 75L1440 75V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="#f9fafb"/>
-        </svg>
-    </div>
-</section>
-
-<!-- ============ CATEGORIES SECTION ============ -->
-<section class="py-20 bg-gray-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16" data-aos="fade-up">
-            <span class="inline-block px-4 py-1.5 bg-primary-100 text-primary-700 rounded-full text-sm font-semibold mb-4">OUR COMMUNITIES</span>
-            <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 font-playfair mb-4">
-                Everyone Deserves <span class="text-gradient">Love</span>
-            </h2>
-            <p class="text-xl text-gray-600 max-w-2xl mx-auto">We serve diverse communities with specialized matching, privacy, and support systems.</p>
-        </div>
-
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <!-- General -->
-            <div class="card-hover bg-white rounded-3xl p-8 shadow-lg border border-gray-100 text-center" data-aos="fade-up" data-aos-delay="100">
-                <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-rose-100 to-rose-200 rounded-2xl flex items-center justify-center">
-                    <i class="fas fa-heart text-3xl text-rose-500"></i>
-                </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-3">General Matrimony</h3>
-                <p class="text-gray-600 text-sm leading-relaxed">Standard matrimonial profiles for the general public. Find your perfect life partner.</p>
-                <a href="/register?category=general" class="inline-block mt-6 px-6 py-2.5 bg-rose-50 text-rose-600 rounded-full font-semibold text-sm hover:bg-rose-100 transition-colors">
-                    Register Now <i class="fas fa-arrow-right ml-1"></i>
-                </a>
+    <!-- COMMUNITIES: equal editorial treatment -->
+    <section class="editorial-section bg-white" id="communities">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="section-intro reveal-home">
+                <p class="eyebrow">One home, many stories</p>
+                <h2 class="section-title mt-4">There is no single<br><em>way to belong.</em></h2>
+                <p class="section-copy mt-6">Our communities are represented with equal care — because inclusion is not a category filter. It is how the whole experience is built.</p>
             </div>
-
-            <!-- Physically Challenged -->
-            <div class="card-hover bg-white rounded-3xl p-8 shadow-lg border border-gray-100 text-center" data-aos="fade-up" data-aos-delay="200">
-                <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center">
-                    <i class="fas fa-wheelchair text-3xl text-blue-600"></i>
-                </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-3">Divyangjan</h3>
-                <p class="text-gray-600 text-sm leading-relaxed">Physically Challenged / Locomotor Impairment community. UDID verified profiles.</p>
-                <a href="/register?category=physically_challenged" class="inline-block mt-6 px-6 py-2.5 bg-blue-50 text-blue-600 rounded-full font-semibold text-sm hover:bg-blue-100 transition-colors">
-                    Register Now <i class="fas fa-arrow-right ml-1"></i>
-                </a>
-            </div>
-
-            <!-- Hearing & Speech -->
-            <div class="card-hover bg-white rounded-3xl p-8 shadow-lg border border-gray-100 text-center" data-aos="fade-up" data-aos-delay="300">
-                <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-green-100 to-green-200 rounded-2xl flex items-center justify-center">
-                    <i class="fas fa-sign-language text-3xl text-green-600"></i>
-                </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-3">Hearing & Speech</h3>
-                <p class="text-gray-600 text-sm leading-relaxed">Dedicated profiles for Deaf & Mute community with sign language support indicators.</p>
-                <a href="/register?category=hearing_speech_impaired" class="inline-block mt-6 px-6 py-2.5 bg-green-50 text-green-600 rounded-full font-semibold text-sm hover:bg-green-100 transition-colors">
-                    Register Now <i class="fas fa-arrow-right ml-1"></i>
-                </a>
-            </div>
-
-            <!-- Vitiligo -->
-            <div class="card-hover bg-white rounded-3xl p-8 shadow-lg border border-gray-100 text-center" data-aos="fade-up" data-aos-delay="400">
-                <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-purple-100 to-purple-200 rounded-2xl flex items-center justify-center">
-                    <i class="fas fa-star text-3xl text-purple-600"></i>
-                </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-3">Vitiligo Community</h3>
-                <p class="text-gray-600 text-sm leading-relaxed">Specialized profiles for those with Vitiligo / Leucoderma. Embrace your uniqueness.</p>
-                <a href="/register?category=vitiligo_skin_condition" class="inline-block mt-6 px-6 py-2.5 bg-purple-50 text-purple-600 rounded-full font-semibold text-sm hover:bg-purple-100 transition-colors">
-                    Register Now <i class="fas fa-arrow-right ml-1"></i>
-                </a>
+            <div class="community-layout reveal-home">
+                @foreach([
+                    ['key' => 'general', 'label' => 'General matrimony', 'copy' => 'For people looking for a thoughtful, values-led life partnership.'],
+                    ['key' => 'divyangjan', 'label' => 'Divyangjan', 'copy' => 'A dignified space where disability is part of the story, never the whole story.'],
+                    ['key' => 'hearing_speech', 'label' => 'Hearing & speech', 'copy' => 'Connect with people who understand different ways of communicating and being heard.'],
+                    ['key' => 'vitiligo', 'label' => 'Vitiligo community', 'copy' => 'A place to meet with openness, confidence, and respect for every kind of beauty.'],
+                ] as $community)
+                    <article class="community-card">
+                        <img src="{{ $images['communities'][$community['key']]['image'] }}" alt="{{ $images['communities'][$community['key']]['alt'] }}" loading="lazy">
+                        <div class="community-copy"><p class="eyebrow text-gold-300">Community</p><h3>{{ $community['label'] }}</h3><p>{{ $community['copy'] }}</p><a href="{{ route('register') }}?category={{ $community['key'] === 'general' ? 'general' : ($community['key'] === 'divyangjan' ? 'physically_challenged' : ($community['key'] === 'hearing_speech' ? 'hearing_speech_impaired' : 'vitiligo_skin_condition')) }}" class="text-link">Explore this community <span aria-hidden="true">↗</span></a></div>
+                    </article>
+                @endforeach
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- ============ HOW IT WORKS ============ -->
-<section class="py-20 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16" data-aos="fade-up">
-            <span class="inline-block px-4 py-1.5 bg-gold-100 text-gold-600 rounded-full text-sm font-semibold mb-4">SIMPLE PROCESS</span>
-            <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 font-playfair mb-4">
-                How It <span class="text-gradient">Works</span>
-            </h2>
-            <p class="text-xl text-gray-600">Four simple steps to find your life partner</p>
-        </div>
-
-        <div class="grid md:grid-cols-4 gap-8 relative">
-            <!-- Connecting line -->
-            <div class="hidden md:block absolute top-24 left-[12%] right-[12%] h-0.5 bg-gradient-to-r from-primary-200 via-accent-200 to-rose-200"></div>
-
-            <div class="text-center relative" data-aos="fade-up" data-aos-delay="100">
-                <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-primary-500 to-primary-700 rounded-full flex items-center justify-center shadow-lg relative z-10">
-                    <i class="fas fa-user-plus text-2xl text-white"></i>
-                </div>
-                <div class="absolute -top-2 -right-2 w-8 h-8 bg-gold-400 rounded-full flex items-center justify-center text-white font-bold text-sm md:left-1/2 md:-translate-x-1/2 md:right-auto">1</div>
-                <h3 class="text-lg font-bold text-gray-900 mb-2">Register Free</h3>
-                <p class="text-gray-600 text-sm">Create your profile with OTP verification. It's 100% free to register.</p>
-            </div>
-
-            <div class="text-center relative" data-aos="fade-up" data-aos-delay="200">
-                <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-accent-500 to-accent-700 rounded-full flex items-center justify-center shadow-lg relative z-10">
-                    <i class="fas fa-id-card text-2xl text-white"></i>
-                </div>
-                <div class="absolute -top-2 -right-2 w-8 h-8 bg-gold-400 rounded-full flex items-center justify-center text-white font-bold text-sm md:left-1/2 md:-translate-x-1/2 md:right-auto">2</div>
-                <h3 class="text-lg font-bold text-gray-900 mb-2">Complete Profile</h3>
-                <p class="text-gray-600 text-sm">Add your details, photos, and partner preferences for better matches.</p>
-            </div>
-
-            <div class="text-center relative" data-aos="fade-up" data-aos-delay="300">
-                <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-rose-500 to-rose-700 rounded-full flex items-center justify-center shadow-lg relative z-10">
-                    <i class="fas fa-search-plus text-2xl text-white"></i>
-                </div>
-                <div class="absolute -top-2 -right-2 w-8 h-8 bg-gold-400 rounded-full flex items-center justify-center text-white font-bold text-sm md:left-1/2 md:-translate-x-1/2 md:right-auto">3</div>
-                <h3 class="text-lg font-bold text-gray-900 mb-2">Search & Connect</h3>
-                <p class="text-gray-600 text-sm">Use advanced filters to find compatible matches and send interests.</p>
-            </div>
-
-            <div class="text-center relative" data-aos="fade-up" data-aos-delay="400">
-                <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-gold-500 to-gold-600 rounded-full flex items-center justify-center shadow-lg relative z-10">
-                    <i class="fas fa-ring text-2xl text-white"></i>
-                </div>
-                <div class="absolute -top-2 -right-2 w-8 h-8 bg-gold-400 rounded-full flex items-center justify-center text-white font-bold text-sm md:left-1/2 md:-translate-x-1/2 md:right-auto">4</div>
-                <h3 class="text-lg font-bold text-gray-900 mb-2">Get Married!</h3>
-                <p class="text-gray-600 text-sm">Connect, chat, and take the relationship forward towards a beautiful union.</p>
+    <!-- PRINCIPLES -->
+    <section class="editorial-section principles-section">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="section-intro reveal-home"><p class="eyebrow text-gold-300">Why Advaita</p><h2 class="section-title mt-4">Technology with<br><em>human judgement.</em></h2><p class="mt-6 text-white/65 leading-relaxed max-w-xl">The best matchmaking experience should feel reassuring, not addictive. Every feature is here to help you make a better decision — not a faster one.</p></div>
+            <div class="principles-grid reveal-home">
+                <div class="principle"><span class="principle-index">01 / TRUST</span><h3>Profiles with context</h3><p>Move beyond a photo and a headline with details about values, family, work, lifestyle, and preferences.</p></div>
+                <div class="principle"><span class="principle-index">02 / PRIVACY</span><h3>Visibility by consent</h3><p>Photo access, contact details, and conversations stay within the controls chosen by each member.</p></div>
+                <div class="principle"><span class="principle-index">03 / INCLUSION</span><h3>Designed for everyone</h3><p>Inclusive categories, Kannada support, clear language, and respectful representation are part of the foundation.</p></div>
+                <div class="principle"><span class="principle-index">04 / COMPATIBILITY</span><h3>Explain the why</h3><p>Compatibility should be understandable — shared preferences and life details matter more than a mysterious score.</p></div>
+                <div class="principle"><span class="principle-index">05 / SAFETY</span><h3>Human support</h3><p>Verification, profile approval, reporting, and privacy tools help create a more accountable community.</p></div>
+                <div class="principle"><span class="principle-index">06 / PACE</span><h3>Connection without pressure</h3><p>Send an interest, ask for a photo, or start a conversation when you are ready. There is no swipe timer.</p></div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- ============ FEATURES SECTION ============ -->
-<section class="py-20 bg-gray-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16" data-aos="fade-up">
-            <span class="inline-block px-4 py-1.5 bg-green-100 text-green-700 rounded-full text-sm font-semibold mb-4">WHY CHOOSE US</span>
-            <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 font-playfair mb-4">
-                Safety & Privacy <span class="text-gradient">First</span>
-            </h2>
-            <p class="text-xl text-gray-600 max-w-2xl mx-auto">Your security is our top priority. Advanced protection features built into every profile.</p>
-        </div>
-
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div class="card-hover bg-white rounded-2xl p-8 shadow-sm border border-gray-100" data-aos="fade-up">
-                <div class="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center mb-5">
-                    <i class="fas fa-shield-alt text-2xl text-blue-600"></i>
-                </div>
-                <h3 class="text-lg font-bold text-gray-900 mb-2">Photo Privacy Controls</h3>
-                <p class="text-gray-600 text-sm">Your photos are blurred for non-members. Grant access only to people you trust via Request Access.</p>
-            </div>
-
-            <div class="card-hover bg-white rounded-2xl p-8 shadow-sm border border-gray-100" data-aos="fade-up" data-aos-delay="100">
-                <div class="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-5">
-                    <i class="fas fa-image text-2xl text-purple-600"></i>
-                </div>
-                <h3 class="text-lg font-bold text-gray-900 mb-2">Watermarked Photos</h3>
-                <p class="text-gray-600 text-sm">All photos are automatically watermarked with "Advaita Matrimony" to prevent misuse.</p>
-            </div>
-
-            <div class="card-hover bg-white rounded-2xl p-8 shadow-sm border border-gray-100" data-aos="fade-up" data-aos-delay="200">
-                <div class="w-14 h-14 bg-rose-100 rounded-xl flex items-center justify-center mb-5">
-                    <i class="fas fa-phone-slash text-2xl text-rose-600"></i>
-                </div>
-                <h3 class="text-lg font-bold text-gray-900 mb-2">Contact Masking</h3>
-                <p class="text-gray-600 text-sm">Phone numbers and email IDs are hidden from free users. Only premium members can view contacts.</p>
-            </div>
-
-            <div class="card-hover bg-white rounded-2xl p-8 shadow-sm border border-gray-100" data-aos="fade-up" data-aos-delay="300">
-                <div class="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center mb-5">
-                    <i class="fas fa-user-check text-2xl text-green-600"></i>
-                </div>
-                <h3 class="text-lg font-bold text-gray-900 mb-2">Manual Verification</h3>
-                <p class="text-gray-600 text-sm">Every profile is manually reviewed and approved by our admin team before going live.</p>
-            </div>
-
-            <div class="card-hover bg-white rounded-2xl p-8 shadow-sm border border-gray-100" data-aos="fade-up" data-aos-delay="400">
-                <div class="w-14 h-14 bg-amber-100 rounded-xl flex items-center justify-center mb-5">
-                    <i class="fas fa-certificate text-2xl text-amber-600"></i>
-                </div>
-                <h3 class="text-lg font-bold text-gray-900 mb-2">UDID Verification</h3>
-                <p class="text-gray-600 text-sm">Disability certificate / UDID verification for authenticity and trust within the differently-abled community.</p>
-            </div>
-
-            <div class="card-hover bg-white rounded-2xl p-8 shadow-sm border border-gray-100" data-aos="fade-up" data-aos-delay="500">
-                <div class="w-14 h-14 bg-indigo-100 rounded-xl flex items-center justify-center mb-5">
-                    <i class="fas fa-mobile-alt text-2xl text-indigo-600"></i>
-                </div>
-                <h3 class="text-lg font-bold text-gray-900 mb-2">Screenshot Protection</h3>
-                <p class="text-gray-600 text-sm">Screenshot restrictions on mobile app to prevent unauthorized saving of profile photos.</p>
+    <!-- PRIVACY -->
+    <section class="editorial-section" id="safety">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="privacy-layout reveal-home">
+                <div class="privacy-photo"><img src="{{ $images['privacy']['image'] }}" alt="{{ $images['privacy']['alt'] }}" loading="lazy"></div>
+                <div class="privacy-copy"><p class="eyebrow">Your boundaries matter</p><h2 class="section-title mt-4">Your privacy<br><em>comes first.</em></h2><p class="section-copy mt-6">You should never have to trade personal privacy for the chance to meet someone. Advaita keeps important decisions in your hands.</p><div class="privacy-list"><div><span class="privacy-dot"></span><div><strong>Protected photos</strong><span>Share access only when you are comfortable.</span></div></div><div><span class="privacy-dot"></span><div><strong>Contact masking</strong><span>Keep phone and email details private until you choose.</span></div></div><div><span class="privacy-dot"></span><div><strong>Profile and UDID review</strong><span>Verification helps make introductions more trustworthy.</span></div></div></div><a href="{{ route('privacy') }}" class="btn-premium btn-primary-premium self-start">Read our privacy promise <span aria-hidden="true">↗</span></a></div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- ============ PRICING SECTION ============ -->
-<section class="py-20 bg-white" id="plans">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16" data-aos="fade-up">
-            <span class="inline-block px-4 py-1.5 bg-accent-100 text-accent-700 rounded-full text-sm font-semibold mb-4">MEMBERSHIP PLANS</span>
-            <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 font-playfair mb-4">
-                Choose Your <span class="text-gradient">Plan</span>
-            </h2>
-            <p class="text-xl text-gray-600">Affordable plans to help you connect with your perfect match</p>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            <!-- Silver Plan -->
-            <div class="card-hover bg-white rounded-3xl p-8 shadow-lg border-2 border-gray-100 relative" data-aos="fade-up">
-                <div class="text-center">
-                    <div class="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-2xl flex items-center justify-center">
-                        <i class="fas fa-star text-2xl text-gray-500"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900">Silver</h3>
-                    <p class="text-gray-500 text-sm mt-1">3 Months</p>
-                    <div class="mt-4">
-                        <span class="text-4xl font-bold text-gray-900">₹999</span>
-                        <span class="text-gray-500 line-through ml-2">₹1,999</span>
-                    </div>
-                </div>
-                <ul class="mt-8 space-y-3">
-                    <li class="flex items-center text-sm text-gray-600"><i class="fas fa-check text-green-500 mr-3"></i>View 50 Profiles</li>
-                    <li class="flex items-center text-sm text-gray-600"><i class="fas fa-check text-green-500 mr-3"></i>Send 30 Interests</li>
-                    <li class="flex items-center text-sm text-gray-600"><i class="fas fa-check text-green-500 mr-3"></i>Chat with Matches</li>
-                    <li class="flex items-center text-sm text-gray-600"><i class="fas fa-check text-green-500 mr-3"></i>View Contact Details</li>
-                    <li class="flex items-center text-sm text-gray-400"><i class="fas fa-times text-gray-300 mr-3"></i>Profile Highlight</li>
-                    <li class="flex items-center text-sm text-gray-400"><i class="fas fa-times text-gray-300 mr-3"></i>Video Call</li>
-                </ul>
-                <button class="w-full mt-8 py-3 border-2 border-primary-600 text-primary-600 rounded-xl font-bold hover:bg-primary-50 transition-colors">
-                    Get Started
-                </button>
-            </div>
-
-            <!-- Gold Plan (Popular) -->
-            <div class="card-hover bg-gradient-to-b from-primary-600 to-primary-800 rounded-3xl p-8 shadow-2xl relative transform scale-105" data-aos="fade-up" data-aos-delay="100">
-                <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <span class="px-6 py-1.5 bg-gradient-to-r from-gold-400 to-gold-500 text-white text-sm font-bold rounded-full shadow-lg">MOST POPULAR</span>
-                </div>
-                <div class="text-center text-white">
-                    <div class="w-16 h-16 mx-auto mb-4 bg-white/20 rounded-2xl flex items-center justify-center">
-                        <i class="fas fa-crown text-2xl text-gold-400"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold">Gold</h3>
-                    <p class="text-white/70 text-sm mt-1">6 Months</p>
-                    <div class="mt-4">
-                        <span class="text-4xl font-bold">₹1,999</span>
-                        <span class="text-white/50 line-through ml-2">₹3,999</span>
-                    </div>
-                </div>
-                <ul class="mt-8 space-y-3">
-                    <li class="flex items-center text-sm text-white/90"><i class="fas fa-check text-gold-400 mr-3"></i>Unlimited Profile Views</li>
-                    <li class="flex items-center text-sm text-white/90"><i class="fas fa-check text-gold-400 mr-3"></i>Send 100 Interests</li>
-                    <li class="flex items-center text-sm text-white/90"><i class="fas fa-check text-gold-400 mr-3"></i>Unlimited Chat</li>
-                    <li class="flex items-center text-sm text-white/90"><i class="fas fa-check text-gold-400 mr-3"></i>View All Contact Details</li>
-                    <li class="flex items-center text-sm text-white/90"><i class="fas fa-check text-gold-400 mr-3"></i>Profile Highlight</li>
-                    <li class="flex items-center text-sm text-white/90"><i class="fas fa-check text-gold-400 mr-3"></i>Priority Support</li>
-                </ul>
-                <button class="w-full mt-8 py-3 bg-gradient-to-r from-gold-400 to-gold-500 text-gray-900 rounded-xl font-bold hover:from-gold-500 hover:to-gold-600 transition-all shadow-lg">
-                    Get Gold Plan
-                </button>
-            </div>
-
-            <!-- Platinum Plan -->
-            <div class="card-hover bg-white rounded-3xl p-8 shadow-lg border-2 border-gray-100 relative" data-aos="fade-up" data-aos-delay="200">
-                <div class="text-center">
-                    <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-purple-100 to-rose-100 rounded-2xl flex items-center justify-center">
-                        <i class="fas fa-gem text-2xl text-purple-600"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900">Platinum</h3>
-                    <p class="text-gray-500 text-sm mt-1">12 Months</p>
-                    <div class="mt-4">
-                        <span class="text-4xl font-bold text-gray-900">₹2,999</span>
-                        <span class="text-gray-500 line-through ml-2">₹5,999</span>
-                    </div>
-                </div>
-                <ul class="mt-8 space-y-3">
-                    <li class="flex items-center text-sm text-gray-600"><i class="fas fa-check text-green-500 mr-3"></i>Everything in Gold</li>
-                    <li class="flex items-center text-sm text-gray-600"><i class="fas fa-check text-green-500 mr-3"></i>Unlimited Interests</li>
-                    <li class="flex items-center text-sm text-gray-600"><i class="fas fa-check text-green-500 mr-3"></i>Video Call Feature</li>
-                    <li class="flex items-center text-sm text-gray-600"><i class="fas fa-check text-green-500 mr-3"></i>Profile Boost (2x)</li>
-                    <li class="flex items-center text-sm text-gray-600"><i class="fas fa-check text-green-500 mr-3"></i>Dedicated Relationship Manager</li>
-                    <li class="flex items-center text-sm text-gray-600"><i class="fas fa-check text-green-500 mr-3"></i>VIP Badge</li>
-                </ul>
-                <button class="w-full mt-8 py-3 gradient-bg text-white rounded-xl font-bold hover:opacity-90 transition-opacity shadow-lg">
-                    Get Platinum
-                </button>
+    <!-- STORIES -->
+    <section class="editorial-section bg-white" id="stories">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5"><div class="section-intro reveal-home"><p class="eyebrow">The human outcome</p><h2 class="section-title mt-4">Every match has<br><em>a story behind it.</em></h2></div><a href="{{ route('success-stories') }}" class="text-link reveal-home">Read more stories <span aria-hidden="true">↗</span></a></div>
+            <div class="story-grid reveal-home">
+                <article class="story-card"><img src="{{ $images['stories'][0]['image'] }}" alt="{{ $images['stories'][0]['alt'] }}" loading="lazy"><div class="story-copy"><p class="eyebrow text-gold-300">{{ $images['stories'][0]['eyebrow'] }}</p><p>“{{ $images['stories'][0]['quote'] }}”</p></div></article>
+                <div class="story-column"><article class="story-card small"><img src="{{ $images['stories'][1]['image'] }}" alt="{{ $images['stories'][1]['alt'] }}" loading="lazy"><div class="story-copy"><p class="eyebrow text-gold-300">{{ $images['stories'][1]['eyebrow'] }}</p><p>“{{ $images['stories'][1]['quote'] }}”</p></div></article><article class="story-card small"><img src="{{ $images['stories'][2]['image'] }}" alt="{{ $images['stories'][2]['alt'] }}" loading="lazy"><div class="story-copy"><p class="eyebrow text-gold-300">{{ $images['stories'][2]['eyebrow'] }}</p><p>“{{ $images['stories'][2]['quote'] }}”</p></div></article></div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- ============ TESTIMONIALS ============ -->
-<section class="py-20 gradient-bg hero-pattern relative overflow-hidden">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div class="text-center mb-16" data-aos="fade-up">
-            <span class="inline-block px-4 py-1.5 bg-white/20 text-white rounded-full text-sm font-semibold mb-4">SUCCESS STORIES</span>
-            <h2 class="text-4xl lg:text-5xl font-bold text-white font-playfair mb-4">
-                Love Stories That <span class="text-gold-400">Inspire</span>
-            </h2>
-            <p class="text-xl text-white/80">Real couples who found their soulmate through Advaita Matrimony</p>
-        </div>
+    <!-- APP -->
+    <section class="editorial-section app-section" id="app">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><div class="app-showcase"><div class="phone-cluster reveal-home" aria-label="Preview of the Advaita mobile experience"><div class="phone"><div class="phone-screen"><div class="phone-bar"></div><div class="phone-photo"><img src="{{ $images['hero']['mobile'] }}" alt="" loading="lazy"></div><div class="phone-line"></div><div class="phone-line short"></div><span class="phone-pill">Profile verified</span><div class="phone-line"></div><div class="phone-line short"></div></div></div><div class="phone"><div class="phone-screen"><div class="phone-bar"></div><p class="eyebrow text-plum-700">For you</p><div class="phone-photo mt-3"><img src="{{ $images['communities']['general']['image'] }}" alt="" loading="lazy"></div><div class="phone-line"></div><div class="phone-line short"></div><span class="phone-pill">Shared values</span><div class="phone-line"></div></div></div></div><div class="reveal-home"><p class="eyebrow">A quieter way to connect</p><h2 class="section-title mt-4">Your matches,<br><em>wherever you are.</em></h2><p class="section-copy mt-6">Keep your discovery, conversations, interests, and privacy controls close — with the same warm, considered experience on mobile.</p><div class="mt-8 flex flex-wrap gap-3"><span class="inline-flex items-center gap-2 px-4 py-3 bg-white border border-ivory-300 text-sm font-semibold text-ink">Android app</span><span class="inline-flex items-center gap-2 px-4 py-3 bg-white border border-ivory-300 text-sm font-semibold text-ink">iOS coming soon</span></div></div></div></div>
+    </section>
 
-        <div class="grid md:grid-cols-3 gap-8">
-            <div class="glass-card rounded-3xl p-8 text-white" data-aos="fade-up">
-                <div class="flex items-center mb-4">
-                    <div class="flex -space-x-3">
-                        <div class="w-12 h-12 bg-rose-300 rounded-full border-2 border-white flex items-center justify-center"><i class="fas fa-user text-white"></i></div>
-                        <div class="w-12 h-12 bg-blue-300 rounded-full border-2 border-white flex items-center justify-center"><i class="fas fa-user text-white"></i></div>
-                    </div>
-                    <div class="ml-4">
-                        <p class="font-semibold">Priya & Rohit</p>
-                        <p class="text-sm text-white/60">Married in 2024</p>
-                    </div>
-                </div>
-                <p class="text-white/80 italic leading-relaxed">"We both have locomotor disability. Finding someone who truly understood was impossible until Advaita. Now we're happily married! Thank you for this beautiful platform."</p>
-                <div class="flex text-gold-400 mt-4">
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                </div>
-            </div>
+    <!-- FAQ -->
+    <section class="editorial-section" id="faq">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><div class="text-center section-intro mx-auto reveal-home"><p class="eyebrow">Good questions are welcome</p><h2 class="section-title mt-4">Before you<br><em>begin.</em></h2></div><div class="faq-list reveal-home"><details><summary>How does Advaita work?</summary><p>Create a profile, share what matters to you, explore compatible people, and choose when to send an interest or begin a conversation.</p></details><details><summary>Are profiles reviewed?</summary><p>The existing platform includes profile approval, photo moderation, OTP verification, and UDID verification flows. The interface will show each status clearly rather than hiding it behind decorative badges.</p></details><details><summary>Can I protect my photos?</summary><p>Yes. The existing photo privacy model supports protected access, blurred images, member-only visibility, and photo requests. Your profile experience will communicate those states clearly.</p></details><details><summary>Can I use Kannada?</summary><p>English and Kannada are supported in the product direction. The remaining screens need broader copy coverage so language switching is not limited to a few labels.</p></details><details><summary>Is registration free?</summary><p>Registration is available through the existing OTP flow. Subscription features and payment availability depend on the plans configured by the platform.</p></details></div></div>
+    </section>
 
-            <div class="glass-card rounded-3xl p-8 text-white" data-aos="fade-up" data-aos-delay="100">
-                <div class="flex items-center mb-4">
-                    <div class="flex -space-x-3">
-                        <div class="w-12 h-12 bg-green-300 rounded-full border-2 border-white flex items-center justify-center"><i class="fas fa-user text-white"></i></div>
-                        <div class="w-12 h-12 bg-purple-300 rounded-full border-2 border-white flex items-center justify-center"><i class="fas fa-user text-white"></i></div>
-                    </div>
-                    <div class="ml-4">
-                        <p class="font-semibold">Anita & Suresh</p>
-                        <p class="text-sm text-white/60">Married in 2024</p>
-                    </div>
-                </div>
-                <p class="text-white/80 italic leading-relaxed">"Living with vitiligo, I always felt judged on other platforms. Advaita gave me a safe space where I was accepted for who I am. Found my soulmate here!"</p>
-                <div class="flex text-gold-400 mt-4">
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                </div>
-            </div>
-
-            <div class="glass-card rounded-3xl p-8 text-white" data-aos="fade-up" data-aos-delay="200">
-                <div class="flex items-center mb-4">
-                    <div class="flex -space-x-3">
-                        <div class="w-12 h-12 bg-yellow-300 rounded-full border-2 border-white flex items-center justify-center"><i class="fas fa-user text-white"></i></div>
-                        <div class="w-12 h-12 bg-rose-300 rounded-full border-2 border-white flex items-center justify-center"><i class="fas fa-user text-white"></i></div>
-                    </div>
-                    <div class="ml-4">
-                        <p class="font-semibold">Deepak & Meena</p>
-                        <p class="text-sm text-white/60">Married in 2024</p>
-                    </div>
-                </div>
-                <p class="text-white/80 italic leading-relaxed">"Both of us are hearing impaired. The sign language filter and video chat feature made it so easy to connect. Advaita truly understands our community."</p>
-                <div class="flex text-gold-400 mt-4">
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ============ DOWNLOAD APP CTA ============ -->
-<section class="py-20 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="bg-gradient-to-r from-primary-700 via-accent-600 to-rose-600 rounded-3xl p-12 relative overflow-hidden" data-aos="fade-up">
-            <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
-            <div class="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2"></div>
-
-            <div class="relative z-10 grid md:grid-cols-2 gap-12 items-center">
-                <div class="text-white">
-                    <h2 class="text-4xl font-bold font-playfair mb-4">Download Our App</h2>
-                    <p class="text-lg text-white/80 mb-8">Get the Advaita Matrimony app for a seamless matchmaking experience on the go. Available for Android & iOS.</p>
-                    <div class="flex flex-wrap gap-4">
-                        <a href="#" class="inline-flex items-center px-6 py-3 bg-black rounded-xl hover:bg-gray-900 transition-colors">
-                            <i class="fab fa-google-play text-2xl mr-3"></i>
-                            <div>
-                                <p class="text-xs text-gray-400">GET IT ON</p>
-                                <p class="text-sm font-semibold text-white">Google Play</p>
-                            </div>
-                        </a>
-                        <a href="#" class="inline-flex items-center px-6 py-3 bg-black rounded-xl hover:bg-gray-900 transition-colors">
-                            <i class="fab fa-apple text-2xl mr-3"></i>
-                            <div>
-                                <p class="text-xs text-gray-400">Download on the</p>
-                                <p class="text-sm font-semibold text-white">App Store</p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="hidden md:flex justify-center">
-                    <div class="w-48 h-80 bg-white/20 rounded-[2.5rem] border-4 border-white/30 backdrop-blur-sm flex items-center justify-center">
-                        <div class="text-center text-white">
-                            <i class="fas fa-mobile-alt text-6xl mb-4"></i>
-                            <p class="font-semibold">Advaita App</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ============ CTA SECTION ============ -->
-<section class="py-20 bg-gray-50">
-    <div class="max-w-4xl mx-auto px-4 text-center" data-aos="fade-up">
-        <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 font-playfair mb-6">
-            Ready to Find Your <span class="text-gradient">Perfect Match?</span>
-        </h2>
-        <p class="text-xl text-gray-600 mb-10">Join thousands of happy couples. Registration is 100% FREE.</p>
-        <a href="/register" class="inline-block px-10 py-4 gradient-bg text-white rounded-full font-bold text-lg shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300">
-            <i class="fas fa-heart mr-2 heartbeat"></i> Register Now - It's Free!
-        </a>
-        <p class="mt-6 text-gray-500 text-sm"><i class="fas fa-lock mr-1"></i> Your information is 100% secure and private</p>
-    </div>
-</section>
+    <!-- FINAL CTA -->
+    <section class="final-cta"><img src="{{ $images['stories'][0]['image'] }}" alt="" loading="lazy"><div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full"><div class="final-cta-content reveal-home"><p class="eyebrow text-gold-300">Your next chapter starts here</p><h2 class="mt-5">Your story could be the next one we celebrate.</h2><p class="mt-7 max-w-md text-white/72 leading-relaxed">Create a profile that feels like you. Meet with intention. Let the right beginning take its time.</p><div class="mt-8 flex flex-wrap gap-3"><a href="{{ route('register') }}" class="btn-premium btn-gold-premium btn-lg">Create free profile <span aria-hidden="true">↗</span></a><a href="{{ route('login') }}" class="inline-flex items-center px-5 py-3 text-sm font-semibold text-white hover:text-gold-300 transition-colors">Already a member? Sign in</a></div></div></div></section>
+</div>
 @endsection
+
+@push('scripts')
+<script>
+    (function () {
+        const elements = document.querySelectorAll('.reveal-home');
+        if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            elements.forEach((element) => element.classList.add('is-visible'));
+            return;
+        }
+        const observer = new IntersectionObserver((entries, instance) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    instance.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12 });
+        elements.forEach((element) => observer.observe(element));
+    }());
+</script>
+@endpush

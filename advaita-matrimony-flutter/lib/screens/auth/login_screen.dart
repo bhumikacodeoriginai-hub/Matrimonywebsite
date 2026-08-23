@@ -21,246 +21,220 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFF1E40AF), Color(0xFF7C3AED)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-        child: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 40),
-
-                // Logo & Header
-                Center(
-                  child: Column(
-                    children: [
-                      Container(
-                        width: 80,
-                        height: 80,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              blurRadius: 20,
-                              offset: const Offset(0, 8),
-                            ),
-                          ],
-                        ),
-                        child: const Center(
-                          child: Text('A', style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: AppColors.primary)),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      const Text(
-                        'Welcome Back',
-                        style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
-                      ),
-                      const SizedBox(height: 8),
-                      const Text(
-                        'Sign in to find your perfect match',
-                        style: TextStyle(fontSize: 15, color: Colors.white70),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 50),
-
-                // Login Card
-                Container(
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(24),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 30,
-                        offset: const Offset(0, 10),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Login with Mobile OTP',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.textPrimary),
-                      ),
-                      const SizedBox(height: 8),
-                      const Text(
-                        'Enter your registered mobile number',
-                        style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
-                      ),
-                      const SizedBox(height: 24),
-
-                      // Phone Field
-                      TextFormField(
-                        controller: _phoneController,
-                        keyboardType: TextInputType.phone,
-                        maxLength: 10,
-                        enabled: !_showOtpField,
-                        decoration: InputDecoration(
-                          labelText: 'Mobile Number',
-                          prefixIcon: const Icon(Icons.phone_android, color: AppColors.primary),
-                          prefixText: '+91 ',
-                          counterText: '',
-                          suffixIcon: _showOtpField
-                              ? TextButton(
-                                  onPressed: () => setState(() {
-                                    _showOtpField = false;
-                                    _otpController.clear();
-                                  }),
-                                  child: const Text('Change', style: TextStyle(fontSize: 12)),
-                                )
-                              : null,
-                        ),
-                      ),
-
-                      if (_showOtpField) ...[
-                        const SizedBox(height: 24),
-                        const Text(
-                          'Enter 6-digit OTP',
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                        ),
-                        const SizedBox(height: 12),
-                        PinCodeTextField(
-                          appContext: context,
-                          length: 6,
-                          controller: _otpController,
-                          keyboardType: TextInputType.number,
-                          animationType: AnimationType.fade,
-                          pinTheme: PinTheme(
-                            shape: PinCodeFieldShape.box,
-                            borderRadius: BorderRadius.circular(12),
-                            fieldHeight: 50,
-                            fieldWidth: 42,
-                            activeFillColor: AppColors.primary.withOpacity(0.05),
-                            inactiveFillColor: Colors.grey.shade50,
-                            selectedFillColor: AppColors.primary.withOpacity(0.1),
-                            activeColor: AppColors.primary,
-                            inactiveColor: Colors.grey.shade300,
-                            selectedColor: AppColors.primary,
+      backgroundColor: AppColors.background,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildEditorialHeader(textTheme),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 24, 20, 32),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('A thoughtful way to begin', style: textTheme.labelLarge?.copyWith(color: AppColors.gold)),
+                    const SizedBox(height: 8),
+                    Text('Welcome back.', style: textTheme.headlineLarge?.copyWith(fontWeight: FontWeight.w600)),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Your next conversation can start with a little intention.',
+                      style: textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary, height: 1.5),
+                    ),
+                    const SizedBox(height: 24),
+                    _buildLoginPanel(textTheme),
+                    const SizedBox(height: 24),
+                    Center(
+                      child: Wrap(
+                        alignment: WrapAlignment.center,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          Text("New to Advaita?", style: textTheme.bodySmall?.copyWith(color: AppColors.textSecondary)),
+                          TextButton(
+                            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const RegisterScreen())),
+                            child: const Text('Create a free profile'),
                           ),
-                          enableActiveFill: true,
-                          onCompleted: (_) => _verifyOtp(),
-                          onChanged: (value) {},
-                        ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
-                            onPressed: _sendOtp,
-                            child: const Text('Resend OTP', style: TextStyle(fontSize: 13)),
-                          ),
-                        ),
-                      ],
-
-                      const SizedBox(height: 20),
-
-                      // Submit Button
-                      SizedBox(
-                        width: double.infinity,
-                        height: 52,
-                        child: ElevatedButton(
-                          onPressed: _isLoading ? null : (_showOtpField ? _verifyOtp : _sendOtp),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                          ),
-                          child: _isLoading
-                              ? const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                              : Text(
-                                  _showOtpField ? 'Verify & Login' : 'Send OTP',
-                                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                                ),
-                        ),
+                        ],
                       ),
-
-                      // Error message
-                      Consumer<AuthProvider>(
-                        builder: (context, auth, _) {
-                          if (auth.errorMessage != null) {
-                            return Padding(
-                              padding: const EdgeInsets.only(top: 12),
-                              child: Text(
-                                auth.errorMessage!,
-                                style: const TextStyle(color: Colors.red, fontSize: 13),
-                              ),
-                            );
-                          }
-                          return const SizedBox.shrink();
-                        },
+                    ),
+                    const SizedBox(height: 12),
+                    Center(
+                      child: Text(
+                        'By continuing, you agree to meet with respect and care.',
+                        textAlign: TextAlign.center,
+                        style: textTheme.bodySmall?.copyWith(color: AppColors.textHint, fontSize: 11),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-
-                const SizedBox(height: 30),
-
-                // Register Link
-                Center(
-                  child: Column(
-                    children: [
-                      const Text("Don't have an account?", style: TextStyle(color: Colors.white70, fontSize: 14)),
-                      TextButton(
-                        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const RegisterScreen())),
-                        child: const Text(
-                          'Register Free',
-                          style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 
+  Widget _buildEditorialHeader(TextTheme textTheme) {
+    return SizedBox(
+      height: 230,
+      width: double.infinity,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Image.network(
+            'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=1000&h=700&fit=crop&auto=format&q=82',
+            fit: BoxFit.cover,
+            semanticLabel: 'Indian couple sharing a joyful moment',
+            errorBuilder: (_, __, ___) => Container(color: AppColors.primaryDark),
+          ),
+          DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [AppColors.primaryDark.withOpacity(.96), AppColors.primary.withOpacity(.48)],
+                begin: Alignment.bottomLeft,
+                end: Alignment.topRight,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 26),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      width: 42,
+                      height: 42,
+                      decoration: BoxDecoration(color: AppColors.goldLight, borderRadius: BorderRadius.circular(12)),
+                      alignment: Alignment.center,
+                      child: Text('A', style: textTheme.headlineSmall?.copyWith(color: AppColors.primaryDark, fontWeight: FontWeight.w700)),
+                    ),
+                    const SizedBox(width: 12),
+                    Text('ADVAITA', style: textTheme.labelLarge?.copyWith(color: AppColors.goldLight, letterSpacing: 2.4, fontWeight: FontWeight.w700)),
+                  ],
+                ),
+                const SizedBox(height: 18),
+                Text('Where every heart finds its match.', style: textTheme.headlineMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.w500, height: 1.02)),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLoginPanel(TextTheme textTheme) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: AppColors.divider),
+        boxShadow: [BoxShadow(color: AppColors.primary.withOpacity(.06), blurRadius: 30, offset: const Offset(0, 14))],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(width: 34, height: 34, decoration: BoxDecoration(color: AppColors.goldLight.withOpacity(.35), shape: BoxShape.circle), child: const Icon(Icons.lock_outline, size: 17, color: AppColors.primary)),
+              const SizedBox(width: 10),
+              Text('Sign in with mobile OTP', style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600)),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text('We will send a one-time code to keep your account secure.', style: textTheme.bodySmall?.copyWith(color: AppColors.textSecondary, height: 1.45)),
+          const SizedBox(height: 22),
+          TextFormField(
+            controller: _phoneController,
+            keyboardType: TextInputType.phone,
+            maxLength: 10,
+            enabled: !_showOtpField,
+            decoration: InputDecoration(
+              labelText: 'Mobile number',
+              prefixIcon: const Icon(Icons.phone_android_outlined),
+              prefixText: '+91  ',
+              counterText: '',
+              suffixIcon: _showOtpField
+                  ? TextButton(onPressed: () => setState(() { _showOtpField = false; _otpController.clear(); }), child: const Text('Change'))
+                  : null,
+            ),
+          ),
+          if (_showOtpField) ...[
+            const SizedBox(height: 22),
+            Text('Enter your 6-digit code', style: textTheme.labelLarge),
+            const SizedBox(height: 10),
+            PinCodeTextField(
+              appContext: context,
+              length: 6,
+              controller: _otpController,
+              keyboardType: TextInputType.number,
+              animationType: AnimationType.fade,
+              pinTheme: PinTheme(
+                shape: PinCodeFieldShape.box,
+                borderRadius: BorderRadius.circular(12),
+                fieldHeight: 48,
+                fieldWidth: 42,
+                activeFillColor: AppColors.goldLight.withOpacity(.2),
+                inactiveFillColor: AppColors.background,
+                selectedFillColor: AppColors.goldLight.withOpacity(.3),
+                activeColor: AppColors.primary,
+                inactiveColor: AppColors.divider,
+                selectedColor: AppColors.gold,
+              ),
+              enableActiveFill: true,
+              onCompleted: (_) => _verifyOtp(),
+              onChanged: (_) {},
+            ),
+            Align(alignment: Alignment.centerRight, child: TextButton(onPressed: _sendOtp, child: const Text('Resend code'))),
+          ],
+          const SizedBox(height: 18),
+          SizedBox(
+            width: double.infinity,
+            height: 54,
+            child: ElevatedButton(
+              onPressed: _isLoading ? null : (_showOtpField ? _verifyOtp : _sendOtp),
+              child: _isLoading
+                  ? const SizedBox(width: 22, height: 22, child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.background))
+                  : Text(_showOtpField ? 'Verify and continue' : 'Send secure code'),
+            ),
+          ),
+          Consumer<AuthProvider>(
+            builder: (context, auth, _) {
+              if (auth.errorMessage == null) return const SizedBox.shrink();
+              return Padding(padding: const EdgeInsets.only(top: 12), child: Text(auth.errorMessage!, style: textTheme.bodySmall?.copyWith(color: AppColors.rose)));
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   void _sendOtp() async {
     if (_phoneController.text.length != 10) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter a valid 10-digit mobile number')),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please enter a valid 10-digit mobile number')));
       return;
     }
-
     setState(() => _isLoading = true);
     final auth = Provider.of<AuthProvider>(context, listen: false);
     final success = await auth.sendOtp(_phoneController.text);
-
-    setState(() {
-      _isLoading = false;
-      if (success) _showOtpField = true;
-    });
+    if (!mounted) return;
+    setState(() { _isLoading = false; if (success) _showOtpField = true; });
   }
 
   void _verifyOtp() async {
     if (_otpController.text.length != 6) return;
-
     setState(() => _isLoading = true);
     final auth = Provider.of<AuthProvider>(context, listen: false);
     final result = await auth.verifyOtp(_phoneController.text, _otpController.text);
-
-    setState(() => _isLoading = false);
-
     if (!mounted) return;
-
+    setState(() => _isLoading = false);
     if (result['success'] == true) {
       if (result['is_new_user'] == true) {
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const RegisterScreen()));

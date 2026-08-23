@@ -25,7 +25,7 @@
                     <span class="lang-en">Home</span>
                     <span class="lang-kn">ಮುಖ್ಯ ಪುಟ</span>
                 </a>
-                <a href="{{ route('search') }}" class="nav-link group">
+                <a href="{{ auth()->check() ? route('dashboard.search') : route('register') }}?intent=discover" class="nav-link group">
                     <span class="lang-en">Discover</span>
                         <span class="lang-kn">ಹುಡುಕಿ</span>
                 </a>
@@ -33,7 +33,7 @@
                     <span class="lang-en">How It Works</span>
                     <span class="lang-kn">ಹೇಗೆ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ</span>
                 </a>
-                <a href="{{ route('communities') }}" class="nav-link group">
+                <a href="{{ route('register') }}?intent=communities" class="nav-link group">
                     <span class="lang-en">Communities</span>
                     <span class="lang-kn">ಸಮುದಾಯಗಳು</span>
                 </a>
@@ -101,7 +101,7 @@
                 <span class="lang-en">Home</span>
                 <span class="lang-kn">ಮುಖ್ಯ ಪುಟ</span>
             </a>
-            <a href="{{ route('search') }}" onclick="toggleMobileMenu()" class="mobile-nav-link">
+            <a href="{{ auth()->check() ? route('dashboard.search') : route('register') }}?intent=discover" onclick="toggleMobileMenu()" class="mobile-nav-link">
                 <i class="fas fa-search w-6"></i>
                 <span class="lang-en">Discover</span>
                 <span class="lang-kn">ಹುಡುಕಿ</span>
@@ -111,7 +111,7 @@
                 <span class="lang-en">How It Works</span>
                 <span class="lang-kn">ಹೇಗೆ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ</span>
             </a>
-            <a href="{{ route('communities') }}" onclick="toggleMobileMenu()" class="mobile-nav-link">
+            <a href="{{ route('register') }}?intent=communities" onclick="toggleMobileMenu()" class="mobile-nav-link">
                 <i class="fas fa-users w-6"></i>
                 <span class="lang-en">Communities</span>
                 <span class="lang-kn">ಸಮುದಾಯಗಳು</span>

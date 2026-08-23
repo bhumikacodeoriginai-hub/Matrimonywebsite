@@ -15,9 +15,14 @@
     .home-progress { position: fixed; inset: 0 0 auto; z-index: 1000; height: 3px; pointer-events: none; background: rgba(231,207,161,.14); }
     .home-progress span { display: block; width: 0; height: 100%; transform-origin: left; background: linear-gradient(90deg, var(--color-rose-500), var(--color-gold-400)); transition: width .08s linear; }
     .hero-editorial { min-height: min(860px, 100vh); background: var(--color-plum-900); color: var(--color-ivory-light); position: relative; isolation: isolate; }
-    .hero-editorial::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(42,21,38,.98) 0%, rgba(42,21,38,.86) 43%, rgba(42,21,38,.2) 78%, rgba(42,21,38,.34) 100%); }
-    .hero-photo { position: absolute; inset: 0 0 0 38%; z-index: -2; overflow: hidden; background: var(--color-plum-800); }
-    .hero-photo img, .hero-photo video { width: 100%; height: 100%; object-fit: cover; object-position: center; opacity: .9; }
+    .hero-editorial::after { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(90deg, rgba(42,21,38,.98) 0%, rgba(42,21,38,.86) 43%, rgba(42,21,38,.2) 78%, rgba(42,21,38,.34) 100%); }
+    .hero-editorial > .max-w-7xl { position: relative; z-index: 2; }
+    .hero-photo { position: absolute; inset: 0 0 0 38%; z-index: 0; overflow: hidden; background: var(--color-plum-800); }
+    .hero-photo picture { position: absolute; inset: 0; z-index: 0; display: block; }
+    .hero-photo img, .hero-photo video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; opacity: .9; }
+    .hero-photo img { animation: hero-image-drift 18s ease-in-out infinite alternate; }
+    @keyframes hero-image-drift { from { transform: scale(1.02); } to { transform: scale(1.08) translate3d(-1.5%, -1%, 0); } }
+    .hero-photo video { z-index: 1; transform: scale(1.04); filter: saturate(.86) contrast(1.03); pointer-events: none; }
     .hero-photo video.video-failed { display: none; }
     .tilt-home { will-change: transform; }
     .hero-photo::before { content: ''; position: absolute; inset: 0; z-index: 1; background: radial-gradient(circle at 68% 40%, rgba(231,207,161,.18), transparent 26%), linear-gradient(110deg, rgba(42,21,38,.25), transparent 50%); mix-blend-mode: screen; pointer-events: none; }
@@ -189,6 +194,7 @@
     @media (prefers-reduced-motion: reduce) {
         .hero-title-line, .hero-copy > .eyebrow, .hero-copy > p:not(.eyebrow), .hero-copy > .flex, .hero-copy > .hero-intent { opacity: 1; transform: none; animation: none; }
         .hero-orbit { animation: none; }
+        .hero-photo img { animation: none; }
         .hero-video-toggle { display: none; }
         .reveal-home { opacity: 1; transform: none; }
         .profile-frame, .profile-frame:nth-child(2), .profile-frame:nth-child(3), .profile-frame:hover, .profile-frame:nth-child(2):hover, .profile-frame:nth-child(3):hover, .community-card { transform: none; transition: none; }
@@ -207,17 +213,17 @@
                 <source media="(max-width: 640px)" srcset="{{ $images['hero']['mobile'] }}">
                 <img src="{{ $images['hero']['desktop'] }}" alt="">
             </picture>
-            <video id="heroVideo" autoplay muted loop playsinline preload="metadata" poster="{{ $images['hero']['video']['poster'] }}" aria-hidden="true">
+            <video id="heroVideo" autoplay muted loop playsinline preload="auto" poster="{{ $images['hero']['video']['poster'] }}" aria-hidden="true">
                 <source src="{{ $images['hero']['video']['mp4'] }}" type="video/mp4">
                 <track kind="descriptions" src="{{ asset(ltrim($images['hero']['video']['captions'], '/')) }}" srclang="en" label="Video description">
             </video>
             <span id="heroVideoDescription" class="sr-only">{{ $images['hero']['video']['description'] }}</span>
-            <span class="hero-video-label" aria-hidden="true">A living portrait of belonging</span>
-            <span class="hero-orbit" aria-hidden="true"></span>
-            <button type="button" class="hero-video-toggle" id="heroVideoToggle" aria-controls="heroVideo" aria-pressed="false" aria-label="Pause background video">
-                <span class="video-status-dot" aria-hidden="true"></span><span class="video-toggle-label">Pause motion</span>
-            </button>
         </div>
+        <span class="hero-video-label" aria-hidden="true">A living portrait of belonging</span>
+        <span class="hero-orbit" aria-hidden="true"></span>
+        <button type="button" class="hero-video-toggle" id="heroVideoToggle" aria-controls="heroVideo" aria-pressed="false" aria-label="Pause background video">
+            <span class="video-status-dot" aria-hidden="true"></span><span class="video-toggle-label">Pause motion</span>
+        </button>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="hero-topline py-4 flex items-center justify-between gap-4 text-xs text-gold-300/90">
                 <span class="tracking-[.18em] uppercase">Advaita / A more human way to meet</span>
@@ -416,8 +422,14 @@
         updateProgress();
 
         if (video) {
+            let videoReady = false;
+            const showVideo = () => { videoReady = true; video.classList.remove('video-failed'); };
             if (reduceMotion.matches) video.pause();
-            video.addEventListener('error', () => video.classList.add('video-failed'));
+            video.addEventListener('canplay', showVideo, { once: true });
+            video.addEventListener('error', () => video.classList.add('video-failed'), { once: true });
+            window.setTimeout(() => {
+                if (!videoReady) video.classList.add('video-failed');
+            }, 6000);
             videoToggle?.addEventListener('click', () => {
                 if (video.paused) {
                     video.play().catch(() => {});

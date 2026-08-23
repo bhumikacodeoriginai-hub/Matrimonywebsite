@@ -13,6 +13,8 @@ import 'localization/app_localizations.dart';
 import 'screens/splash/splash_screen.dart';
 import 'theme/app_theme.dart';
 
+const bool designPreview = bool.fromEnvironment('ADVAITA_DESIGN_PREVIEW', defaultValue: false);
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -61,7 +63,7 @@ class AdvaitaMatrimonyApp extends StatelessWidget {
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
           themeMode: ThemeMode.light,
-          home: const SplashScreen(),
+          home: const SplashScreen(designPreview: designPreview),
         ),
       ),
     );

@@ -89,14 +89,25 @@ class _HomeTab extends StatefulWidget {
   State<_HomeTab> createState() => _HomeTabState();
 }
 
-class _HomeTabState extends State<_HomeTab> {
+class _HomeTabState extends State<_HomeTab> with SingleTickerProviderStateMixin {
   static const _compassPreferenceKey = 'advaita-compass-index';
   int _compassIndex = 0;
+  late final AnimationController _entranceController;
 
   @override
   void initState() {
     super.initState();
+    _entranceController = AnimationController(vsync: this, duration: AppMotion.reveal);
     _loadCompassPreference();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final reduceMotion = MediaQuery.maybeOf(context)?.disableAnimations ?? false;
+      if (reduceMotion) {
+        _entranceController.value = 1;
+      } else {
+        _entranceController.forward();
+      }
+    });
   }
 
   Future<void> _loadCompassPreference() async {
@@ -131,6 +142,12 @@ class _HomeTabState extends State<_HomeTab> {
   ];
 
   @override
+  void dispose() {
+    _entranceController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final compass = _compassItems[_compassIndex];
     final disableAnimations = MediaQuery.maybeOf(context)?.disableAnimations ?? false;
@@ -153,9 +170,14 @@ class _HomeTabState extends State<_HomeTab> {
 
           // Welcome Banner
           SliverToBoxAdapter(
-            child: Container(
-              margin: const EdgeInsets.fromLTRB(16, 16, 16, 20),
-              padding: const EdgeInsets.all(24),
+            child: _HomeReveal(
+              animation: _entranceController,
+              start: 0,
+              end: .28,
+              disableAnimations: disableAnimations,
+              child: Container(
+                margin: const EdgeInsets.fromLTRB(16, 16, 16, 20),
+                padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
                 gradient: AppColors.primaryGradient,
                 borderRadius: BorderRadius.circular(28),
@@ -184,15 +206,22 @@ class _HomeTabState extends State<_HomeTab> {
                 ),
               ),
             ),
+            ),
           ),
 
           // Connection Compass: a calm, explainable discovery signal.
           SliverToBoxAdapter(
-            child: _ConnectionCompass(
-              selectedIndex: _compassIndex,
-              items: _compassItems,
+            child: _HomeReveal(
+              animation: _entranceController,
+              start: .16,
+              end: .48,
               disableAnimations: disableAnimations,
-              onSelected: _selectCompass,
+              child: _ConnectionCompass(
+                selectedIndex: _compassIndex,
+                items: _compassItems,
+                disableAnimations: disableAnimations,
+                onSelected: _selectCompass,
+              ),
             ),
           ),
 
@@ -203,17 +232,23 @@ class _HomeTabState extends State<_HomeTab> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Explore communities', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 23)),
+                  _HomeReveal(
+                    animation: _entranceController,
+                    start: .38,
+                    end: .52,
+                    disableAnimations: disableAnimations,
+                    child: Text('Explore communities', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 23)),
+                  ),
                   const SizedBox(height: 12),
                   Row(
                     children: [
-                      _CategoryCard(icon: '❤️', label: 'General', color: AppColors.categoryGeneral),
+                      Expanded(child: _HomeReveal(animation: _entranceController, start: .44, end: .60, disableAnimations: disableAnimations, child: _CategoryCard(icon: '❤️', label: 'General', color: AppColors.categoryGeneral))),
                       const SizedBox(width: 8),
-                      _CategoryCard(icon: '♿', label: 'Divyangjan', color: AppColors.categoryPhysical),
+                      Expanded(child: _HomeReveal(animation: _entranceController, start: .49, end: .65, disableAnimations: disableAnimations, child: _CategoryCard(icon: '♿', label: 'Divyangjan', color: AppColors.categoryPhysical))),
                       const SizedBox(width: 8),
-                      _CategoryCard(icon: '🤟', label: 'Deaf/Mute', color: AppColors.categoryHearing),
+                      Expanded(child: _HomeReveal(animation: _entranceController, start: .54, end: .70, disableAnimations: disableAnimations, child: _CategoryCard(icon: '🤟', label: 'Deaf/Mute', color: AppColors.categoryHearing))),
                       const SizedBox(width: 8),
-                      _CategoryCard(icon: '⭐', label: 'Vitiligo', color: AppColors.categoryVitiligo),
+                      Expanded(child: _HomeReveal(animation: _entranceController, start: .59, end: .75, disableAnimations: disableAnimations, child: _CategoryCard(icon: '⭐', label: 'Vitiligo', color: AppColors.categoryVitiligo))),
                     ],
                   ),
                 ],
@@ -223,14 +258,20 @@ class _HomeTabState extends State<_HomeTab> {
 
           // Recommended Matches
           SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('A considered introduction', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 23)),
-                  TextButton(onPressed: () {}, child: const Text('View All')),
-                ],
+            child: _HomeReveal(
+              animation: _entranceController,
+              start: .52,
+              end: .78,
+              disableAnimations: disableAnimations,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('A considered introduction', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 23)),
+                    TextButton(onPressed: () {}, child: const Text('View All')),
+                  ],
+                ),
               ),
             ),
           ),
@@ -265,7 +306,14 @@ class _HomeTabState extends State<_HomeTab> {
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
                     final match = matchProvider.recommendations[index];
-                    return _ProfileCard(profile: match);
+                    final revealStart = (.68 + (index * .08)).clamp(.68, .86).toDouble();
+                    return _HomeReveal(
+                      animation: _entranceController,
+                      start: revealStart,
+                      end: (revealStart + .22).clamp(0.9, 1.0).toDouble(),
+                      disableAnimations: disableAnimations,
+                      child: _ProfileCard(profile: match),
+                    );
                   },
                   childCount: matchProvider.recommendations.length,
                 ),
@@ -274,6 +322,42 @@ class _HomeTabState extends State<_HomeTab> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _HomeReveal extends StatelessWidget {
+  final Animation<double> animation;
+  final double start;
+  final double end;
+  final bool disableAnimations;
+  final Widget child;
+
+  const _HomeReveal({
+    required this.animation,
+    required this.start,
+    required this.end,
+    required this.disableAnimations,
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (disableAnimations) return child;
+
+    return AnimatedBuilder(
+      animation: animation,
+      child: child,
+      builder: (_, child) {
+        final progress = Interval(start, end, curve: AppMotion.easeOut).transform(animation.value);
+        return Opacity(
+          opacity: progress,
+          child: Transform.translate(
+            offset: Offset(0, (1 - progress) * 18),
+            child: child,
+          ),
+        );
+      },
     );
   }
 }
@@ -432,21 +516,19 @@ class _CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        decoration: BoxDecoration(
-          color: color.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: color.withOpacity(0.3)),
-        ),
-        child: Column(
-          children: [
-            Text(icon, style: const TextStyle(fontSize: 24)),
-            const SizedBox(height: 6),
-            Text(label, style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: color), textAlign: TextAlign.center),
-          ],
-        ),
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: color.withOpacity(0.3)),
+      ),
+      child: Column(
+        children: [
+          Text(icon, style: const TextStyle(fontSize: 24)),
+          const SizedBox(height: 6),
+          Text(label, style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: color), textAlign: TextAlign.center),
+        ],
       ),
     );
   }

@@ -7,7 +7,9 @@ import '../auth/login_screen.dart';
 import '../home/home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+  final bool designPreview;
+
+  const SplashScreen({super.key, this.designPreview = false});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -40,11 +42,19 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
   }
 
   Future<void> _navigateToNext() async {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    await authProvider.checkAuthStatus();
-    if (!mounted) return;
+    Widget nextScreen;
 
-    final nextScreen = authProvider.isLoggedIn ? const HomeScreen() : const LoginScreen();
+    if (widget.designPreview) {
+      // Explicitly opt-in design preview mode; normal launches still check auth.
+      nextScreen = const HomeScreen();
+    } else {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      await authProvider.checkAuthStatus();
+      if (!mounted) return;
+      nextScreen = authProvider.isLoggedIn ? const HomeScreen() : const LoginScreen();
+    }
+
+    if (!mounted) return;
     Navigator.of(context).pushReplacement(
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) => nextScreen,

@@ -9,14 +9,36 @@
 
 @push('styles')
 <style>
-    /* Homepage v3: editorial match journey, not a dashboard/template */
-    .home-page { background: var(--color-ivory); overflow: hidden; }
+    .home-page { background: var(--color-ivory); overflow: hidden; --motion-ease: cubic-bezier(.22,1,.36,1); }
     .home-page .eyebrow { color: var(--color-gold-600); font-size: .7rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
     .home-page .serif { font-family: var(--font-display); }
+    .home-progress { position: fixed; inset: 0 0 auto; z-index: 1000; height: 3px; pointer-events: none; background: rgba(231,207,161,.14); }
+    .home-progress span { display: block; width: 0; height: 100%; transform-origin: left; background: linear-gradient(90deg, var(--color-rose-500), var(--color-gold-400)); transition: width .08s linear; }
     .hero-editorial { min-height: min(860px, 100vh); background: var(--color-plum-900); color: var(--color-ivory-light); position: relative; isolation: isolate; }
     .hero-editorial::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(42,21,38,.98) 0%, rgba(42,21,38,.86) 43%, rgba(42,21,38,.2) 78%, rgba(42,21,38,.34) 100%); }
-    .hero-photo { position: absolute; inset: 0 0 0 38%; z-index: -2; overflow: hidden; }
-    .hero-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center; opacity: .9; }
+    .hero-photo { position: absolute; inset: 0 0 0 38%; z-index: -2; overflow: hidden; background: var(--color-plum-800); }
+    .hero-photo img, .hero-photo video { width: 100%; height: 100%; object-fit: cover; object-position: center; opacity: .9; }
+    .hero-photo video.video-failed { display: none; }
+    .tilt-home { will-change: transform; }
+    .hero-photo::before { content: ''; position: absolute; inset: 0; z-index: 1; background: radial-gradient(circle at 68% 40%, rgba(231,207,161,.18), transparent 26%), linear-gradient(110deg, rgba(42,21,38,.25), transparent 50%); mix-blend-mode: screen; pointer-events: none; }
+    .hero-photo::after { content: ''; position: absolute; inset: 0; z-index: 2; opacity: .12; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='.48'/%3E%3C/svg%3E"); }
+    .hero-video-toggle { position: absolute; z-index: 4; right: 1.5rem; bottom: 1.5rem; display: inline-flex; align-items: center; gap: .55rem; padding: .7rem .9rem; border: 1px solid rgba(255,252,248,.38); background: rgba(42,21,38,.38); color: var(--color-white); backdrop-filter: blur(14px); font-size: .7rem; font-weight: 700; letter-spacing: .04em; transition: transform .3s var(--motion-ease), background .3s ease; }
+    .hero-video-toggle:hover { transform: translateY(-3px); background: rgba(42,21,38,.68); }
+    .hero-video-toggle .video-status-dot { width: .45rem; height: .45rem; border-radius: 50%; background: var(--color-gold-300); box-shadow: 0 0 0 4px rgba(231,207,161,.14); }
+    .hero-video-label { position: absolute; z-index: 3; right: 1.5rem; top: 8.5rem; display: flex; align-items: center; gap: .65rem; color: rgba(255,252,248,.72); font-size: .65rem; letter-spacing: .12em; text-transform: uppercase; writing-mode: vertical-rl; transform: rotate(180deg); }
+    .hero-video-label::before { content: ''; width: 1px; height: 42px; background: var(--color-gold-400); }
+    .hero-title-line { display: block; opacity: 0; transform: translateY(1.2em); animation: hero-line-in .9s var(--motion-ease) forwards; }
+    .hero-title-line:nth-child(2) { animation-delay: .12s; }
+    .hero-title-line:nth-child(3) { animation-delay: .24s; }
+    @keyframes hero-line-in { to { opacity: 1; transform: none; } }
+    .hero-copy > .eyebrow, .hero-copy > p:not(.eyebrow), .hero-copy > .flex, .hero-copy > .hero-intent { opacity: 0; transform: translateY(18px); animation: hero-support-in .8s .38s var(--motion-ease) forwards; }
+    .hero-copy > p:not(.eyebrow) { animation-delay: .48s; }
+    .hero-copy > .flex { animation-delay: .58s; }
+    .hero-copy > .hero-intent { animation-delay: .7s; }
+    @keyframes hero-support-in { to { opacity: 1; transform: none; } }
+    .hero-orbit { position: absolute; z-index: 3; top: 29%; left: 54%; width: 16px; height: 16px; border: 1px solid rgba(231,207,161,.7); border-radius: 50%; animation: orbit-pulse 3.6s ease-in-out infinite; pointer-events: none; }
+    .hero-orbit::after { content: ''; position: absolute; width: 5px; height: 5px; top: -3px; right: -3px; background: var(--color-gold-300); border-radius: 50%; }
+    @keyframes orbit-pulse { 0%, 100% { transform: translate3d(0,0,0) scale(1); opacity: .7; } 50% { transform: translate3d(42px,28px,0) scale(1.8); opacity: .28; } }
     .hero-topline { border-bottom: 1px solid rgba(231,207,161,.26); }
     .hero-copy { max-width: 640px; padding: 11rem 0 8rem; }
     .hero-title { font-size: clamp(3.5rem, 7vw, 7.2rem); line-height: .88; letter-spacing: -.045em; font-weight: 400; }
@@ -44,26 +66,44 @@
     .discovery-row:last-of-type { border-bottom: 1px solid rgba(255,255,255,.18); }
     .discovery-number { color: var(--color-gold-400); font: 500 1.5rem var(--font-display); width: 2rem; }
     .profile-rail { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; margin-top: 3.5rem; }
-    .profile-frame { background: var(--color-white); border: 1px solid var(--color-ivory-300); }
+    .profile-frame { background: var(--color-white); border: 1px solid var(--color-ivory-300); transition: transform .45s var(--motion-ease), box-shadow .45s ease; transform-style: preserve-3d; will-change: transform; }
+    .profile-frame:hover { box-shadow: 0 24px 60px rgba(42,21,38,.14); }
+    .profile-frame:nth-child(2) { transform: translateY(28px); }
+    .profile-frame:nth-child(2):hover { transform: translateY(22px); }
+    .profile-frame:nth-child(3) { transform: translateY(8px); }
+    .profile-frame:nth-child(3):hover { transform: translateY(2px); }
     .profile-frame-image { aspect-ratio: 4/5; overflow: hidden; position: relative; background: var(--color-plum-50); }
-    .profile-frame-image img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s var(--transition-smooth); }
-    .profile-frame:hover .profile-frame-image img { transform: scale(1.04); }
-    .profile-frame-copy { padding: 1.25rem; }
+    .profile-frame-image::after { content: ''; position: absolute; inset: 0; opacity: 0; background: linear-gradient(135deg, rgba(231,207,161,.16), transparent 42%); transition: opacity .45s ease; pointer-events: none; }
+    .profile-frame:hover .profile-frame-image::after { opacity: 1; }
+    .profile-frame-image img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s var(--motion-ease); }
+    .profile-frame:hover .profile-frame-image img { transform: scale(1.06); }
+    .profile-frame-copy { position: relative; z-index: 1; padding: 1.25rem; }
     .profile-frame-copy h3 { font: 500 1.65rem/1 var(--font-display); color: var(--color-ink); }
     .profile-frame-copy p { font-size: .8rem; margin: .35rem 0 0; color: var(--color-ivory-600); }
     .profile-placeholder { height: 100%; display: grid; place-items: center; padding: 2rem; text-align: center; color: var(--color-plum-700); }
     .profile-placeholder span { display: block; font: 400 2.2rem/1 var(--font-display); }
     .profile-placeholder small { display: block; margin-top: .75rem; color: var(--color-ivory-600); font-size: .78rem; line-height: 1.5; }
     .community-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--color-ivory-300); margin-top: 4rem; border: 1px solid var(--color-ivory-300); }
-    .community-card { min-height: 370px; background: var(--color-ivory-light); position: relative; overflow: hidden; display: flex; align-items: end; }
-    .community-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: saturate(.84); transition: transform .7s var(--transition-smooth); }
-    .community-card:hover img { transform: scale(1.04); }
+    .community-card { min-height: 370px; background: var(--color-ivory-light); position: relative; overflow: hidden; display: flex; align-items: end; transform-style: preserve-3d; transition: transform .45s var(--motion-ease), box-shadow .45s ease; }
+    .community-card:hover { box-shadow: 0 24px 60px rgba(42,21,38,.18); z-index: 2; }
+    .community-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: saturate(.84); transition: transform .7s var(--motion-ease), filter .7s ease; }
+    .community-card:hover img { transform: scale(1.07); filter: saturate(1); }
     .community-card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(28,20,32,.9), rgba(28,20,32,.02) 72%); }
-    .community-copy { position: relative; z-index: 1; padding: 1.7rem; color: var(--color-white); }
+    .community-copy { position: relative; z-index: 1; padding: 1.7rem; color: var(--color-white); transform: translateZ(16px); }
     .community-copy h3 { font: 500 2rem/1 var(--font-display); margin: .45rem 0; }
     .community-copy p { color: rgba(255,255,255,.76); max-width: 350px; font-size: .84rem; line-height: 1.55; }
     .text-link { color: var(--color-gold-500); font-weight: 700; font-size: .78rem; letter-spacing: .03em; }
     .text-link:hover { color: var(--color-plum-600); }
+    .magnetic-home { position: relative; overflow: hidden; }
+    .magnetic-home::before { content: ''; position: absolute; width: 140px; height: 140px; left: var(--pointer-x, 50%); top: var(--pointer-y, 50%); transform: translate(-50%, -50%) scale(0); border-radius: 50%; background: rgba(231,207,161,.2); transition: transform .45s var(--motion-ease); pointer-events: none; }
+    .magnetic-home:hover::before { transform: translate(-50%, -50%) scale(1); }
+    .magnetic-home > * { position: relative; z-index: 1; }
+    .reveal-home { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s var(--motion-ease); }
+    .reveal-home.is-visible { opacity: 1; transform: none; }
+    .profile-rail .profile-frame, .principles-grid .principle, .community-layout .community-card { transition-delay: calc(var(--motion-index, 0) * 80ms); }
+    .motion-underline { position: relative; }
+    .motion-underline::after { content: ''; position: absolute; left: 0; bottom: -.35rem; height: 1px; width: 100%; transform: scaleX(0); transform-origin: right; background: var(--color-gold-500); transition: transform .45s var(--motion-ease); }
+    .motion-underline:hover::after { transform: scaleX(1); transform-origin: left; }
     .principles-section { background: var(--color-plum-900); color: var(--color-ivory-light); }
     .principles-section .section-title { color: var(--color-ivory-light); }
     .principles-section .section-title em { color: var(--color-gold-300); }
@@ -120,6 +160,7 @@
     @media (max-width: 900px) {
         .hero-photo { inset: 0; opacity: .5; }
         .hero-editorial::after { background: linear-gradient(90deg, rgba(42,21,38,.96), rgba(42,21,38,.62)); }
+        .hero-video-label { top: auto; bottom: 6.4rem; right: .8rem; font-size: .55rem; }
         .hero-copy { padding: 9rem 0 5rem; }
         .trust-item + .trust-item { padding-left: 1rem; }
         .discovery-panel, .privacy-layout, .app-showcase { grid-template-columns: 1fr; }
@@ -131,10 +172,13 @@
         .editorial-section { padding: 4.5rem 0; }
         .hero-title { font-size: clamp(3.4rem, 17vw, 5.2rem); }
         .hero-intent { margin-top: 2rem; }
+        .hero-video-toggle { right: .8rem; bottom: .8rem; }
+        .hero-orbit { left: 76%; top: 22%; }
         .trust-line .grid { grid-template-columns: 1fr 1fr; }
         .trust-item { padding: 1rem 0; }
         .trust-item + .trust-item { border-left: 0; padding-left: 0; }
         .profile-rail, .community-layout, .principles-grid { grid-template-columns: 1fr; }
+        .profile-frame:nth-child(2), .profile-frame:nth-child(2):hover, .profile-frame:nth-child(3), .profile-frame:nth-child(3):hover { transform: none; }
         .community-card { min-height: 330px; }
         .principles-grid { border-top: 1px solid rgba(231,207,161,.25); }
         .principle, .principle:nth-child(3n+2), .principle:nth-child(3n+3) { padding: 1.75rem 0; border-left: 0; }
@@ -143,7 +187,11 @@
         .phone-cluster { transform: scale(.82); margin: -2rem 0; }
     }
     @media (prefers-reduced-motion: reduce) {
+        .hero-title-line, .hero-copy > .eyebrow, .hero-copy > p:not(.eyebrow), .hero-copy > .flex, .hero-copy > .hero-intent { opacity: 1; transform: none; animation: none; }
+        .hero-orbit { animation: none; }
+        .hero-video-toggle { display: none; }
         .reveal-home { opacity: 1; transform: none; }
+        .profile-frame, .profile-frame:nth-child(2), .profile-frame:nth-child(3), .profile-frame:hover, .profile-frame:nth-child(2):hover, .profile-frame:nth-child(3):hover, .community-card { transform: none; transition: none; }
         .profile-frame-image img, .community-card img, .story-card img { transition: none; }
     }
 </style>
@@ -151,13 +199,24 @@
 
 @section('content')
 <div class="home-page">
-    <!-- HERO: a confident first impression, not a feature collage -->
+    <div class="home-progress" aria-hidden="true"><span id="homeProgressBar"></span></div>
+    <!-- HERO: cinematic motion establishes the brand before the user reads a word -->
     <section class="hero-editorial">
-        <div class="hero-photo" aria-hidden="true">
+        <div class="hero-photo" aria-describedby="heroVideoDescription">
             <picture>
                 <source media="(max-width: 640px)" srcset="{{ $images['hero']['mobile'] }}">
                 <img src="{{ $images['hero']['desktop'] }}" alt="">
             </picture>
+            <video id="heroVideo" autoplay muted loop playsinline preload="metadata" poster="{{ $images['hero']['video']['poster'] }}" aria-hidden="true">
+                <source src="{{ $images['hero']['video']['mp4'] }}" type="video/mp4">
+                <track kind="descriptions" src="{{ asset(ltrim($images['hero']['video']['captions'], '/')) }}" srclang="en" label="Video description">
+            </video>
+            <span id="heroVideoDescription" class="sr-only">{{ $images['hero']['video']['description'] }}</span>
+            <span class="hero-video-label" aria-hidden="true">A living portrait of belonging</span>
+            <span class="hero-orbit" aria-hidden="true"></span>
+            <button type="button" class="hero-video-toggle" id="heroVideoToggle" aria-controls="heroVideo" aria-pressed="false" aria-label="Pause background video">
+                <span class="video-status-dot" aria-hidden="true"></span><span class="video-toggle-label">Pause motion</span>
+            </button>
         </div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="hero-topline py-4 flex items-center justify-between gap-4 text-xs text-gold-300/90">
@@ -166,38 +225,21 @@
             </div>
             <div class="hero-copy">
                 <p class="eyebrow text-gold-300 mb-6">India's inclusive matrimony</p>
-                <h1 class="hero-title serif">Where every<br><em>heart</em> finds<br>its match.</h1>
-                <p class="mt-8 max-w-lg text-base sm:text-lg leading-relaxed text-white/72">
-                    A thoughtful place to meet someone who understands your values, your family, and the life you want to build together.
-                </p>
+                <h1 class="hero-title serif"><span class="hero-title-line">Where every</span><span class="hero-title-line"><em>heart</em> finds</span><span class="hero-title-line">its match.</span></h1>
+                <p class="mt-8 max-w-lg text-base sm:text-lg leading-relaxed text-white/72">A thoughtful place to meet someone who understands your values, your family, and the life you want to build together.</p>
                 <div class="mt-9 flex flex-wrap gap-3">
-                    <a href="{{ route('register') }}" class="btn-premium btn-gold-premium btn-lg">Begin your story <span aria-hidden="true">↗</span></a>
-                    <a href="#discover" class="inline-flex items-center px-5 py-3 text-sm font-semibold text-white/88 hover:text-gold-300 transition-colors">See how it works <span class="ml-2" aria-hidden="true">↓</span></a>
+                    <a href="{{ route('register') }}" class="btn-premium btn-gold-premium btn-lg magnetic-home">Begin your story <span aria-hidden="true">↗</span></a>
+                    <a href="#discover" class="motion-underline inline-flex items-center px-5 py-3 text-sm font-semibold text-white/88 hover:text-gold-300 transition-colors">See how it works <span class="ml-2" aria-hidden="true">↓</span></a>
                 </div>
                 <div class="hero-intent mt-12 max-w-2xl p-5 sm:p-6">
                     <div class="flex items-start justify-between gap-4 mb-4">
-                        <div>
-                            <p class="eyebrow text-plum-700">Start with intention</p>
-                            <h2 class="serif text-2xl sm:text-3xl text-ink mt-1">Who would you like to meet?</h2>
-                        </div>
+                        <div><p class="eyebrow text-plum-700">Start with intention</p><h2 class="serif text-2xl sm:text-3xl text-ink mt-1">Who would you like to meet?</h2></div>
                         <span class="text-xs text-ivory-600 mt-1">Step 1 of 1</span>
                     </div>
                     <form action="{{ route('register') }}" method="GET" class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                        <label class="sr-only" for="home-gender">Looking for</label>
-                        <select id="home-gender" name="gender">
-                            <option value="">Looking for</option>
-                            <option value="female">A bride</option>
-                            <option value="male">A groom</option>
-                        </select>
-                        <label class="sr-only" for="home-location">Location</label>
-                        <select id="home-location" name="location">
-                            <option value="">Any location</option>
-                            <option value="Bengaluru">Bengaluru</option>
-                            <option value="Mumbai">Mumbai</option>
-                            <option value="Chennai">Chennai</option>
-                            <option value="Hyderabad">Hyderabad</option>
-                        </select>
-                        <button type="submit" class="btn-premium btn-primary-premium min-h-[50px]">Explore matches <span aria-hidden="true">→</span></button>
+                        <label class="sr-only" for="home-gender">Looking for</label><select id="home-gender" name="gender"><option value="">Looking for</option><option value="female">A bride</option><option value="male">A groom</option></select>
+                        <label class="sr-only" for="home-location">Location</label><select id="home-location" name="location"><option value="">Any location</option><option value="Bengaluru">Bengaluru</option><option value="Mumbai">Mumbai</option><option value="Chennai">Chennai</option><option value="Hyderabad">Hyderabad</option></select>
+                        <button type="submit" class="btn-premium btn-primary-premium min-h-[50px] magnetic-home">Explore matches <span aria-hidden="true">→</span></button>
                     </form>
                     <p class="mt-3 text-xs text-ivory-600">You can refine your preferences after creating your private profile.</p>
                 </div>
@@ -261,7 +303,7 @@
                         $profileImage = data_get($profile, 'primary_photo.url') ?: data_get($profile, 'primaryPhoto.url');
                         $profileMeta = collect([data_get($profile, 'profile.city'), data_get($profile, 'profile.occupation')])->filter()->implode(' · ');
                     @endphp
-                    <article class="profile-frame">
+                    <article class="profile-frame tilt-home">
                         <div class="profile-frame-image">
                             @if($profileImage)
                                 <img src="{{ $profileImage }}" alt="{{ $profileName }}" loading="lazy">
@@ -272,9 +314,9 @@
                         <div class="profile-frame-copy"><h3>{{ $profileName }}</h3><p>{{ $profileMeta ?: 'Profile details available after joining' }}</p></div>
                     </article>
                 @empty
-                    <article class="profile-frame"><div class="profile-frame-image"><div class="profile-placeholder"><div><span>Start with values</span><small>See people through the details that shape their everyday life.</small></div></div></div><div class="profile-frame-copy"><h3>Shared values</h3><p>A more meaningful way to discover.</p></div></article>
-                    <article class="profile-frame"><div class="profile-frame-image"><div class="profile-placeholder"><div><span>Privacy first</span><small>Protected photos stay protected until a member chooses to share them.</small></div></div></div><div class="profile-frame-copy"><h3>At your pace</h3><p>Connection without pressure.</p></div></article>
-                    <article class="profile-frame"><div class="profile-frame-image"><div class="profile-placeholder"><div><span>Your story</span><small>Build a profile that feels like you, not a checklist.</small></div></div></div><div class="profile-frame-copy"><h3>Be understood</h3><p>Begin with a private profile.</p></div></article>
+                    <article class="profile-frame tilt-home"><div class="profile-frame-image"><div class="profile-placeholder"><div><span>Start with values</span><small>See people through the details that shape their everyday life.</small></div></div></div><div class="profile-frame-copy"><h3>Shared values</h3><p>A more meaningful way to discover.</p></div></article>
+                    <article class="profile-frame tilt-home"><div class="profile-frame-image"><div class="profile-placeholder"><div><span>Privacy first</span><small>Protected photos stay protected until a member chooses to share them.</small></div></div></div><div class="profile-frame-copy"><h3>At your pace</h3><p>Connection without pressure.</p></div></article>
+                    <article class="profile-frame tilt-home"><div class="profile-frame-image"><div class="profile-placeholder"><div><span>Your story</span><small>Build a profile that feels like you, not a checklist.</small></div></div></div><div class="profile-frame-copy"><h3>Be understood</h3><p>Begin with a private profile.</p></div></article>
                 @endforelse
             </div>
         </div>
@@ -295,7 +337,7 @@
                     ['key' => 'hearing_speech', 'label' => 'Hearing & speech', 'copy' => 'Connect with people who understand different ways of communicating and being heard.'],
                     ['key' => 'vitiligo', 'label' => 'Vitiligo community', 'copy' => 'A place to meet with openness, confidence, and respect for every kind of beauty.'],
                 ] as $community)
-                    <article class="community-card">
+                    <article class="community-card tilt-home">
                         <img src="{{ $images['communities'][$community['key']]['image'] }}" alt="{{ $images['communities'][$community['key']]['alt'] }}" loading="lazy">
                         <div class="community-copy"><p class="eyebrow text-gold-300">Community</p><h3>{{ $community['label'] }}</h3><p>{{ $community['copy'] }}</p><a href="{{ route('register') }}?category={{ $community['key'] === 'general' ? 'general' : ($community['key'] === 'divyangjan' ? 'physically_challenged' : ($community['key'] === 'hearing_speech' ? 'hearing_speech_impaired' : 'vitiligo_skin_condition')) }}" class="text-link">Explore this community <span aria-hidden="true">↗</span></a></div>
                     </article>
@@ -334,8 +376,8 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5"><div class="section-intro reveal-home"><p class="eyebrow">The human outcome</p><h2 class="section-title mt-4">Every match has<br><em>a story behind it.</em></h2></div><a href="{{ route('success-stories') }}" class="text-link reveal-home">Read more stories <span aria-hidden="true">↗</span></a></div>
             <div class="story-grid reveal-home">
-                <article class="story-card"><img src="{{ $images['stories'][0]['image'] }}" alt="{{ $images['stories'][0]['alt'] }}" loading="lazy"><div class="story-copy"><p class="eyebrow text-gold-300">{{ $images['stories'][0]['eyebrow'] }}</p><p>“{{ $images['stories'][0]['quote'] }}”</p></div></article>
-                <div class="story-column"><article class="story-card small"><img src="{{ $images['stories'][1]['image'] }}" alt="{{ $images['stories'][1]['alt'] }}" loading="lazy"><div class="story-copy"><p class="eyebrow text-gold-300">{{ $images['stories'][1]['eyebrow'] }}</p><p>“{{ $images['stories'][1]['quote'] }}”</p></div></article><article class="story-card small"><img src="{{ $images['stories'][2]['image'] }}" alt="{{ $images['stories'][2]['alt'] }}" loading="lazy"><div class="story-copy"><p class="eyebrow text-gold-300">{{ $images['stories'][2]['eyebrow'] }}</p><p>“{{ $images['stories'][2]['quote'] }}”</p></div></article></div>
+                <article class="story-card tilt-home"><img src="{{ $images['stories'][0]['image'] }}" alt="{{ $images['stories'][0]['alt'] }}" loading="lazy"><div class="story-copy"><p class="eyebrow text-gold-300">{{ $images['stories'][0]['eyebrow'] }}</p><p>“{{ $images['stories'][0]['quote'] }}”</p></div></article>
+                <div class="story-column"><article class="story-card small tilt-home"><img src="{{ $images['stories'][1]['image'] }}" alt="{{ $images['stories'][1]['alt'] }}" loading="lazy"><div class="story-copy"><p class="eyebrow text-gold-300">{{ $images['stories'][1]['eyebrow'] }}</p><p>“{{ $images['stories'][1]['quote'] }}”</p></div></article><article class="story-card small tilt-home"><img src="{{ $images['stories'][2]['image'] }}" alt="{{ $images['stories'][2]['alt'] }}" loading="lazy"><div class="story-copy"><p class="eyebrow text-gold-300">{{ $images['stories'][2]['eyebrow'] }}</p><p>“{{ $images['stories'][2]['quote'] }}”</p></div></article></div>
             </div>
         </div>
     </section>
@@ -357,21 +399,81 @@
 
 @push('scripts')
 <script>
-    (function () {
-        const elements = document.querySelectorAll('.reveal-home');
-        if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            elements.forEach((element) => element.classList.add('is-visible'));
-            return;
-        }
-        const observer = new IntersectionObserver((entries, instance) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('is-visible');
-                    instance.unobserve(entry.target);
+    (() => {
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        const progressBar = document.getElementById('homeProgressBar');
+        const video = document.getElementById('heroVideo');
+        const videoToggle = document.getElementById('heroVideoToggle');
+        const videoToggleLabel = videoToggle?.querySelector('.video-toggle-label');
+        const videoStatusDot = videoToggle?.querySelector('.video-status-dot');
+
+        const updateProgress = () => {
+            if (!progressBar) return;
+            const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+            progressBar.style.width = `${scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0}%`;
+        };
+        window.addEventListener('scroll', updateProgress, { passive: true });
+        updateProgress();
+
+        if (video) {
+            if (reduceMotion.matches) video.pause();
+            video.addEventListener('error', () => video.classList.add('video-failed'));
+            videoToggle?.addEventListener('click', () => {
+                if (video.paused) {
+                    video.play().catch(() => {});
+                    videoToggle.setAttribute('aria-pressed', 'false');
+                    videoToggle.setAttribute('aria-label', 'Pause background video');
+                    if (videoToggleLabel) videoToggleLabel.textContent = 'Pause motion';
+                    if (videoStatusDot) videoStatusDot.style.background = 'var(--color-gold-300)';
+                } else {
+                    video.pause();
+                    videoToggle.setAttribute('aria-pressed', 'true');
+                    videoToggle.setAttribute('aria-label', 'Play background video');
+                    if (videoToggleLabel) videoToggleLabel.textContent = 'Play motion';
+                    if (videoStatusDot) videoStatusDot.style.background = 'var(--color-rose-400)';
                 }
             });
-        }, { threshold: 0.12 });
-        elements.forEach((element) => observer.observe(element));
-    }());
+        }
+
+        const reveals = document.querySelectorAll('.reveal-home');
+        if (!('IntersectionObserver' in window) || reduceMotion.matches) {
+            reveals.forEach((element) => element.classList.add('is-visible'));
+        } else {
+            const observer = new IntersectionObserver((entries, instance) => {
+                entries.forEach((entry) => {
+                    if (!entry.isIntersecting) return;
+                    entry.target.classList.add('is-visible');
+                    instance.unobserve(entry.target);
+                });
+            }, { threshold: 0.12 });
+            reveals.forEach((element) => observer.observe(element));
+        }
+
+        if (!reduceMotion.matches && window.matchMedia('(pointer: fine)').matches) {
+            document.querySelectorAll('.magnetic-home').forEach((element) => {
+                element.addEventListener('pointermove', (event) => {
+                    const bounds = element.getBoundingClientRect();
+                    const x = event.clientX - bounds.left;
+                    const y = event.clientY - bounds.top;
+                    element.style.setProperty('--pointer-x', `${x}px`);
+                    element.style.setProperty('--pointer-y', `${y}px`);
+                    const moveX = (x - bounds.width / 2) * .06;
+                    const moveY = (y - bounds.height / 2) * .06;
+                    element.style.transform = `translate(${moveX}px, ${moveY}px)`;
+                });
+                element.addEventListener('pointerleave', () => { element.style.transform = ''; });
+            });
+
+            document.querySelectorAll('.tilt-home').forEach((element) => {
+                element.addEventListener('pointermove', (event) => {
+                    const bounds = element.getBoundingClientRect();
+                    const rotateY = ((event.clientX - bounds.left) / bounds.width - .5) * 5;
+                    const rotateX = ((event.clientY - bounds.top) / bounds.height - .5) * -5;
+                    element.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+                });
+                element.addEventListener('pointerleave', () => { element.style.transform = ''; });
+            });
+        }
+    })();
 </script>
 @endpush

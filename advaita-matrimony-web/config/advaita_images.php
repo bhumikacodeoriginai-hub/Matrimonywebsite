@@ -12,6 +12,13 @@ return [
         'desktop' => 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=1800&h=1200&fit=crop&auto=format&q=85',
         'mobile' => 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=900&h=1200&fit=crop&auto=format&q=85',
         'alt' => 'Indian couple sharing a joyful moment in warm evening light',
+        'video' => [
+            // Development source: replace with a licensed local MP4/WebM in production.
+            'mp4' => 'https://videos.pexels.com/video-files/853801/853801-hd_1920_1080_30fps.mp4',
+            'poster' => 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=1800&h=1200&fit=crop&auto=format&q=85',
+            'description' => 'A quiet, cinematic moment of a couple walking together in warm light.',
+            'captions' => '/media/hero-video-description.vtt',
+        ],
     ],
     'communities' => [
         'general' => [

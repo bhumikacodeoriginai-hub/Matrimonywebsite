@@ -23,9 +23,21 @@ Open `http://localhost:3000`.
 The canonical website routes are:
 
 - `/` — public homepage
-- `/login` — styled login surface
+- `/login` — preview access login
 - `/register` — styled registration surface
+- `/dashboard` — bilingual demo dashboard
 - `/terms`, `/privacy`, `/refund` — legal placeholders ready for final Laravel policy content
+
+### Preview dashboard login
+
+Use only for local design preview:
+
+```text
+Username: demo@advaita.test
+Password: Advaita2026!
+```
+
+These credentials are hardcoded preview credentials and do not connect to production authentication or the Laravel database.
 
 Legacy `/login.html` and `/register.html` URLs redirect to the new routes. The hero video is read from the tracked `frontend-preview/media/advaithamatrimony.mp4` file through `/api/media/advaithamatrimony.mp4`; keep the repository layout intact when running the Next app locally.
 

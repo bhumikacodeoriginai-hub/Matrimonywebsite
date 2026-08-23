@@ -1,0 +1,247 @@
+/* ==========================================================================
+   First-launch intro sequence
+   ==========================================================================
+   Two light paths travel inward from opposite edges, two rings follow them, they
+   meet at the centre, bloom, and resolve into the Advaita mark and tagline.
+   Total ≈2.6s (--duration-intro), then the curtain fades away.
+
+   FAIL-SAFE DIRECTION (the most important rule in this file)
+   ----------------------------------------------------------
+   The overlay is `display: none` BY DEFAULT. It is only shown when the inline
+   script in app/layout.tsx sets `data-intro="play"` on <html>. So:
+     • JavaScript disabled or broken  → no attribute → no intro → content visible
+     • Already seen this session      → no attribute → no intro → content visible
+     • prefers-reduced-motion         → script never sets it → no intro
+   There is no state in which a failure leaves the member staring at a curtain.
+
+   Everything here is CSS + inline SVG. No images, no video, no JS animation
+   library — the whole sequence is a few kB of markup that paints on first frame.
+   ========================================================================== */
+
+.root {
+  display: none;
+}
+
+:root[data-intro='play'] .root {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-intro);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  /* Deep brand field, so the whole thing reads as one considered moment. */
+  background: radial-gradient(
+    circle at 50% 46%,
+    var(--plum-700) 0%,
+    var(--plum-900) 46%,
+    var(--plum-950) 100%
+  );
+  /* The curtain leaves at the very end of the sequence. */
+  animation: intro-curtain-out var(--duration-slower) var(--ease-out) var(--duration-intro) both;
+}
+
+/* Once dismissed (early skip or completion) it is removed from the tree by the
+   component; this class covers the frame in between. */
+.leaving {
+  animation: intro-curtain-out var(--duration-base) var(--ease-out) both !important;
+}
+
+/* -------- Stage -------- */
+.stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(560px, 88vw);
+  /* Fixed aspect keeps the composition identical on every screen. */
+  aspect-ratio: 1 / 1;
+  max-height: 70vh;
+}
+
+/* -------- The two travelling light paths -------- */
+.path {
+  position: absolute;
+  top: 50%;
+  width: 42%;
+  height: 1.5px;
+  border-radius: var(--radius-pill);
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+
+.pathLeft {
+  right: 50%;
+  background: linear-gradient(90deg, transparent, var(--rose-300) 55%, var(--gold-200));
+  transform-origin: right center;
+  animation: intro-path-left var(--duration-intro) var(--ease-out) both;
+}
+
+.pathRight {
+  left: 50%;
+  background: linear-gradient(270deg, transparent, var(--rose-300) 55%, var(--gold-200));
+  transform-origin: left center;
+  animation: intro-path-right var(--duration-intro) var(--ease-out) both;
+}
+
+/* -------- The two rings that ride the paths -------- */
+.ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: clamp(76px, 22vw, 132px);
+  aspect-ratio: 1;
+  margin-top: calc(clamp(76px, 22vw, 132px) / -2);
+  margin-left: calc(clamp(76px, 22vw, 132px) / -2);
+  border-radius: var(--radius-circle);
+  border: 1.5px solid;
+  will-change: transform, opacity;
+}
+
+.ringLeft {
+  border-color: color-mix(in srgb, var(--rose-300) 80%, transparent);
+  box-shadow: 0 0 34px -6px color-mix(in srgb, var(--rose-400) 55%, transparent);
+  animation: intro-ring-left var(--duration-intro) var(--ease-out) both;
+}
+
+.ringRight {
+  border-color: color-mix(in srgb, var(--gold-200) 80%, transparent);
+  box-shadow: 0 0 34px -6px color-mix(in srgb, var(--gold-300) 50%, transparent);
+  animation: intro-ring-right var(--duration-intro) var(--ease-out) both;
+}
+
+/* -------- The moment of meeting -------- */
+.bloom {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: clamp(120px, 34vw, 200px);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: var(--radius-circle);
+  background: radial-gradient(
+    circle,
+    rgba(255, 253, 251, 0.9) 0%,
+    color-mix(in srgb, var(--gold-200) 70%, transparent) 34%,
+    transparent 70%
+  );
+  will-change: transform, opacity;
+  animation: intro-bloom var(--duration-intro) var(--ease-out) both;
+}
+
+/* -------- Particles drifting off the meeting point -------- */
+.particle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 3px;
+  height: 3px;
+  border-radius: var(--radius-circle);
+  background: var(--gold-200);
+  will-change: transform, opacity;
+  /* Starts as the paths meet; --particle-x/y are set per particle inline. */
+  animation: intro-particle 1500ms var(--ease-out) 900ms both;
+}
+
+/* -------- The mark -------- */
+.mark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  color: var(--gold-200);
+  will-change: transform, opacity, filter;
+  animation: intro-mark var(--duration-intro) var(--ease-out) both;
+}
+
+/* -------- Wordmark + tagline -------- */
+.words {
+  position: absolute;
+  /* Below the mark, which is centred in the stage. */
+  top: 62%;
+  left: 0;
+  right: 0;
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3);
+  text-align: center;
+  padding-inline: var(--space-5);
+  animation: intro-tagline var(--duration-intro) var(--ease-out) both;
+}
+
+.wordmark {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 1.4rem + 2.6vw, 2.9rem);
+  font-weight: var(--weight-light);
+  letter-spacing: var(--tracking-tighter);
+  line-height: 1;
+  color: #fffdfb;
+}
+
+.tagline {
+  margin: 0;
+  max-width: 26ch;
+  color: color-mix(in srgb, var(--gold-200) 88%, transparent);
+  font-size: clamp(var(--text-xs), 0.7rem + 0.5vw, var(--text-base));
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.04em;
+  line-height: var(--leading-normal);
+}
+
+/* Thin gold rule under the tagline — the "signature" motif. */
+.rule {
+  width: 64px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-300), transparent);
+}
+
+/* -------- Skip -------- */
+.skip {
+  position: absolute;
+  right: var(--space-4);
+  /* Clears the iOS home indicator. */
+  bottom: calc(var(--space-4) + env(safe-area-inset-bottom));
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 253, 251, 0.82);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.02em;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out);
+  /* Fades in almost immediately: an unskippable intro is a hostage situation. */
+  animation: reveal-fade var(--duration-base) var(--ease-out) 260ms both;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .skip:hover {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.4);
+    color: #fffdfb;
+  }
+}
+
+.skip:focus-visible {
+  outline: var(--focus-ring-width) solid var(--gold-200);
+  outline-offset: 3px;
+}
+
+/* -------- Safety nets --------
+   Both of these are belt-and-braces on top of the JS: if the component somehow
+   fails to unmount, the curtain still becomes non-blocking and invisible. */
+@media (prefers-reduced-motion: reduce) {
+  :root[data-intro='play'] .root {
+    display: none;
+  }
+}
+
+/* Nothing here carries information, so high-contrast mode has no use for it. */
+@media (forced-colors: active) {
+  :root[data-intro='play'] .root {
+    display: none;
+  }
+}

@@ -1,0 +1,645 @@
+/* ==========================================================================
+   Advaita Matrimony — Motion layer
+   ==========================================================================
+   Every animation here has a stated purpose. Motion that only decorates is
+   marked `.motion-decoration` so `prefers-reduced-motion` and forced-colors can
+   remove it wholesale (see base.css).
+
+   Budget: normal UI interactions stay within 150–500ms. The only exceptions are
+   the first-launch intro (--duration-intro) and slow ambient loops, both of
+   which are opt-in and removable.
+
+   Performance rules
+   -----------------
+   • Animate `transform` / `opacity` / `filter` only. Never width/height/top/left.
+   • Ambient loops must be composited: they set `will-change` sparingly and are
+     capped to a handful of elements per page.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Entrance / reveal
+   -------------------------------------------------------------------------- */
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 26px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes reveal-down {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -18px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes reveal-left {
+  from {
+    opacity: 0;
+    transform: translate3d(28px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes reveal-right {
+  from {
+    opacity: 0;
+    transform: translate3d(-28px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes reveal-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes reveal-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Kinetic headline: words rise from behind a mask. */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 88%, 0) rotate(3deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Scroll-triggered reveal
+   --------------------------------------------------------------------------
+   Progressive enhancement: elements are VISIBLE by default. Only once JS has
+   confirmed it is running (by setting `data-reveal-ready` on <html>) do they
+   start hidden and wait for the IntersectionObserver in lib/hooks/use-reveal.ts.
+   If JS never runs, nothing is ever hidden.
+   -------------------------------------------------------------------------- */
+[data-reveal-ready] [data-reveal] {
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+[data-reveal-ready] [data-reveal][data-revealed='true'] {
+  animation: reveal-up var(--duration-reveal) var(--ease-out) both;
+  /* Stagger: components set `style={{ '--reveal-index': n }}`. */
+  animation-delay: calc(var(--reveal-index, 0) * var(--stagger));
+  will-change: auto;
+}
+
+[data-reveal-ready] [data-reveal='fade'][data-revealed='true'] {
+  animation-name: reveal-fade;
+}
+[data-reveal-ready] [data-reveal='scale'][data-revealed='true'] {
+  animation-name: reveal-scale;
+}
+[data-reveal-ready] [data-reveal='left'][data-revealed='true'] {
+  animation-name: reveal-left;
+}
+[data-reveal-ready] [data-reveal='right'][data-revealed='true'] {
+  animation-name: reveal-right;
+}
+[data-reveal-ready] [data-reveal='down'][data-revealed='true'] {
+  animation-name: reveal-down;
+}
+
+/* Reduced motion: reveal instantly and drop the stagger entirely. */
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal-ready] [data-reveal] {
+    opacity: 1;
+    animation: none !important;
+  }
+}
+
+/* Immediate (non-scroll) staggered entrance, for above-the-fold content. */
+.enter {
+  animation: reveal-up var(--duration-reveal) var(--ease-out) both;
+  animation-delay: calc(var(--reveal-index, 0) * var(--stagger));
+}
+
+.enter-fade {
+  animation: reveal-fade var(--duration-slower) var(--ease-out) both;
+  animation-delay: calc(var(--reveal-index, 0) * var(--stagger));
+}
+
+.enter-scale {
+  animation: reveal-scale var(--duration-slower) var(--ease-spring) both;
+  animation-delay: calc(var(--reveal-index, 0) * var(--stagger));
+}
+
+/* --------------------------------------------------------------------------
+   Ambient / decorative loops  (all `.motion-decoration`)
+   -------------------------------------------------------------------------- */
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(3vw, 2.5vw, 0) scale(1.07);
+  }
+  66% {
+    transform: translate3d(-2.5vw, 1.5vw, 0) scale(0.95);
+  }
+}
+
+@keyframes breathe {
+  from {
+    transform: scale(1) rotate(0deg);
+    opacity: 0.85;
+  }
+  to {
+    transform: scale(1.1) rotate(4deg);
+    opacity: 1;
+  }
+}
+
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -12px, 0);
+  }
+}
+
+@keyframes shimmer-text {
+  to {
+    background-position: 220% center;
+  }
+}
+
+@keyframes marquee {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* Gradient wordmark / emphasised italic. Purely aesthetic, so it degrades to a
+   flat brand colour when motion is reduced. */
+.shimmer {
+  background: linear-gradient(
+    100deg,
+    var(--plum-600),
+    var(--rose-500) 42%,
+    var(--gold-400) 72%,
+    var(--plum-600)
+  );
+  background-size: 220% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer-text 7s var(--ease-linear) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shimmer {
+    animation: none;
+    background: none;
+    -webkit-text-fill-color: currentColor;
+    color: var(--brand-text);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Attention / status
+   -------------------------------------------------------------------------- */
+
+/* Live dot (online, "new today"). Subtle — opacity only, no size jump. */
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 var(--accent-ring);
+  }
+  50% {
+    opacity: 0.55;
+    box-shadow: 0 0 0 6px transparent;
+  }
+}
+
+/* Confirmation for "Interest sent". Runs once, ~420ms, then stops. */
+@keyframes heart-pulse {
+  0% {
+    transform: scale(1);
+  }
+  28% {
+    transform: scale(0.86);
+  }
+  55% {
+    transform: scale(1.22);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes glow-out {
+  from {
+    opacity: 0.75;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 0;
+    transform: scale(2.1);
+  }
+}
+
+/* Success tick: the stroke draws itself. */
+@keyframes draw-check {
+  from {
+    stroke-dashoffset: var(--check-length, 48);
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes badge-pop {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Counter roll used by <AnimatedCounter> when it cannot animate numerically. */
+@keyframes count-fade {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Loading
+   -------------------------------------------------------------------------- */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes skeleton-sweep {
+  from {
+    background-position: -180% 0;
+  }
+  to {
+    background-position: 180% 0;
+  }
+}
+
+@keyframes typing-bounce {
+  0%,
+  60%,
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.45;
+  }
+  30% {
+    transform: translate3d(0, -4px, 0);
+    opacity: 1;
+  }
+}
+
+@keyframes progress-fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(var(--progress, 1));
+  }
+}
+
+@keyframes indeterminate-slide {
+  from {
+    transform: translate3d(-100%, 0, 0) scaleX(0.4);
+  }
+  to {
+    transform: translate3d(250%, 0, 0) scaleX(0.4);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Overlays, sheets, toasts
+   -------------------------------------------------------------------------- */
+@keyframes overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes sheet-up {
+  from {
+    transform: translate3d(0, 100%, 0);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes drawer-in-right {
+  from {
+    transform: translate3d(100%, 0, 0);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes drawer-in-left {
+  from {
+    transform: translate3d(-100%, 0, 0);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes toast-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0) scale(0.98);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Messaging
+   -------------------------------------------------------------------------- */
+@keyframes message-in-out {
+  from {
+    opacity: 0;
+    transform: translate3d(10px, 8px, 0) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes message-in-in {
+  from {
+    opacity: 0;
+    transform: translate3d(-10px, 8px, 0) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Photo privacy: blur → clear once access is granted.
+   NOTE the security contract — this animates a *newly authorised* image source.
+   It must never be used to "reveal" an original that the viewer is not
+   authorised to see. See components/profile/private-photo.tsx.
+   -------------------------------------------------------------------------- */
+@keyframes unblur {
+  from {
+    filter: blur(18px) saturate(0.85);
+    transform: scale(1.06);
+  }
+  to {
+    filter: blur(0) saturate(1);
+    transform: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   First-launch intro sequence
+   --------------------------------------------------------------------------
+   Two light paths travel inward, meet at the centre, pulse, and resolve into
+   the Advaita mark. Total ≈2.6s. Owned by components/intro/.
+   -------------------------------------------------------------------------- */
+@keyframes intro-path-left {
+  0% {
+    opacity: 0;
+    transform: translate3d(-58%, 0, 0) scaleX(0.3);
+  }
+  22% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scaleX(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) scaleX(1);
+  }
+}
+
+@keyframes intro-path-right {
+  0% {
+    opacity: 0;
+    transform: translate3d(58%, 0, 0) scaleX(0.3);
+  }
+  22% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scaleX(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) scaleX(1);
+  }
+}
+
+@keyframes intro-ring-left {
+  0% {
+    opacity: 0;
+    transform: translate3d(-150%, 0, 0) scale(0.8);
+  }
+  25% {
+    opacity: 0.9;
+  }
+  62% {
+    opacity: 0.9;
+    transform: translate3d(-22%, 0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(-22%, 0, 0) scale(1.25);
+  }
+}
+
+@keyframes intro-ring-right {
+  0% {
+    opacity: 0;
+    transform: translate3d(150%, 0, 0) scale(0.8);
+  }
+  25% {
+    opacity: 0.9;
+  }
+  62% {
+    opacity: 0.9;
+    transform: translate3d(22%, 0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(22%, 0, 0) scale(1.25);
+  }
+}
+
+/* The moment of meeting. */
+@keyframes intro-bloom {
+  0%,
+  48% {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+  62% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+  78% {
+    opacity: 0.5;
+    transform: scale(1.5);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.4);
+  }
+}
+
+@keyframes intro-mark {
+  0%,
+  52% {
+    opacity: 0;
+    transform: scale(0.72);
+    filter: blur(8px);
+  }
+  72% {
+    opacity: 1;
+    transform: scale(1.04);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes intro-tagline {
+  0%,
+  66% {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes intro-particle {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) scale(0.5);
+  }
+  35% {
+    opacity: var(--particle-opacity, 0.7);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--particle-x, 0), var(--particle-y, -40px), 0) scale(0);
+  }
+}
+
+@keyframes intro-curtain-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.03);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Shared single-purpose utilities
+   -------------------------------------------------------------------------- */
+.spin {
+  animation: spin 700ms var(--ease-linear) infinite;
+}
+
+.pulse-dot {
+  animation: pulse-dot 2.4s var(--ease-in-out) infinite;
+}
+
+.float {
+  animation: float-y 6s var(--ease-in-out) infinite;
+}

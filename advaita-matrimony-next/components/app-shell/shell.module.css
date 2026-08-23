@@ -1,0 +1,488 @@
+/* ==========================================================================
+   Authenticated app shell
+   ==========================================================================
+   Desktop: fixed sidebar + sticky topbar + scrolling content.
+   Mobile:  sticky topbar + scrolling content + fixed bottom tab bar.
+
+   The sidebar is `position: fixed` with the content offset by a margin rather
+   than both living in a grid, so the sidebar never scrolls with the page and the
+   content column keeps the document's own scrollbar. That matters: a nested
+   scroll container breaks browser find-in-page, scroll restoration and
+   `scroll-margin-top` on anchors.
+   ========================================================================== */
+
+.shell {
+  min-height: 100dvh;
+  background: var(--bg);
+}
+
+/* ==========================================================================
+   Sidebar
+   ========================================================================== */
+
+.sidebar {
+  position: fixed;
+  inset-block: 0;
+  inset-inline-start: 0;
+  z-index: var(--z-drawer);
+  width: var(--sidebar-width);
+  display: flex;
+  flex-direction: column;
+  border-inline-end: 1px solid var(--border);
+  background: var(--surface);
+  /* Own scroll for the nav list only — the page keeps its own. */
+  overflow: hidden;
+}
+
+.sidebarHead {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  height: var(--topbar-height);
+  padding-inline: var(--space-5);
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebarScroll {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--space-5) var(--space-3);
+  display: grid;
+  gap: var(--space-6);
+  align-content: start;
+}
+
+.navGroup {
+  display: grid;
+  gap: 2px;
+}
+
+.navGroupTitle {
+  margin: 0 0 var(--space-2);
+  padding-inline: var(--space-3);
+  color: var(--text-muted);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-extrabold);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+}
+
+.navLink {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 44px;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  text-decoration: none;
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .navLink:hover {
+    background: color-mix(in srgb, var(--text) 5%, transparent);
+    color: var(--text);
+  }
+}
+
+.navLinkActive {
+  background: color-mix(in srgb, var(--brand-text) 10%, transparent);
+  color: var(--brand-text);
+  font-weight: var(--weight-bold);
+}
+
+/* Active marker on the inline-start edge — a second, non-colour signal. */
+.navLinkActive::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block: 22%;
+  width: 3px;
+  border-radius: var(--radius-pill);
+  background: var(--brand-text);
+}
+
+.navIcon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  font-size: 1.15rem;
+}
+
+.navLabel {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.navBadge {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  min-width: 20px;
+  height: 20px;
+  padding-inline: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  color: var(--text-on-accent);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-extrabold);
+  font-variant-numeric: tabular-nums;
+  animation: badge-pop var(--duration-slow) var(--ease-spring) both;
+}
+
+/* -------- Sidebar footer: the member's own card -------- */
+.sidebarFoot {
+  flex: 0 0 auto;
+  padding: var(--space-3);
+  border-top: 1px solid var(--border);
+}
+
+.meCard {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-2);
+  border-radius: var(--radius-md);
+  color: inherit;
+  text-decoration: none;
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .meCard:hover {
+    background: color-mix(in srgb, var(--text) 5%, transparent);
+  }
+}
+
+.meText {
+  flex: 1 1 auto;
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+  text-align: start;
+}
+
+.meName {
+  color: var(--text);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.meMeta {
+  color: var(--text-muted);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-semibold);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   Main column
+   ========================================================================== */
+
+.main {
+  margin-inline-start: var(--sidebar-width);
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--topbar-height);
+  padding: var(--space-3) var(--space-gutter);
+  border-bottom: 1px solid var(--border);
+  background: var(--glass-bg-strong);
+}
+
+@supports (backdrop-filter: blur(1px)) {
+  .topbar {
+    background: var(--glass-bg);
+    -webkit-backdrop-filter: blur(18px) saturate(1.4);
+    backdrop-filter: blur(18px) saturate(1.4);
+  }
+}
+
+.topbarTitle {
+  flex: 1 1 auto;
+  margin: 0;
+  min-width: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-tight);
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.topbarActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: 0 0 auto;
+}
+
+.iconButton {
+  position: relative;
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  min-height: 42px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--text-secondary);
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .iconButton:hover {
+    color: var(--brand-text);
+    border-color: var(--border-strong);
+  }
+}
+
+/* Unread dot on the notification bell. Paired with an sr-only count. */
+.iconButtonDot::after {
+  content: '';
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-circle);
+  background: var(--accent);
+  box-shadow: 0 0 0 2px var(--surface);
+}
+
+.content {
+  flex: 1 1 auto;
+  padding: clamp(var(--space-5), 3vw, var(--space-8)) var(--space-gutter) var(--space-16);
+  min-width: 0;
+}
+
+.contentInner {
+  width: 100%;
+  max-width: var(--container-wide);
+  margin-inline: auto;
+  min-width: 0;
+}
+
+/* ==========================================================================
+   Mobile
+   ========================================================================== */
+
+.mobileNav {
+  display: none;
+}
+
+.menuButton {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .sidebar {
+    /* Slides in as a drawer. `visibility` (not display) keeps the transition. */
+    transform: translate3d(-100%, 0, 0);
+    visibility: hidden;
+    transition:
+      transform var(--duration-slow) var(--ease-out),
+      visibility var(--duration-slow);
+    box-shadow: var(--shadow-xl);
+  }
+
+  .sidebarOpen {
+    transform: none;
+    visibility: visible;
+  }
+
+  .main {
+    margin-inline-start: 0;
+    /* Clear the fixed tab bar and the iOS home indicator. */
+    padding-bottom: calc(var(--mobilenav-height) + env(safe-area-inset-bottom));
+  }
+
+  .menuButton {
+    display: grid;
+  }
+
+  .scrim {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-overlay);
+    background: rgba(26, 19, 25, 0.5);
+    animation: overlay-in var(--duration-base) var(--ease-out) both;
+  }
+
+  /* The drawer must sit above its own scrim. */
+  .sidebar {
+    z-index: calc(var(--z-overlay) + 1);
+  }
+
+  .mobileNav {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: var(--z-header);
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    min-height: var(--mobilenav-height);
+    padding-bottom: env(safe-area-inset-bottom);
+    border-top: 1px solid var(--border);
+    background: var(--glass-bg-strong);
+  }
+
+  @supports (backdrop-filter: blur(1px)) {
+    .mobileNav {
+      background: var(--glass-bg);
+      -webkit-backdrop-filter: blur(20px) saturate(1.4);
+      backdrop-filter: blur(20px) saturate(1.4);
+    }
+  }
+}
+
+.mobileNavItem {
+  position: relative;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 3px;
+  min-height: var(--mobilenav-height);
+  padding: var(--space-2) var(--space-1);
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: var(--weight-bold);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.mobileNavItemActive {
+  color: var(--brand-text);
+}
+
+/* Active pill behind the icon — again, not colour alone. */
+.mobileNavItemActive .mobileNavIcon {
+  background: color-mix(in srgb, var(--brand-text) 12%, transparent);
+}
+
+.mobileNavIcon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 26px;
+  border-radius: var(--radius-pill);
+  font-size: 1.15rem;
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.mobileNavLabel {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mobileNavBadge {
+  position: absolute;
+  top: 6px;
+  right: 50%;
+  transform: translateX(18px);
+  min-width: 17px;
+  height: 17px;
+  padding-inline: 4px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  color: var(--text-on-accent);
+  font-size: 9px;
+  font-weight: var(--weight-extrabold);
+  font-variant-numeric: tabular-nums;
+}
+
+/* "More" sheet contents */
+.moreGrid {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.moreGroupTitle {
+  margin: 0 0 var(--space-2);
+  color: var(--text-muted);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-extrabold);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+}
+
+.moreItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 56px;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  color: inherit;
+  text-decoration: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .moreItem:hover {
+    background: color-mix(in srgb, var(--text) 5%, transparent);
+  }
+}
+
+.moreItemIcon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--brand-text) 9%, transparent);
+  color: var(--brand-text);
+}
+
+.moreItemText {
+  flex: 1 1 auto;
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+
+.moreItemLabel {
+  color: var(--text);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+}
+
+.moreItemDescription {
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  line-height: var(--leading-normal);
+}

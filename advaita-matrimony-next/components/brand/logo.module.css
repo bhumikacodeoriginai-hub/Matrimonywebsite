@@ -1,0 +1,94 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--text);
+  text-decoration: none;
+  /* Keeps the lockup from being stretched by a flex parent. */
+  flex: 0 0 auto;
+}
+
+.markBox {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: var(--action-bg);
+  color: var(--gold-200);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--duration-slow) var(--ease-spring);
+}
+
+.logo:hover .markBox {
+  transform: rotate(-4deg) scale(1.04);
+}
+
+/* Bare mark with no plate — for tight spaces and dark photographic surfaces. */
+.plain .markBox {
+  width: auto;
+  height: auto;
+  background: none;
+  box-shadow: none;
+  border-radius: 0;
+  color: inherit;
+}
+
+.text {
+  display: grid;
+  gap: 3px;
+  line-height: 1;
+  /* Allows the wordmark to be clipped rather than forcing overflow at 320px. */
+  min-width: 0;
+}
+
+.name {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-tight);
+  color: currentColor;
+  white-space: nowrap;
+}
+
+.tagline {
+  font-size: 8px;
+  font-weight: var(--weight-extrabold);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* -------- Sizes -------- */
+.sm .markBox {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+}
+
+.sm .name {
+  font-size: var(--text-base);
+}
+
+.sm .tagline {
+  font-size: 7px;
+}
+
+.lg .markBox {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-lg);
+}
+
+.lg .name {
+  font-size: var(--text-2xl);
+}
+
+/* Below 380px the tagline is the first thing to go — the name must survive. */
+@media (max-width: 380px) {
+  .tagline {
+    display: none;
+  }
+}

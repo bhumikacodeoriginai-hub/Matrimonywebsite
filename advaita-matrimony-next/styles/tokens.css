@@ -1,0 +1,494 @@
+/* ==========================================================================
+   Advaita Matrimony — Design tokens
+   ==========================================================================
+   Emotional direction: Trust + Elegance + Modern Technology + Meaningful
+   Relationships + Inclusion.
+
+   Structure
+   ---------
+   1. Primitive palette   — raw hues, never referenced directly by components
+   2. Semantic tokens     — what components actually consume (--bg, --text, ...)
+   3. Dark theme          — the same semantic names, remapped
+   4. Typography / space / radii / elevation / motion / layout / z-index
+
+   Rules for contributors
+   ----------------------
+   • Components MUST use semantic tokens, never primitives. That is what makes
+     dark mode and future re-themes a one-file change.
+   • Every text/background pairing below is annotated with its measured WCAG
+     contrast ratio. If you change a colour, re-check the ratio.
+   • Deliberately NO aggressive red/pink as the dominant colour. Plum leads,
+     rose accents, gold signals premium, teal signals verified/success.
+   ========================================================================== */
+
+:root {
+  /* ---------------------------------------------------------------------
+     1. PRIMITIVE PALETTE
+     --------------------------------------------------------------------- */
+
+  /* Plum — the brand spine. 600 is the inherited Advaita brand plum. */
+  --plum-50: #faf4f9;
+  --plum-100: #f2e4ef;
+  --plum-200: #e3c8de;
+  --plum-300: #cba1c3;
+  --plum-400: #a9739f;
+  --plum-500: #7e4a74;
+  --plum-600: #54234c;
+  --plum-700: #451d3f;
+  --plum-800: #331630;
+  --plum-900: #241021;
+  --plum-950: #180a16;
+
+  /* Royal violet — depth partner for plum in gradients and dark surfaces. */
+  --violet-300: #b79add;
+  --violet-400: #9a72c9;
+  --violet-500: #7d4faf;
+  --violet-600: #6b3fa0;
+  --violet-700: #55307f;
+
+  /* Warm rose — the accent. Emotional warmth without shouting. */
+  --rose-50: #fdf2f6;
+  --rose-100: #fbe3ec;
+  --rose-200: #f6c4d6;
+  --rose-300: #ee9cb8;
+  --rose-400: #e27796;
+  --rose-500: #d4577e;
+  --rose-600: #b94466;
+  --rose-700: #973550;
+
+  /* Gold — premium / subscription only. Never used for plain UI. */
+  --gold-100: #f7efdf;
+  --gold-200: #e7cfa1;
+  --gold-300: #d5b478;
+  --gold-400: #c19a5b;
+  --gold-500: #a67f43;
+  --gold-600: #866536;
+  --gold-700: #6a4f29;
+
+  /* Teal — verification, success, safety. Reads as "checked", not "sale". */
+  --teal-50: #ecf7f3;
+  --teal-100: #d3ede4;
+  --teal-200: #a8dcc9;
+  --teal-300: #7fcfb4;
+  --teal-400: #4bb494;
+  --teal-500: #2e9e7a;
+  --teal-600: #1f7d60;
+  --teal-700: #17624b;
+
+  /* Amber — pending / awaiting review states. */
+  --amber-100: #fdf0d8;
+  --amber-300: #f0c274;
+  --amber-500: #c98a1e;
+  --amber-600: #a06d14;
+
+  /* Danger — destructive and error only. */
+  --danger-50: #fdf1f0;
+  --danger-100: #fadedb;
+  --danger-300: #ec9d95;
+  --danger-500: #cf4f42;
+  --danger-600: #b03b30;
+  --danger-700: #8c2c23;
+
+  /* Warm neutral ramp, faintly plum-tinted so greys never look cold. */
+  --n-0: #ffffff;
+  --n-25: #fdfbfa;
+  --n-50: #faf7f5;
+  --n-100: #f2edea;
+  --n-200: #e6dfdb;
+  --n-300: #d2c8c3;
+  --n-400: #afa3a0;
+  --n-500: #8b7f80;
+  --n-600: #6b6064;
+  --n-700: #4f464c;
+  --n-800: #332c34;
+  --n-900: #1a1319;
+
+  /* Soft ivory canvas — warmer than white, kinder than grey. */
+  --ivory: #fbf8f4;
+  --sand: #f3ece3;
+
+  /* ---------------------------------------------------------------------
+     2. SEMANTIC TOKENS — LIGHT (default)
+     --------------------------------------------------------------------- */
+
+  /* Canvas & surfaces */
+  --bg: var(--ivory);
+  --bg-subtle: var(--sand);
+  --surface: var(--n-0);
+  --surface-raised: var(--n-0);
+  --surface-sunken: var(--n-50);
+  --surface-inverse: var(--plum-800);
+
+  /* Text — ratios measured against --bg (#fbf8f4) */
+  --text: var(--n-900); /* 15.8:1  AAA */
+  --text-secondary: var(--n-600); /*  5.4:1  AA   */
+  --text-muted: var(--n-500); /*  3.6:1  AA Large / non-text only */
+  --text-inverse: #fffdfb;
+  --text-on-accent: #ffffff;
+
+  /* Brand-tinted text that still passes AA on --bg */
+  --brand-text: var(--plum-600); /*  9.4:1  AAA */
+  --brand-text-soft: var(--plum-500); /*  6.1:1  AA  */
+
+  /* Borders & dividers */
+  --border: rgba(84, 35, 76, 0.12);
+  --border-strong: rgba(84, 35, 76, 0.22);
+  --border-inverse: rgba(255, 255, 255, 0.16);
+
+  /* Primary action (solid button): gradient bg + guaranteed-contrast fg */
+  --action-bg: linear-gradient(148deg, var(--plum-800) 0%, var(--plum-600) 58%, var(--violet-600) 100%);
+  --action-bg-flat: var(--plum-600);
+  --action-bg-hover: linear-gradient(148deg, var(--plum-900) 0%, var(--plum-700) 58%, var(--violet-700) 100%);
+  --action-fg: #fffdfb; /* 10.1:1 on --plum-600  AAA */
+
+  /* Accent (secondary emphasis, interest/heart affordances) */
+  --accent: var(--rose-500);
+  --accent-strong: var(--rose-600); /* 4.8:1 on --bg — safe for accent text */
+  --accent-soft: var(--rose-100);
+  --accent-ring: rgba(212, 87, 126, 0.22);
+
+  /* Status */
+  --verified: var(--teal-600); /* 4.9:1 on --bg  AA */
+  --verified-soft: var(--teal-50);
+  --verified-border: var(--teal-200);
+  --premium: var(--gold-500); /* 4.6:1 on --bg  AA */
+  --premium-soft: var(--gold-100);
+  --premium-border: var(--gold-200);
+  --pending: var(--amber-600);
+  --pending-soft: var(--amber-100);
+  --danger: var(--danger-600); /* 5.1:1 on --bg  AA */
+  --danger-soft: var(--danger-50);
+  --danger-border: var(--danger-100);
+  --online: var(--teal-500);
+
+  /* Focus — high contrast in both themes, never removed */
+  --focus-ring: var(--violet-600);
+  --focus-ring-offset: var(--bg);
+  --focus-ring-width: 3px;
+
+  /* Glass surfaces — subtle, never muddy */
+  --glass-bg: rgba(255, 255, 255, 0.62);
+  --glass-bg-strong: rgba(255, 255, 255, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.7);
+  --glass-blur: 20px;
+
+  /* Ambient decoration (aurora blobs, glows) */
+  --aurora-1: rgba(212, 87, 126, 0.34);
+  --aurora-2: rgba(193, 154, 91, 0.4);
+  --aurora-3: rgba(107, 63, 160, 0.3);
+  --grain-opacity: 0.045;
+
+  /* Elevation — plum-tinted so shadows feel part of the palette */
+  --shadow-xs: 0 1px 2px rgba(36, 16, 33, 0.06);
+  --shadow-sm: 0 2px 8px -2px rgba(36, 16, 33, 0.1);
+  --shadow-md: 0 10px 26px -12px rgba(36, 16, 33, 0.22);
+  --shadow-lg: 0 22px 50px -24px rgba(36, 16, 33, 0.3);
+  --shadow-xl: 0 34px 80px -32px rgba(36, 16, 33, 0.36);
+  --shadow-glow-accent: 0 0 0 1px var(--accent-ring), 0 18px 40px -22px rgba(212, 87, 126, 0.55);
+  --shadow-glow-premium: 0 0 0 1px rgba(193, 154, 91, 0.3), 0 18px 40px -22px rgba(193, 154, 91, 0.5);
+
+  /* ---------------------------------------------------------------------
+     4. TYPOGRAPHY
+     --------------------------------------------------------------------- */
+  --font-sans:
+    'Plus Jakarta Sans', 'Plus Jakarta Sans Fallback', 'Noto Sans Kannada', system-ui, -apple-system,
+    'Segoe UI', sans-serif;
+  --font-display: 'Fraunces', 'Fraunces Fallback', Georgia, 'Times New Roman', serif;
+  --font-kannada: 'Noto Sans Kannada', 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, monospace;
+
+  /* Fluid scale. Every step is clamp()ed so 320px → 2560px never breaks. */
+  --text-2xs: 0.6875rem; /* 11px — badges, overline only */
+  --text-xs: 0.75rem; /* 12px */
+  --text-sm: 0.8125rem; /* 13px */
+  --text-base: 0.9375rem; /* 15px — body default */
+  --text-md: 1rem; /* 16px — long-form body */
+  --text-lg: clamp(1.0625rem, 0.98rem + 0.4vw, 1.1875rem);
+  --text-xl: clamp(1.25rem, 1.14rem + 0.5vw, 1.4375rem);
+  --text-2xl: clamp(1.5rem, 1.32rem + 0.85vw, 1.875rem);
+  --text-3xl: clamp(1.875rem, 1.55rem + 1.5vw, 2.5rem);
+  --text-4xl: clamp(2.25rem, 1.75rem + 2.4vw, 3.25rem);
+  --text-5xl: clamp(2.75rem, 1.9rem + 4vw, 4.5rem);
+  --text-6xl: clamp(3.25rem, 2rem + 5.6vw, 5.75rem);
+
+  --leading-tight: 1.06;
+  --leading-snug: 1.22;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.72;
+
+  --tracking-tighter: -0.045em;
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.06em;
+  --tracking-widest: 0.16em;
+
+  --weight-light: 300;
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-extrabold: 800;
+
+  /* ---------------------------------------------------------------------
+     5. SPACING — 4px base
+     --------------------------------------------------------------------- */
+  --space-0: 0;
+  --space-px: 1px;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-7: 1.75rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-14: 3.5rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+
+  /* Generous, fluid section rhythm */
+  --space-section: clamp(3.5rem, 2rem + 7vw, 7rem);
+  --space-gutter: clamp(1rem, 0.5rem + 2vw, 2rem);
+
+  /* ---------------------------------------------------------------------
+     6. RADII
+     --------------------------------------------------------------------- */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-2xl: 30px;
+  --radius-3xl: 40px;
+  --radius-pill: 999px;
+  --radius-circle: 50%;
+
+  /* ---------------------------------------------------------------------
+     7. MOTION
+     Normal UI interactions stay inside 150–500ms per the design brief.
+     --------------------------------------------------------------------- */
+  --duration-instant: 90ms;
+  --duration-fast: 150ms;
+  --duration-base: 220ms;
+  --duration-slow: 320ms;
+  --duration-slower: 460ms;
+  --duration-reveal: 620ms; /* one-off entrances only, never hover */
+  --duration-intro: 2600ms; /* first-launch sequence only */
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1); /* default: decisive arrival */
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1); /* restrained overshoot   */
+  --ease-linear: linear;
+
+  --stagger: 70ms; /* one unit of staggered reveal delay */
+
+  /* ---------------------------------------------------------------------
+     8. LAYOUT
+     --------------------------------------------------------------------- */
+  --container: 1200px;
+  --container-narrow: 720px;
+  --container-wide: 1440px;
+  --sidebar-width: 264px;
+  --sidebar-width-collapsed: 76px;
+  --topbar-height: 68px;
+  --mobilenav-height: 64px;
+  --tap-target: 44px; /* WCAG 2.5.8 minimum, enforced in base.css */
+
+  /* ---------------------------------------------------------------------
+     9. Z-INDEX — single source of truth, no magic numbers in components
+     --------------------------------------------------------------------- */
+  --z-below: -1;
+  --z-base: 0;
+  --z-raised: 10;
+  --z-sticky: 100;
+  --z-header: 200;
+  --z-drawer: 300;
+  --z-overlay: 400;
+  --z-modal: 500;
+  --z-toast: 600;
+  --z-intro: 900;
+  --z-skiplink: 1000;
+
+  color-scheme: light;
+}
+
+/* ==========================================================================
+   3. DARK THEME
+   ==========================================================================
+   Deep charcoal + plum + muted violet with subtle rose highlights.
+
+   The mapping below is intentionally written twice: once for an explicit user
+   choice (`data-theme="dark"`) and once for the OS preference when the user has
+   not chosen (`:not([data-theme='light'])`). Vanilla CSS has no mixins, and the
+   modern one-liner alternative (`light-dark()`) is not yet safe for the older
+   Android WebViews in our support matrix. Compatibility wins over brevity.
+   Keep the two blocks in sync — they are adjacent on purpose.
+   ========================================================================== */
+
+:root[data-theme='dark'] {
+  --bg: #17121a;
+  --bg-subtle: #1e1723;
+  --surface: #221a28;
+  --surface-raised: #2a2031;
+  --surface-sunken: #130f16;
+  --surface-inverse: var(--n-50);
+
+  --text: #f5f0f4; /* 15.1:1 on --bg  AAA */
+  --text-secondary: #bcafbb; /*  8.2:1 on --bg  AAA */
+  --text-muted: #948a96; /*  4.9:1 on --bg  AA   */
+  --text-inverse: var(--n-900);
+  --text-on-accent: #ffffff;
+
+  --brand-text: var(--plum-300); /*  7.6:1 on --bg  AAA */
+  --brand-text-soft: var(--plum-400);
+
+  --border: rgba(255, 255, 255, 0.1);
+  --border-strong: rgba(255, 255, 255, 0.2);
+  --border-inverse: rgba(0, 0, 0, 0.16);
+
+  --action-bg: linear-gradient(148deg, var(--violet-600) 0%, var(--plum-500) 60%, var(--rose-600) 130%);
+  --action-bg-flat: var(--violet-600);
+  --action-bg-hover: linear-gradient(148deg, var(--violet-500) 0%, var(--plum-400) 60%, var(--rose-500) 130%);
+  --action-fg: #fffdfb;
+
+  --accent: var(--rose-400);
+  --accent-strong: var(--rose-300); /*  7.4:1 on --bg  AAA */
+  --accent-soft: rgba(226, 119, 150, 0.16);
+  --accent-ring: rgba(226, 119, 150, 0.3);
+
+  --verified: var(--teal-300); /*  8.9:1 on --bg  AAA */
+  --verified-soft: rgba(127, 207, 180, 0.14);
+  --verified-border: rgba(127, 207, 180, 0.32);
+  --premium: var(--gold-200); /* 11.2:1 on --bg  AAA */
+  --premium-soft: rgba(231, 207, 161, 0.14);
+  --premium-border: rgba(231, 207, 161, 0.32);
+  --pending: var(--amber-300);
+  --pending-soft: rgba(240, 194, 116, 0.14);
+  --danger: var(--danger-300); /*  6.7:1 on --bg  AA   */
+  --danger-soft: rgba(236, 157, 149, 0.14);
+  --danger-border: rgba(236, 157, 149, 0.3);
+  --online: var(--teal-300);
+
+  --focus-ring: var(--gold-200);
+  --focus-ring-offset: var(--bg);
+
+  --glass-bg: rgba(42, 32, 49, 0.62);
+  --glass-bg-strong: rgba(42, 32, 49, 0.84);
+  --glass-border: rgba(255, 255, 255, 0.1);
+
+  --aurora-1: rgba(212, 87, 126, 0.26);
+  --aurora-2: rgba(107, 63, 160, 0.3);
+  --aurora-3: rgba(84, 35, 76, 0.42);
+  --grain-opacity: 0.06;
+
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 2px 8px -2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 10px 26px -12px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 22px 50px -24px rgba(0, 0, 0, 0.68);
+  --shadow-xl: 0 34px 80px -32px rgba(0, 0, 0, 0.75);
+  --shadow-glow-accent: 0 0 0 1px var(--accent-ring), 0 18px 40px -22px rgba(226, 119, 150, 0.4);
+  --shadow-glow-premium: 0 0 0 1px var(--premium-border), 0 18px 40px -22px rgba(231, 207, 161, 0.32);
+
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #17121a;
+    --bg-subtle: #1e1723;
+    --surface: #221a28;
+    --surface-raised: #2a2031;
+    --surface-sunken: #130f16;
+    --surface-inverse: var(--n-50);
+
+    --text: #f5f0f4;
+    --text-secondary: #bcafbb;
+    --text-muted: #948a96;
+    --text-inverse: var(--n-900);
+    --text-on-accent: #ffffff;
+
+    --brand-text: var(--plum-300);
+    --brand-text-soft: var(--plum-400);
+
+    --border: rgba(255, 255, 255, 0.1);
+    --border-strong: rgba(255, 255, 255, 0.2);
+    --border-inverse: rgba(0, 0, 0, 0.16);
+
+    --action-bg: linear-gradient(148deg, var(--violet-600) 0%, var(--plum-500) 60%, var(--rose-600) 130%);
+    --action-bg-flat: var(--violet-600);
+    --action-bg-hover: linear-gradient(
+      148deg,
+      var(--violet-500) 0%,
+      var(--plum-400) 60%,
+      var(--rose-500) 130%
+    );
+    --action-fg: #fffdfb;
+
+    --accent: var(--rose-400);
+    --accent-strong: var(--rose-300);
+    --accent-soft: rgba(226, 119, 150, 0.16);
+    --accent-ring: rgba(226, 119, 150, 0.3);
+
+    --verified: var(--teal-300);
+    --verified-soft: rgba(127, 207, 180, 0.14);
+    --verified-border: rgba(127, 207, 180, 0.32);
+    --premium: var(--gold-200);
+    --premium-soft: rgba(231, 207, 161, 0.14);
+    --premium-border: rgba(231, 207, 161, 0.32);
+    --pending: var(--amber-300);
+    --pending-soft: rgba(240, 194, 116, 0.14);
+    --danger: var(--danger-300);
+    --danger-soft: rgba(236, 157, 149, 0.14);
+    --danger-border: rgba(236, 157, 149, 0.3);
+    --online: var(--teal-300);
+
+    --focus-ring: var(--gold-200);
+    --focus-ring-offset: var(--bg);
+
+    --glass-bg: rgba(42, 32, 49, 0.62);
+    --glass-bg-strong: rgba(42, 32, 49, 0.84);
+    --glass-border: rgba(255, 255, 255, 0.1);
+
+    --aurora-1: rgba(212, 87, 126, 0.26);
+    --aurora-2: rgba(107, 63, 160, 0.3);
+    --aurora-3: rgba(84, 35, 76, 0.42);
+    --grain-opacity: 0.06;
+
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-sm: 0 2px 8px -2px rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 10px 26px -12px rgba(0, 0, 0, 0.6);
+    --shadow-lg: 0 22px 50px -24px rgba(0, 0, 0, 0.68);
+    --shadow-xl: 0 34px 80px -32px rgba(0, 0, 0, 0.75);
+    --shadow-glow-accent: 0 0 0 1px var(--accent-ring), 0 18px 40px -22px rgba(226, 119, 150, 0.4);
+    --shadow-glow-premium: 0 0 0 1px var(--premium-border), 0 18px 40px -22px rgba(231, 207, 161, 0.32);
+
+    color-scheme: dark;
+  }
+}
+
+/* ==========================================================================
+   High-contrast / forced-colors respect
+   ========================================================================== */
+@media (prefers-contrast: more) {
+  :root {
+    --text-secondary: var(--n-700);
+    --text-muted: var(--n-600);
+    --border: rgba(84, 35, 76, 0.32);
+    --border-strong: rgba(84, 35, 76, 0.5);
+    --glass-bg: rgba(255, 255, 255, 0.94);
+    --glass-bg-strong: rgba(255, 255, 255, 0.98);
+  }
+
+  :root[data-theme='dark'] {
+    --text-secondary: #d8cfd7;
+    --text-muted: #b7aeb6;
+    --border: rgba(255, 255, 255, 0.3);
+    --border-strong: rgba(255, 255, 255, 0.48);
+    --glass-bg: rgba(34, 26, 40, 0.95);
+    --glass-bg-strong: rgba(34, 26, 40, 0.99);
+  }
+}

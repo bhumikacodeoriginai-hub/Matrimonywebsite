@@ -1,0 +1,225 @@
+/* ==========================================================================
+   Progress: bar, ring, wizard steps
+   ==========================================================================
+   All three animate `transform: scaleX()` or `stroke-dashoffset` rather than
+   width, so they never trigger layout during the animation.
+   ========================================================================== */
+
+/* -------- Bar -------- */
+.barWrap {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.barHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.barLabel {
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.02em;
+}
+
+.barValue {
+  color: var(--text);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-extrabold);
+  font-variant-numeric: tabular-nums;
+}
+
+.track {
+  position: relative;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-sunken);
+  overflow: hidden;
+  /* Border keeps the empty track visible in forced-colors mode. */
+  border: 1px solid transparent;
+}
+
+.trackSlim {
+  height: 5px;
+}
+
+.trackThick {
+  height: 12px;
+}
+
+.fill {
+  position: absolute;
+  inset: 0;
+  transform-origin: left center;
+  /* `--progress` is a 0–1 scale factor set inline by the component. */
+  transform: scaleX(var(--progress, 0));
+  border-radius: inherit;
+  background: var(--action-bg);
+  transition: transform var(--duration-slower) var(--ease-out);
+}
+
+.fillAccent {
+  background: linear-gradient(90deg, var(--rose-500), var(--gold-400));
+}
+
+.fillVerified {
+  background: linear-gradient(90deg, var(--teal-500), var(--teal-300));
+}
+
+.fillPremium {
+  background: linear-gradient(90deg, var(--gold-500), var(--gold-200));
+}
+
+.fillDanger {
+  background: var(--danger);
+}
+
+/* Indeterminate: we know something is happening, not how far along it is. */
+.indeterminate {
+  transform: none;
+  width: 40%;
+  inset-inline: auto;
+  animation: indeterminate-slide 1.15s var(--ease-in-out) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .indeterminate {
+    animation: none;
+    width: 100%;
+    opacity: 0.4;
+  }
+}
+
+/* -------- Ring -------- */
+.ring {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+}
+
+.ringSvg {
+  /* 12 o'clock start instead of 3 o'clock. */
+  transform: rotate(-90deg);
+  overflow: visible;
+}
+
+.ringTrack {
+  stroke: var(--surface-sunken);
+}
+
+.ringFill {
+  stroke: url(#advaita-ring-gradient);
+  stroke-linecap: round;
+  transition: stroke-dashoffset var(--duration-slower) var(--ease-out);
+}
+
+.ringCenter {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  line-height: 1;
+}
+
+.ringValue {
+  font-family: var(--font-display);
+  font-size: var(--ring-value-size, 1.35rem);
+  font-weight: var(--weight-semibold);
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+
+.ringCaption {
+  margin-top: 3px;
+  color: var(--text-muted);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+/* -------- Wizard steps -------- */
+.steps {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.stepsHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.stepsTitle {
+  color: var(--text);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+}
+
+.stepsCount {
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Dot rail. Scrolls horizontally rather than crushing 10 dots at 320px. */
+.dots {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+
+.dots::-webkit-scrollbar {
+  display: none;
+}
+
+.dot {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 14px;
+  height: 5px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-sunken);
+  transition:
+    background-color var(--duration-base) var(--ease-out),
+    transform var(--duration-base) var(--ease-out);
+}
+
+.dotDone {
+  background: var(--verified);
+}
+
+.dotCurrent {
+  background: var(--action-bg-flat);
+  transform: scaleY(1.6);
+}
+
+/* Clickable steps (revisiting a completed step). */
+button.dot {
+  min-height: 5px;
+  cursor: pointer;
+  border: 0;
+  padding: 0;
+}
+
+button.dot::before {
+  /* 44px-tall invisible hit area over a 5px-tall painted bar. */
+  content: '';
+  position: absolute;
+  inset-block: -19px;
+  inset-inline: 0;
+}
+
+button.dot:disabled {
+  cursor: default;
+}

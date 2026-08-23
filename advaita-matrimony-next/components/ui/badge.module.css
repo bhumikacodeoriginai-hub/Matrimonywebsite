@@ -1,0 +1,259 @@
+/* ==========================================================================
+   Badge, status dot, chip
+   ==========================================================================
+   Every badge tone here pairs a colour with an ICON or TEXT, never colour alone.
+   "Verified" cannot be communicated by a green pill to a member who cannot
+   distinguish it (WCAG 1.4.1 Use of Colour), so the tick is not optional
+   decoration — it is the actual signal.
+   ========================================================================== */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 4px 9px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-extrabold);
+  letter-spacing: 0.02em;
+  line-height: 1.35;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  font-size: 1.05em;
+}
+
+/* -------- Tones -------- */
+.neutral {
+  background: color-mix(in srgb, var(--text) 7%, transparent);
+  color: var(--text-secondary);
+}
+
+.brand {
+  background: color-mix(in srgb, var(--brand-text) 10%, transparent);
+  color: var(--brand-text);
+}
+
+.accent {
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
+.verified {
+  background: var(--verified-soft);
+  border-color: var(--verified-border);
+  color: var(--verified);
+}
+
+.premium {
+  background: var(--premium-soft);
+  border-color: var(--premium-border);
+  color: var(--premium);
+}
+
+.pending {
+  background: var(--pending-soft);
+  color: var(--pending);
+}
+
+.danger {
+  background: var(--danger-soft);
+  border-color: var(--danger-border);
+  color: var(--danger);
+}
+
+/* Solid variants, for photo overlays where a tint would disappear. */
+.solid {
+  border-color: transparent;
+  box-shadow: var(--shadow-sm);
+}
+
+.solid.verified {
+  background: var(--teal-600);
+  color: #fff;
+}
+
+.solid.premium {
+  background: var(--gold-400);
+  color: var(--plum-900);
+}
+
+.solid.brand {
+  background: var(--plum-700);
+  color: #fffdfb;
+}
+
+.solid.neutral {
+  /* Readable over any photograph without hiding it. */
+  background: rgba(26, 19, 25, 0.72);
+  color: #fff;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+/* -------- Sizes -------- */
+.lg {
+  padding: 6px 12px;
+  font-size: var(--text-xs);
+}
+
+/* ==========================================================================
+   Status dot — presence / activity
+   ========================================================================== */
+
+.dotWrap {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  color: var(--text-secondary);
+}
+
+.dot {
+  flex: 0 0 auto;
+  width: 8px;
+  height: 8px;
+  min-width: 8px;
+  border-radius: var(--radius-circle);
+  background: var(--text-muted);
+}
+
+.dotOnline {
+  background: var(--online);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--online) 22%, transparent);
+  animation: pulse-dot 2.6s var(--ease-in-out) infinite;
+}
+
+.dotRecent {
+  background: var(--pending);
+}
+
+/* ==========================================================================
+   Chip — filters, tags, selectable options
+   ========================================================================== */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 7px 13px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  white-space: nowrap;
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
+}
+
+/* Selectable chips are real buttons, so they need a real min target. */
+button.chip {
+  min-height: 36px;
+  cursor: pointer;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  button.chip:hover {
+    border-color: var(--border-strong);
+    color: var(--text);
+  }
+}
+
+button.chip:active {
+  transform: scale(0.97);
+}
+
+.chipSelected {
+  background: color-mix(in srgb, var(--brand-text) 11%, var(--surface));
+  border-color: var(--brand-text);
+  color: var(--brand-text);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  button.chipSelected:hover {
+    color: var(--brand-text);
+    background: color-mix(in srgb, var(--brand-text) 16%, var(--surface));
+  }
+}
+
+/* A selected chip also gets a tick, so selection is not colour-only. */
+.chipTick {
+  display: grid;
+  place-items: center;
+  font-size: 1em;
+}
+
+/* Removable filter chip: the label is static, the × is the button. */
+.chipRemovable {
+  padding-inline-end: 5px;
+  background: color-mix(in srgb, var(--brand-text) 9%, var(--surface));
+  border-color: color-mix(in srgb, var(--brand-text) 24%, transparent);
+  color: var(--brand-text);
+}
+
+.chipRemove {
+  display: grid;
+  place-items: center;
+  /* Visually 22px, but the touch target is padded out to 32px below. */
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  min-height: 22px;
+  margin: 0;
+  border-radius: var(--radius-circle);
+  background: color-mix(in srgb, var(--brand-text) 14%, transparent);
+  color: inherit;
+  font-size: 11px;
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
+}
+
+/* Expands the hit area beyond the painted circle without affecting layout. */
+.chipRemove::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+}
+
+.chipRemove {
+  position: relative;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .chipRemove:hover {
+    background: var(--brand-text);
+    color: var(--action-fg);
+  }
+}
+
+.chipRemove:active {
+  transform: scale(0.9);
+}
+
+/* Read-only tag (hobbies, languages, matched-preference labels). */
+.chipStatic {
+  background: var(--surface-sunken);
+  border-color: transparent;
+  font-weight: var(--weight-semibold);
+}
+
+.chipGroup {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}

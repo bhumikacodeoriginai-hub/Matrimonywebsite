@@ -1,0 +1,242 @@
+/* ==========================================================================
+   Searchable multi-select list + tag input
+   ========================================================================== */
+
+.wrap {
+  display: grid;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.label {
+  color: var(--text);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+}
+
+.count {
+  color: var(--brand-text);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-extrabold);
+  font-variant-numeric: tabular-nums;
+}
+
+.help {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  line-height: var(--leading-normal);
+}
+
+/* -------- Search box -------- */
+.search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-3);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.search:focus-within {
+  border-color: var(--brand-text);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand-text) 13%, transparent);
+}
+
+.searchIcon {
+  flex: 0 0 auto;
+  color: var(--text-muted);
+}
+
+.searchInput {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: var(--space-3) 0;
+  border: 0;
+  background: none;
+  color: var(--text);
+  /* 16px floor prevents iOS zoom-on-focus. */
+  font-size: max(var(--text-sm), 16px);
+  font-weight: var(--weight-medium);
+}
+
+.searchInput:focus {
+  outline: none;
+}
+
+.clear {
+  position: relative;
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  min-width: 26px;
+  min-height: 26px;
+  border-radius: var(--radius-circle);
+  color: var(--text-muted);
+}
+
+.clear::before {
+  content: '';
+  position: absolute;
+  inset: -9px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .clear:hover {
+    background: color-mix(in srgb, var(--text) 9%, transparent);
+    color: var(--text);
+  }
+}
+
+/* -------- Option list -------- */
+.list {
+  display: grid;
+  gap: 1px;
+  /* Caps at ~6 rows then scrolls; a 32-state list must not push the page. */
+  max-height: var(--list-height, 264px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--space-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-sunken);
+}
+
+.row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 42px;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .row:hover {
+    background: var(--surface);
+  }
+}
+
+.rowSelected {
+  background: color-mix(in srgb, var(--brand-text) 8%, var(--surface));
+}
+
+/* Visually hidden but focusable native checkbox. */
+.checkInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  clip-path: inset(50%);
+  pointer-events: none;
+}
+
+.box {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 19px;
+  height: 19px;
+  border: 1.5px solid var(--border-strong);
+  border-radius: var(--radius-xs);
+  background: var(--surface);
+  color: transparent;
+  font-size: 11px;
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.row:has(.checkInput:checked) .box {
+  background: var(--brand-text);
+  border-color: var(--brand-text);
+  color: var(--action-fg);
+}
+
+.row:has(.checkInput:focus-visible) {
+  outline: var(--focus-ring-width) solid var(--focus-ring);
+  outline-offset: -2px;
+}
+
+.rowLabel {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--text);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.noResults {
+  padding: var(--space-5) var(--space-3);
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  text-align: center;
+}
+
+/* Without :has(), fall back to visible native checkboxes. */
+@supports not selector(:has(*)) {
+  .checkInput {
+    position: static;
+    width: auto;
+    height: auto;
+    opacity: 1;
+    clip-path: none;
+    pointer-events: auto;
+  }
+
+  .box {
+    display: none;
+  }
+}
+
+/* -------- Selected summary chips -------- */
+.selected {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+/* -------- Tag input -------- */
+.tagRow {
+  display: flex;
+  gap: var(--space-2);
+  align-items: stretch;
+}
+
+.tagRow .search {
+  flex: 1 1 auto;
+}
+
+.suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.suggestionsLabel {
+  width: 100%;
+  color: var(--text-muted);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-extrabold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}

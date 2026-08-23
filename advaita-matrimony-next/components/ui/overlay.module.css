@@ -1,0 +1,220 @@
+/* ==========================================================================
+   Overlays: modal, bottom sheet, side drawer
+   ==========================================================================
+   One scrim, three panel shapes. All share the focus trap, scroll lock and
+   `inert` backgrounding from lib/hooks/use-dialog.ts.
+   ========================================================================== */
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  display: flex;
+  background: rgba(26, 19, 25, 0.52);
+  animation: overlay-in var(--duration-base) var(--ease-out) both;
+  /* Blur behind the scrim reads as depth without hiding context entirely. */
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.scrimCenter {
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+}
+
+.scrimBottom {
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.scrimRight {
+  align-items: stretch;
+  justify-content: flex-end;
+}
+
+/* -------- Shared panel -------- */
+.panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  z-index: var(--z-modal);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-xl);
+  /* Panels own their scrolling so the page behind stays locked. */
+  max-height: 100%;
+  min-width: 0;
+  outline: none;
+}
+
+/* -------- Modal -------- */
+.modal {
+  width: 100%;
+  max-width: var(--modal-width, 520px);
+  max-height: min(88dvh, 780px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-2xl);
+  animation: modal-in var(--duration-slow) var(--ease-spring) both;
+}
+
+/* Below 560px a centred modal wastes space and fights the keyboard — it becomes
+   a bottom sheet instead. Same component, same semantics. */
+@media (max-width: 560px) {
+  .scrimCenter {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .modal {
+    max-width: 100%;
+    max-height: 92dvh;
+    border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+    animation: sheet-up var(--duration-slow) var(--ease-out) both;
+  }
+}
+
+/* -------- Bottom sheet -------- */
+.sheet {
+  width: 100%;
+  max-width: 720px;
+  /* dvh, not vh: vh is wrong on mobile once the URL bar collapses. */
+  max-height: 92dvh;
+  border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+  border: 1px solid var(--border);
+  border-bottom: 0;
+  animation: sheet-up var(--duration-slow) var(--ease-out) both;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Grab handle. Decorative — dragging is not the only way to dismiss. */
+.grabber {
+  display: grid;
+  place-items: center;
+  padding: var(--space-3) 0 var(--space-1);
+  flex: 0 0 auto;
+}
+
+.grabberBar {
+  width: 42px;
+  height: 4px;
+  border-radius: var(--radius-pill);
+  background: var(--border-strong);
+}
+
+/* -------- Side drawer -------- */
+.drawer {
+  width: min(var(--drawer-width, 400px), 100vw);
+  height: 100%;
+  max-height: 100%;
+  border-left: 1px solid var(--border);
+  animation: drawer-in-right var(--duration-slow) var(--ease-out) both;
+}
+
+@media (max-width: 560px) {
+  .drawer {
+    width: 100vw;
+  }
+}
+
+/* -------- Header / body / footer -------- */
+.head {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-5) var(--space-4);
+  flex: 0 0 auto;
+  /* Sticky so the title and close stay reachable in a long sheet. */
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: inherit;
+  border-bottom: 1px solid var(--border);
+}
+
+.headText {
+  flex: 1 1 auto;
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-tight);
+  color: var(--text);
+}
+
+.description {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  line-height: var(--leading-relaxed);
+}
+
+.close {
+  position: relative;
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.close::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .close:hover {
+    background: color-mix(in srgb, var(--text) 8%, transparent);
+    color: var(--text);
+  }
+}
+
+.body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: var(--space-5);
+}
+
+.bodyFlush {
+  padding: 0;
+}
+
+.foot {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5) var(--space-5);
+  flex: 0 0 auto;
+  position: sticky;
+  bottom: 0;
+  background: inherit;
+  border-top: 1px solid var(--border);
+}
+
+/* On phones the footer buttons go full-width and stack, primary on top so it
+   sits under the thumb. */
+@media (max-width: 480px) {
+  .foot {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+}
+
+.footSpread {
+  justify-content: space-between;
+}

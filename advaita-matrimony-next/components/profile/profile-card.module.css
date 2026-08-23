@@ -1,0 +1,382 @@
+/* ==========================================================================
+   Profile card
+   ==========================================================================
+   The most repeated component in the product. Everything about it is tuned for
+   appearing 20 times on a page: composited hover only, no layout animation, and
+   actions that are always reachable rather than hover-revealed.
+   ========================================================================== */
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  overflow: hidden;
+  isolation: isolate;
+  min-width: 0;
+  transition:
+    transform var(--duration-slow) var(--ease-out),
+    box-shadow var(--duration-slow) var(--ease-out),
+    border-color var(--duration-slow) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card:hover {
+    transform: translate3d(0, -5px, 0);
+    box-shadow: var(--shadow-lg);
+    border-color: color-mix(in srgb, var(--brand-text) 34%, transparent);
+  }
+}
+
+/* Keyboard parity — focusing anything inside gives the same lift. */
+.card:focus-within {
+  box-shadow: var(--shadow-lg);
+  border-color: var(--brand-text);
+}
+
+/* -------- Photo -------- */
+.media {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  background: var(--surface-sunken);
+  overflow: hidden;
+}
+
+.photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Faces sit high in a portrait crop. */
+  object-position: center 26%;
+  transition: transform var(--duration-slower) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card:hover .photo {
+    transform: scale(1.05);
+  }
+}
+
+/* No photo: a neutral, non-photographic placeholder rather than a stock face. */
+.noPhoto {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: var(--space-2);
+  height: 100%;
+  background: linear-gradient(150deg, var(--plum-100), var(--rose-100));
+  color: var(--plum-500);
+}
+
+:root[data-theme='dark'] .noPhoto {
+  background: linear-gradient(150deg, var(--plum-800), var(--plum-700));
+  color: var(--plum-300);
+}
+
+.noPhotoLabel {
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+/* Gradient so overlaid text stays legible on any photo. */
+.shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(26, 19, 25, 0.86) 0%, rgba(26, 19, 25, 0.1) 46%, transparent 70%);
+}
+
+.topBadges {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+  right: var(--space-3);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.overlay {
+  position: absolute;
+  left: var(--space-4);
+  right: var(--space-4);
+  bottom: var(--space-3);
+  display: grid;
+  gap: 3px;
+  color: #fffdfb;
+}
+
+.name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-tight);
+  line-height: 1.1;
+  color: inherit;
+  /* Long names truncate rather than push the card. */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.meta {
+  margin: 0;
+  color: rgba(255, 253, 251, 0.82);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.presence {
+  position: absolute;
+  bottom: var(--space-3);
+  right: var(--space-4);
+}
+
+/* -------- Body -------- */
+.body {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  /* Pushes the actions to the bottom so a row of cards aligns. */
+  flex: 1 1 auto;
+  align-content: start;
+}
+
+.factRow {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.fact {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  min-width: 0;
+}
+
+.factIcon {
+  flex: 0 0 auto;
+  color: var(--text-muted);
+}
+
+.factText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* -------- Compatibility -------- */
+.scoreRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid color-mix(in srgb, var(--brand-text) 18%, transparent);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--brand-text) 5%, transparent);
+}
+
+.scoreValue {
+  flex: 0 0 auto;
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-medium);
+  line-height: 1;
+  color: var(--brand-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.scoreText {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+
+.scoreLabel {
+  color: var(--text);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-extrabold);
+  letter-spacing: 0.02em;
+}
+
+.scoreMethod {
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: var(--weight-semibold);
+}
+
+.reasons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+/* -------- Actions -------- */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4) var(--space-4);
+  border-top: 1px solid var(--border);
+  /* Above the stretched link so they remain clickable. */
+  position: relative;
+  z-index: 2;
+}
+
+.primaryAction {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.iconAction {
+  flex: 0 0 auto;
+  position: relative;
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  min-height: 42px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--text-secondary);
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .iconAction:hover {
+    color: var(--brand-text);
+    border-color: var(--brand-text);
+  }
+}
+
+.iconActionOn {
+  background: var(--premium-soft);
+  border-color: var(--premium-border);
+  color: var(--premium);
+}
+
+/* -------- Interest sent: one-shot confirmation --------
+   Heart scales once (~420ms) with an expanding ring, then settles. It does not
+   loop, and it is removed entirely under reduced motion. */
+.heartPulse {
+  animation: heart-pulse 420ms var(--ease-spring) both;
+}
+
+.heartGlow {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1.5px solid var(--accent);
+  animation: glow-out 620ms var(--ease-out) both;
+  pointer-events: none;
+}
+
+.sentState {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 42px;
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--verified-border);
+  border-radius: var(--radius-md);
+  background: var(--verified-soft);
+  color: var(--verified);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  animation: reveal-scale var(--duration-base) var(--ease-spring) both;
+}
+
+/* -------- Stretched link -------- */
+.linkOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+/* ==========================================================================
+   Compact variant — horizontal row, for lists (interests, viewers, shortlist)
+   ========================================================================== */
+
+.rowCard {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  min-width: 0;
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .rowCard:hover {
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+.rowBody {
+  flex: 1 1 auto;
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.rowName {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  color: var(--text);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+}
+
+.rowMeta {
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rowActions {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  position: relative;
+  z-index: 2;
+}
+
+@media (max-width: 560px) {
+  .rowCard {
+    flex-wrap: wrap;
+  }
+
+  .rowActions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}

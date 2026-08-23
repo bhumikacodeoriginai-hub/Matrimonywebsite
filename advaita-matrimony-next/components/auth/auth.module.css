@@ -1,0 +1,414 @@
+/* ==========================================================================
+   Auth: split-screen sign in / sign up
+   ==========================================================================
+   Desktop: a deep brand panel on the left carrying the story and trust signals,
+   a working card on the right.
+   Mobile: the brand panel collapses to a compact header and the card fills the
+   screen — a full-height decorative panel above a form is wasted space on a phone,
+   and it pushes the fields under the keyboard.
+   ========================================================================== */
+
+.page {
+  min-height: 100dvh;
+  display: grid;
+  /* The form column has a fixed comfortable width; the story panel takes the
+     rest. Story first in the source order matches the visual order. */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 560px);
+  background: var(--bg);
+}
+
+@media (max-width: 1024px) {
+  .page {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ==========================================================================
+   Story panel
+   ========================================================================== */
+
+.story {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-10);
+  padding: var(--space-8) clamp(var(--space-6), 4vw, var(--space-16));
+  overflow: hidden;
+  isolation: isolate;
+  background: linear-gradient(155deg, var(--plum-950) 0%, var(--plum-800) 45%, var(--violet-700) 100%);
+  color: #fffdfb;
+
+  /* On-dark token overrides so shared components adapt without extra props. */
+  --text: #fffdfb;
+  --text-secondary: rgba(255, 253, 251, 0.76);
+  --text-muted: rgba(255, 253, 251, 0.56);
+  --border: rgba(255, 255, 255, 0.14);
+  --border-strong: rgba(255, 255, 255, 0.28);
+  --surface: rgba(255, 255, 255, 0.07);
+  --brand-text: var(--gold-200);
+  --brand-text-soft: var(--gold-200);
+  --focus-ring: var(--gold-200);
+}
+
+/* Slow-moving light field. Decorative, so reduced motion removes it. */
+.storyGlow {
+  position: absolute;
+  inset: -30%;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 22% 28%, color-mix(in srgb, var(--rose-500) 46%, transparent), transparent 42%),
+    radial-gradient(circle at 78% 76%, color-mix(in srgb, var(--gold-400) 34%, transparent), transparent 44%);
+  filter: blur(46px);
+  animation: breathe 14s var(--ease-in-out) infinite alternate;
+}
+
+.storyTop {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.storyBody {
+  position: relative;
+  display: grid;
+  gap: var(--space-6);
+  max-width: 34ch;
+}
+
+.storyTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-5xl);
+  font-weight: var(--weight-light);
+  letter-spacing: var(--tracking-tighter);
+  line-height: 0.98;
+  color: inherit;
+}
+
+.storyTitle em {
+  font-style: italic;
+  font-weight: var(--weight-medium);
+  color: var(--gold-200);
+}
+
+.storyText {
+  margin: 0;
+  color: rgba(255, 253, 251, 0.76);
+  font-size: var(--text-md);
+  line-height: var(--leading-relaxed);
+}
+
+/* Trust list — the reason someone is willing to type their number in. */
+.storyTrust {
+  position: relative;
+  display: grid;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trustRow {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.trustIcon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--gold-200);
+  font-size: 1rem;
+}
+
+.trustText {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.trustTitle {
+  color: #fffdfb;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+}
+
+.trustBody {
+  color: rgba(255, 253, 251, 0.66);
+  font-size: var(--text-xs);
+  line-height: var(--leading-normal);
+}
+
+.storyFoot {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+  color: rgba(255, 253, 251, 0.5);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-semibold);
+}
+
+.storyFoot a {
+  color: rgba(255, 253, 251, 0.72);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* -------- Mobile: compact brand header instead of a full panel -------- */
+@media (max-width: 1024px) {
+  .story {
+    /* The story content is hidden rather than removed so the trust copy is
+       still available to assistive tech and to search engines. */
+    gap: var(--space-5);
+    padding: var(--space-5) var(--space-gutter) var(--space-8);
+  }
+
+  .storyBody {
+    max-width: none;
+  }
+
+  .storyTitle {
+    font-size: var(--text-3xl);
+  }
+
+  .storyTrust,
+  .storyFoot {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   Form panel
+   ========================================================================== */
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(var(--space-6), 4vw, var(--space-12)) clamp(var(--space-5), 4vw, var(--space-10));
+  background: var(--bg);
+}
+
+.panelInner {
+  width: 100%;
+  max-width: 420px;
+  margin-inline: auto;
+  display: grid;
+  gap: var(--space-6);
+}
+
+.panelHead {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.panelTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-light);
+  letter-spacing: var(--tracking-tighter);
+  line-height: var(--leading-tight);
+  color: var(--text);
+}
+
+.panelSubtitle {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+}
+
+.form {
+  display: grid;
+  gap: var(--space-5);
+}
+
+/* A step inside the flow (phone → code). Animated so the transition between
+   them reads as forward movement rather than a repaint. */
+.step {
+  display: grid;
+  gap: var(--space-5);
+  animation: reveal-up var(--duration-slow) var(--ease-out) both;
+}
+
+.formFoot {
+  display: grid;
+  gap: var(--space-4);
+  justify-items: center;
+  text-align: center;
+}
+
+.switchRow {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+
+.switchLink {
+  color: var(--brand-text);
+  font-weight: var(--weight-extrabold);
+  text-decoration: none;
+}
+
+.switchLink:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.helperLink {
+  min-height: 32px;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .helperLink:hover {
+    color: var(--brand-text);
+  }
+}
+
+/* Reassurance directly under the submit button, where the hesitation is. */
+.privacyNote {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-sunken);
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  line-height: var(--leading-normal);
+}
+
+.privacyNoteIcon {
+  flex: 0 0 auto;
+  margin-top: 1px;
+  color: var(--verified);
+}
+
+/* The phone number being verified, shown above the code input. */
+.sentTo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
+
+.sentToText {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.sentToLabel {
+  color: var(--text-muted);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-extrabold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.sentToValue {
+  color: var(--text);
+  font-size: var(--text-base);
+  font-weight: var(--weight-bold);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ==========================================================================
+   Success state
+   ==========================================================================
+   Shown for a beat after verification so the transition into the product feels
+   like an arrival rather than a page swap.
+   ========================================================================== */
+
+.success {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-5);
+  padding: var(--space-8) 0;
+  text-align: center;
+  animation: reveal-scale var(--duration-slow) var(--ease-spring) both;
+}
+
+.successMark {
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  border-radius: var(--radius-circle);
+  background: var(--verified-soft);
+  border: 1.5px solid var(--verified-border);
+  color: var(--verified);
+}
+
+.successMark svg {
+  width: 34px;
+  height: 34px;
+}
+
+/* The tick draws itself once. */
+.successTick {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  --check-length: 34;
+  stroke-dasharray: 34;
+  animation: draw-check 460ms var(--ease-out) 120ms both;
+}
+
+/* Expanding ring, one shot. */
+.successRing {
+  position: absolute;
+  width: 76px;
+  height: 76px;
+  border-radius: var(--radius-circle);
+  border: 1.5px solid var(--verified);
+  animation: glow-out 900ms var(--ease-out) 160ms both;
+}
+
+.successMarkWrap {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.successTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-medium);
+  color: var(--text);
+}
+
+.successBody {
+  margin: 0;
+  max-width: 34ch;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+}

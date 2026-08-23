@@ -1,0 +1,330 @@
+/* ==========================================================================
+   Fields: floating-label text, textarea, select
+   ==========================================================================
+   The floating label is a real <label> that MOVES, not a placeholder pretending
+   to be one. Placeholder-as-label disappears the moment someone starts typing,
+   which is exactly when a member with a memory or attention difficulty needs it
+   most — and screen readers get nothing.
+
+   The mechanism: the control carries `placeholder=" "` (a single space) so
+   `:placeholder-shown` is true only while it is genuinely empty. Combined with
+   `:focus-within` that gives us "floated when focused or filled" in pure CSS,
+   with no JS state and no hydration mismatch.
+   ========================================================================== */
+
+.field {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+/* -------- The control shell -------- */
+.shell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-4);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out);
+}
+
+.shell:hover:not(.shellDisabled) {
+  border-color: var(--border-strong);
+}
+
+/* Focus lives on the SHELL, not the input, so the whole control reads as active.
+   The inner input's own outline is suppressed and replaced by this. */
+.shell:focus-within {
+  border-color: var(--brand-text);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand-text) 14%, transparent);
+  background: var(--surface-raised);
+}
+
+.shellInvalid {
+  border-color: var(--danger);
+}
+
+.shellInvalid:focus-within {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--danger) 16%, transparent);
+}
+
+.shellDisabled {
+  background: var(--surface-sunken);
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* -------- The control -------- */
+.control {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  /* Top padding leaves room for the floated label. */
+  padding: calc(var(--space-6) + 2px) 0 var(--space-3);
+  border: 0;
+  background: none;
+  color: var(--text);
+  font-size: max(var(--text-base), 16px);
+  font-weight: var(--weight-medium);
+  line-height: 1.4;
+}
+
+.control:focus {
+  outline: none;
+}
+
+/* The placeholder is a spacer for the :placeholder-shown trick — never shown. */
+.control::placeholder {
+  color: transparent;
+}
+
+.control:disabled {
+  cursor: not-allowed;
+}
+
+/* Fields with no floating label (search inputs) use symmetric padding. */
+.controlBare {
+  padding-block: var(--space-4);
+}
+
+.textarea {
+  padding-top: calc(var(--space-6) + 4px);
+  min-height: 7.5rem;
+  line-height: var(--leading-normal);
+  resize: vertical;
+}
+
+/* -------- The floating label -------- */
+.label {
+  position: absolute;
+  top: 50%;
+  left: var(--space-4);
+  transform: translateY(-50%);
+  transform-origin: left center;
+  color: var(--text-muted);
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
+  /* Clicks pass through to the input; the <label for> handles activation. */
+  pointer-events: none;
+  white-space: nowrap;
+  max-width: calc(100% - var(--space-8));
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition:
+    transform var(--duration-base) var(--ease-out),
+    color var(--duration-base) var(--ease-out),
+    font-size var(--duration-base) var(--ease-out);
+}
+
+/* Floated: focused, or holding a value. */
+.shell:focus-within .label,
+.control:not(:placeholder-shown) ~ .label,
+.select:valid ~ .label,
+.labelFloated {
+  transform: translateY(-155%) scale(0.82);
+  color: var(--brand-text);
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.02em;
+}
+
+.shellInvalid:focus-within .label,
+.shellInvalid .control:not(:placeholder-shown) ~ .label {
+  color: var(--danger);
+}
+
+/* Textarea labels float to the top edge rather than the vertical centre. */
+.labelTextarea {
+  top: var(--space-5);
+  transform: none;
+}
+
+.shell:focus-within .labelTextarea,
+.textarea:not(:placeholder-shown) ~ .labelTextarea {
+  transform: translateY(-58%) scale(0.82);
+}
+
+/* Required marker. The asterisk is decorative — `required` on the control is the
+   real signal, and the label text says "(required)" for screen readers. */
+.required {
+  color: var(--accent-strong);
+  margin-left: 2px;
+}
+
+/* -------- Adornments -------- */
+.adornment {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  color: var(--text-muted);
+  font-size: 1.15em;
+}
+
+.shell:focus-within .adornment {
+  color: var(--brand-text);
+}
+
+/* Fixed prefix such as "+91" — sits inside the shell, before the control. */
+.prefix {
+  flex: 0 0 auto;
+  padding-top: calc(var(--space-5) + 2px);
+  padding-bottom: var(--space-3);
+  color: var(--text-secondary);
+  font-size: var(--text-base);
+  font-weight: var(--weight-bold);
+  font-variant-numeric: tabular-nums;
+}
+
+/* When a prefix is present the label must clear it. */
+.shell:has(.prefix) .label {
+  left: calc(var(--space-4) + 2.6rem);
+}
+
+/* Trailing button inside the field (reveal password, clear search). */
+.trailingButton {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  min-height: 34px;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out);
+}
+
+.trailingButton::before {
+  /* Pads the touch target to 44px without changing the painted size. */
+  content: '';
+  position: absolute;
+  inset: -5px;
+}
+
+.trailingButton {
+  position: relative;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .trailingButton:hover {
+    color: var(--text);
+    background: color-mix(in srgb, var(--text) 8%, transparent);
+  }
+}
+
+/* -------- Select -------- */
+.select {
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  /* Room for the chevron. */
+  padding-right: var(--space-6);
+}
+
+.chevron {
+  position: absolute;
+  right: var(--space-4);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+  transition: transform var(--duration-base) var(--ease-out);
+}
+
+.shell:focus-within .chevron {
+  color: var(--brand-text);
+}
+
+/* -------- Help & error text -------- */
+.help {
+  margin: 0;
+  padding-inline: 2px;
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  line-height: var(--leading-normal);
+}
+
+.error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin: 0;
+  padding-inline: 2px;
+  color: var(--danger);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-normal);
+  animation: reveal-down var(--duration-fast) var(--ease-out) both;
+}
+
+.errorIcon {
+  flex: 0 0 auto;
+  margin-top: 1px;
+  font-size: 1.05em;
+}
+
+/* -------- Counter for length-limited fields -------- */
+.counter {
+  justify-self: end;
+  color: var(--text-muted);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-bold);
+  font-variant-numeric: tabular-nums;
+}
+
+.counterNear {
+  color: var(--pending);
+}
+
+.counterOver {
+  color: var(--danger);
+}
+
+.footRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.footRow > :first-child {
+  flex: 1 1 auto;
+}
+
+/* -------- Fieldset grouping -------- */
+.group {
+  display: grid;
+  gap: var(--space-3);
+  border: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.legend {
+  padding: 0;
+  color: var(--text);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-tight);
+}
+
+.legendHelp {
+  margin: var(--space-1) 0 0;
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-normal);
+  line-height: var(--leading-normal);
+}
+
+/* -------- Two-up field row that collapses on narrow screens -------- */
+.row {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr));
+}

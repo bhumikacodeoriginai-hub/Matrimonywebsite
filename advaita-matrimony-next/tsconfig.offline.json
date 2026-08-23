@@ -1,0 +1,41 @@
+{
+  "$comment": [
+    "Offline typecheck config. This sandbox/CI image has no npm registry access, so",
+    "node_modules (and therefore the real react/next types) cannot be installed.",
+    "This config swaps in the loose stubs from .offline-types/ so that `tsc` can still",
+    "catch real mistakes in our own source. Use the normal tsconfig.json whenever",
+    "`npm install` has succeeded. See docs/OFFLINE_VERIFICATION.md.",
+    "",
+    "ONE DELIBERATE DIFFERENCE FROM tsconfig.json: `jsx` is 'react-jsx' here, not",
+    "'preserve'. With 'preserve', tsc resolves the JSX namespace in a way our stubs",
+    "cannot satisfy, and every component with a required `children` prop reports a",
+    "false 'Property children is missing'. 'react-jsx' resolves the namespace from",
+    "react/jsx-runtime, which .offline-types/react.d.ts declares. This affects type",
+    "resolution only — no code is emitted (noEmit) — so it does not change the build.",
+    "The real tsconfig.json keeps 'preserve', which is what Next.js requires."
+  ],
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": false,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": false,
+    "noFallthroughCasesInSwitch": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "types": [],
+    "typeRoots": [],
+    "paths": {
+      "@/*": ["./*"]
+    }
+  },
+  "include": [".offline-types/**/*.d.ts", "app/**/*.ts", "app/**/*.tsx", "components/**/*.ts", "components/**/*.tsx", "lib/**/*.ts", "lib/**/*.tsx"],
+  "exclude": ["node_modules", ".next", "next-env.d.ts"]
+}

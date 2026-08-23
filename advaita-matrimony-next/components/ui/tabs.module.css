@@ -1,0 +1,127 @@
+.tablist {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--border);
+  /* Many tabs on a narrow screen scroll rather than wrap or shrink. */
+  overflow-x: auto;
+  scrollbar-width: none;
+  scroll-snap-type: x proximity;
+}
+
+.tablist::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: 0 0 auto;
+  padding: var(--space-3) var(--space-4);
+  border: 0;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  background: none;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  white-space: nowrap;
+  scroll-snap-align: start;
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out);
+}
+
+/* The moving underline. Animating a pseudo-element's transform keeps it off the
+   layout path — no reflow as the indicator slides. */
+.tab::after {
+  content: '';
+  position: absolute;
+  left: var(--space-3);
+  right: var(--space-3);
+  bottom: -3px;
+  height: 2.5px;
+  border-radius: var(--radius-pill);
+  background: var(--brand-text);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform var(--duration-base) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tab:hover {
+    color: var(--text);
+    background: color-mix(in srgb, var(--text) 5%, transparent);
+  }
+}
+
+.tabActive {
+  color: var(--brand-text);
+}
+
+.tabActive::after {
+  transform: scaleX(1);
+}
+
+.tab:focus-visible {
+  outline-offset: -3px;
+}
+
+/* Count pill inside a tab (e.g. "Received 3"). */
+.count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding-inline: 6px;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--text) 9%, transparent);
+  color: var(--text-secondary);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-extrabold);
+  font-variant-numeric: tabular-nums;
+}
+
+.tabActive .count {
+  background: var(--accent);
+  color: var(--text-on-accent);
+}
+
+/* Emphasised count for unactioned items — animates in once. */
+.countAlert {
+  background: var(--accent);
+  color: var(--text-on-accent);
+  animation: badge-pop var(--duration-slow) var(--ease-spring) both;
+}
+
+.panel {
+  padding-top: var(--space-6);
+}
+
+.panel:focus-visible {
+  outline-offset: 4px;
+}
+
+/* -------- Pill variant (filter-style segmented tabs) -------- */
+.pillList {
+  border-bottom: 0;
+  gap: var(--space-2);
+}
+
+.pillList .tab {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-xs);
+}
+
+.pillList .tab::after {
+  display: none;
+}
+
+.pillList .tabActive {
+  background: color-mix(in srgb, var(--brand-text) 10%, transparent);
+  border-color: var(--brand-text);
+}

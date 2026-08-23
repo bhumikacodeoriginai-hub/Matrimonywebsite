@@ -1,0 +1,529 @@
+/* ==========================================================================
+   Advaita Matrimony — Base layer
+   ==========================================================================
+   A modern reset, semantic element defaults, and the accessibility floor that
+   the rest of the system is allowed to build on but never to undercut.
+
+   Accessibility commitments encoded here (see also docs/ACCESSIBILITY.md):
+   • Focus is always visible. `outline: none` without a replacement is banned.
+   • Nothing is sized in px in a way that blocks browser text scaling.
+   • `prefers-reduced-motion` removes motion but never hides content.
+   • Interactive controls meet the 44px touch target minimum.
+   • Horizontal overflow is clipped at the root — 320px must never scroll sideways.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Fallback font metrics.
+   The webfonts load with `display=swap`; these metric-matched local fallbacks
+   keep the swap from shifting layout (CLS). If you change the webfonts, retune
+   `size-adjust` by comparing x-heights, or delete these two rules — they are an
+   optimisation, not a requirement.
+   -------------------------------------------------------------------------- */
+@font-face {
+  font-family: 'Plus Jakarta Sans Fallback';
+  src: local('Arial'), local('Helvetica Neue'), local('Roboto');
+  size-adjust: 100%;
+  ascent-override: 96%;
+  descent-override: 24%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Fraunces Fallback';
+  src: local('Georgia'), local('Times New Roman'), local('Noto Serif');
+  size-adjust: 104%;
+  ascent-override: 94%;
+  descent-override: 26%;
+  line-gap-override: 0%;
+}
+
+/* --------------------------------------------------------------------------
+   Reset
+   -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  /* `clip` (not `hidden`) so we do not accidentally create a scroll container
+     that breaks `position: sticky` in the dashboard shell. */
+  overflow-x: clip;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  /* Offset anchor jumps so sticky headers never cover the target heading. */
+  scroll-padding-top: calc(var(--topbar-height) + var(--space-4));
+  -webkit-tap-highlight-color: rgba(84, 35, 76, 0.12);
+}
+
+body {
+  min-height: 100dvh;
+  overflow-x: clip;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: var(--weight-normal);
+  line-height: var(--leading-normal);
+  font-synthesis-weight: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  /* Colour transition on theme flip only; see .theme-flip in animations.css. */
+  transition: background-color var(--duration-base) var(--ease-out);
+}
+
+/* --------------------------------------------------------------------------
+   Media & embeds
+   -------------------------------------------------------------------------- */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+img {
+  /* Never let a missing/slow image tint the layout. */
+  background-color: var(--surface-sunken);
+}
+
+svg {
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Typography defaults
+   -------------------------------------------------------------------------- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-tight);
+  text-wrap: balance;
+  overflow-wrap: break-word;
+}
+
+h1 {
+  font-size: var(--text-4xl);
+}
+h2 {
+  font-size: var(--text-3xl);
+}
+h3 {
+  font-size: var(--text-xl);
+}
+h4 {
+  font-size: var(--text-lg);
+}
+h5 {
+  font-size: var(--text-base);
+}
+h6 {
+  font-size: var(--text-sm);
+}
+
+p,
+li,
+dd,
+dt,
+figcaption {
+  overflow-wrap: break-word;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+/* The editorial voice of the brand. Applied deliberately, not everywhere. */
+.display {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: var(--weight-light);
+  letter-spacing: var(--tracking-tighter);
+  line-height: var(--leading-tight);
+}
+
+.display em,
+em.display {
+  font-style: italic;
+  font-weight: var(--weight-medium);
+}
+
+/* Small uppercase label used above section headings. */
+.overline {
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-extrabold);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--brand-text-soft);
+}
+
+/* Kannada copy needs its own family and a slightly looser line box. */
+:lang(kn),
+.lang-kn {
+  font-family: var(--font-kannada);
+  line-height: 1.62;
+}
+
+a {
+  color: var(--brand-text);
+  text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  text-decoration-color: currentColor;
+}
+
+/* Links that are structural UI (nav items, cards) opt out of underlines. */
+a.unstyled,
+a.unstyled:hover {
+  color: inherit;
+  text-decoration: none;
+}
+
+strong,
+b {
+  font-weight: var(--weight-bold);
+}
+
+small {
+  font-size: var(--text-xs);
+}
+
+code,
+kbd,
+samp,
+pre {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+}
+
+ul[role='list'],
+ol[role='list'] {
+  list-style: none;
+}
+
+/* --------------------------------------------------------------------------
+   Forms & controls
+   -------------------------------------------------------------------------- */
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+}
+
+button {
+  background: none;
+  border: 0;
+  cursor: pointer;
+  /* WCAG 2.5.8 target size. Components that need a visually smaller control
+     must keep this box and shrink the painted area instead. */
+  min-width: var(--tap-target);
+  min-height: var(--tap-target);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+}
+
+/* Buttons that are genuinely inline with text (e.g. "Resend" inside a
+   sentence) opt out of the target floor but must stay ≥24px per WCAG 2.2 AA. */
+button.inline-control {
+  min-width: 0;
+  min-height: 24px;
+  display: inline;
+}
+
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled,
+[aria-disabled='true'] {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+input,
+textarea,
+select {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  /* 16px on iOS prevents the automatic zoom-on-focus. */
+  font-size: max(var(--text-base), 16px);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 6rem;
+}
+
+::placeholder {
+  color: var(--text-muted);
+  opacity: 1;
+}
+
+/* Native controls adopt the brand hue. */
+input[type='checkbox'],
+input[type='radio'],
+input[type='range'],
+progress {
+  accent-color: var(--action-bg-flat);
+}
+
+input[type='checkbox'],
+input[type='radio'] {
+  width: 1.15rem;
+  height: 1.15rem;
+  min-height: 0;
+  cursor: pointer;
+}
+
+fieldset {
+  border: 0;
+}
+
+legend {
+  padding: 0;
+}
+
+label {
+  cursor: pointer;
+}
+
+/* Only remove the spinner where a numeric field is styled as text. */
+input[type='number'].no-spinner {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+input[type='number'].no-spinner::-webkit-outer-spin-button,
+input[type='number'].no-spinner::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='search']::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* --------------------------------------------------------------------------
+   Focus — the single most important accessibility rule in this file.
+   -------------------------------------------------------------------------- */
+:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}
+
+/* Mouse users do not get a ring, keyboard users always do. */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* For controls whose own border is the affordance, thicken instead of ringing
+   outside the box (prevents clipping inside scroll containers). */
+.focus-inset:focus-visible {
+  outline-offset: -2px;
+}
+
+/* --------------------------------------------------------------------------
+   Screen-reader & skip-link utilities
+   -------------------------------------------------------------------------- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Visible once focused — used for "Skip to content". */
+.sr-only-focusable:focus,
+.sr-only-focusable:focus-visible {
+  position: fixed;
+  top: var(--space-3);
+  left: var(--space-3);
+  z-index: var(--z-skiplink);
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: var(--space-3) var(--space-5);
+  overflow: visible;
+  clip-path: none;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+}
+
+/* Hides content from assistive tech only (decorative layers). */
+[aria-hidden='true'] {
+  pointer-events: none;
+}
+
+/* ...unless it is an interactive wrapper that manages its own semantics. */
+[aria-hidden='true'].interactive-layer {
+  pointer-events: auto;
+}
+
+/* --------------------------------------------------------------------------
+   Selection
+   -------------------------------------------------------------------------- */
+::selection {
+  background: var(--accent-soft);
+  color: var(--text);
+}
+
+/* --------------------------------------------------------------------------
+   Scrollbars — themed, but never so thin they stop being grabbable.
+   -------------------------------------------------------------------------- */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border: 3px solid transparent;
+  border-radius: var(--radius-pill);
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+  background-clip: content-box;
+}
+
+/* Opt-in class for rails that hide their scrollbar but stay keyboard/wheel
+   scrollable. Never use this on the page's primary scroll container. */
+.hide-scrollbar {
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  /* Collapse animations to a single final frame rather than removing them —
+     `animation-fill-mode: both` entrances must still end up VISIBLE. */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Purely decorative motion layers are removed outright. */
+  .motion-decoration {
+    display: none !important;
+  }
+
+  /* Parallax and pointer-reactive transforms are neutralised. */
+  .motion-parallax {
+    transform: none !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Forced colors (Windows High Contrast)
+   -------------------------------------------------------------------------- */
+@media (forced-colors: active) {
+  /* Decorative gradient/blur layers carry no information — drop them. */
+  .motion-decoration,
+  .aurora,
+  .grain {
+    display: none !important;
+  }
+
+  /* Glass surfaces lose their blur; give them a real border so they read. */
+  .glass,
+  [class*='glass'] {
+    background: Canvas !important;
+    border: 1px solid CanvasText !important;
+    backdrop-filter: none !important;
+  }
+
+  :focus-visible {
+    outline: 3px solid Highlight;
+  }
+
+  /* Badges rely on colour; make the boundary explicit. */
+  [data-status] {
+    border: 1px solid CanvasText !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Print — legal pages and profile sheets should print cleanly.
+   -------------------------------------------------------------------------- */
+@media print {
+  .no-print,
+  .aurora,
+  .grain,
+  .motion-decoration {
+    display: none !important;
+  }
+
+  body {
+    background: #fff;
+    color: #000;
+  }
+
+  a::after {
+    content: ' (' attr(href) ')';
+    font-size: 0.8em;
+    word-break: break-all;
+  }
+}

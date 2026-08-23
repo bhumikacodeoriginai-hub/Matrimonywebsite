@@ -1,0 +1,310 @@
+/* ==========================================================================
+   Advaita Matrimony — Utilities
+   ==========================================================================
+   A deliberately small set of layout and surface helpers. Anything with
+   component-specific styling belongs in that component's *.module.css instead.
+
+   Why utilities at all, given CSS Modules? Because layout primitives (stack,
+   cluster, container) and the two shared ambient layers (aurora, grain) are
+   used identically by dozens of components, and duplicating them per-module
+   would be worse.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Containers
+   -------------------------------------------------------------------------- */
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--space-gutter);
+}
+
+.container-narrow {
+  width: 100%;
+  max-width: var(--container-narrow);
+  margin-inline: auto;
+  padding-inline: var(--space-gutter);
+}
+
+.container-wide {
+  width: 100%;
+  max-width: var(--container-wide);
+  margin-inline: auto;
+  padding-inline: var(--space-gutter);
+}
+
+.section {
+  padding-block: var(--space-section);
+}
+
+/* --------------------------------------------------------------------------
+   Layout primitives
+   -------------------------------------------------------------------------- */
+
+/* Vertical rhythm. Gap via --stack-gap. */
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stack-gap, var(--space-4));
+}
+
+/* Horizontal group that wraps gracefully instead of overflowing. */
+.cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--cluster-gap, var(--space-2));
+}
+
+/* Push-apart row. */
+.row-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+/* Auto-fitting grid — the workhorse for card collections. It never overflows
+   at 320px because the track floor is a min() against 100%. */
+.auto-grid {
+  display: grid;
+  gap: var(--grid-gap, var(--space-4));
+  grid-template-columns: repeat(auto-fill, minmax(min(var(--grid-min, 260px), 100%), 1fr));
+}
+
+/* Centre a single child both axes. */
+.center {
+  display: grid;
+  place-items: center;
+}
+
+/* Fill the positioned parent. */
+.inset {
+  position: absolute;
+  inset: 0;
+}
+
+/* Maintain aspect ratio without layout shift. */
+.ratio-portrait {
+  aspect-ratio: 4 / 5;
+}
+.ratio-square {
+  aspect-ratio: 1 / 1;
+}
+.ratio-video {
+  aspect-ratio: 16 / 9;
+}
+
+/* Horizontal snap rail (carousels). Keyboard and wheel scrollable. */
+.rail {
+  display: flex;
+  gap: var(--rail-gap, var(--space-4));
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  /* Bleed to the viewport edge on mobile so cards do not look boxed in. */
+  padding-inline: var(--space-gutter);
+  margin-inline: calc(var(--space-gutter) * -1);
+  scroll-padding-inline-start: var(--space-gutter);
+}
+
+.rail > * {
+  scroll-snap-align: start;
+  flex: 0 0 auto;
+}
+
+/* --------------------------------------------------------------------------
+   Surfaces
+   -------------------------------------------------------------------------- */
+.surface {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+}
+
+/* Subtle glass. Falls back to a solid surface where backdrop-filter is absent. */
+.glass {
+  background: var(--glass-bg-strong);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+}
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .glass {
+    background: var(--glass-bg);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.4);
+    backdrop-filter: blur(var(--glass-blur)) saturate(1.4);
+  }
+}
+
+/* Deep brand surface for emphasis panels. Always pair with .on-dark. */
+.surface-deep {
+  background: linear-gradient(148deg, var(--plum-900) 0%, var(--plum-700) 55%, var(--violet-700) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-xl);
+  color: var(--text-inverse);
+}
+
+/* Token overrides for content sitting on a deep/photographic surface. */
+.on-dark {
+  --text: #fffdfb;
+  --text-secondary: rgba(255, 253, 251, 0.74);
+  --text-muted: rgba(255, 253, 251, 0.56);
+  --border: rgba(255, 255, 255, 0.14);
+  --border-strong: rgba(255, 255, 255, 0.26);
+  --brand-text: var(--gold-200);
+  --brand-text-soft: var(--gold-200);
+  --surface: rgba(255, 255, 255, 0.08);
+  --focus-ring: var(--gold-200);
+  color: var(--text);
+}
+
+/* Hover lift shared by all card-like surfaces. */
+.lift {
+  transition:
+    transform var(--duration-slow) var(--ease-out),
+    box-shadow var(--duration-slow) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .lift:hover {
+    transform: translate3d(0, -4px, 0);
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+.lift:focus-within {
+  box-shadow: var(--shadow-lg);
+}
+
+/* --------------------------------------------------------------------------
+   Ambient background layers
+   --------------------------------------------------------------------------
+   Both are decorative and removed under reduced-motion / forced-colors.
+   Keep to ONE aurora per route — it is the most expensive paint on the page.
+   -------------------------------------------------------------------------- */
+.aurora {
+  position: fixed;
+  inset: -25%;
+  z-index: var(--z-below);
+  pointer-events: none;
+  filter: blur(80px) saturate(1.15);
+  /* Own compositing layer so the blur is not repainted on scroll. */
+  will-change: transform;
+  contain: strict;
+}
+
+.aurora span {
+  position: absolute;
+  border-radius: var(--radius-circle);
+  animation: drift 26s var(--ease-in-out) infinite;
+}
+
+.aurora span:nth-child(1) {
+  width: 52vw;
+  height: 52vw;
+  left: -8vw;
+  top: -10vw;
+  background: radial-gradient(circle, var(--aurora-1), transparent 62%);
+}
+
+.aurora span:nth-child(2) {
+  width: 46vw;
+  height: 46vw;
+  right: -8vw;
+  top: 4vw;
+  background: radial-gradient(circle, var(--aurora-2), transparent 62%);
+  animation-delay: -8s;
+}
+
+.aurora span:nth-child(3) {
+  width: 50vw;
+  height: 50vw;
+  left: 24vw;
+  bottom: -16vw;
+  background: radial-gradient(circle, var(--aurora-3), transparent 62%);
+  animation-delay: -16s;
+}
+
+/* Film grain — kills the "flat gradient" look. Inline SVG, no network request. */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-below);
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  contain: strict;
+}
+
+/* --------------------------------------------------------------------------
+   Text helpers
+   -------------------------------------------------------------------------- */
+.text-secondary {
+  color: var(--text-secondary);
+}
+.text-muted {
+  color: var(--text-muted);
+}
+.text-brand {
+  color: var(--brand-text);
+}
+.text-accent {
+  color: var(--accent-strong);
+}
+
+.measure {
+  max-width: 62ch;
+}
+.measure-tight {
+  max-width: 46ch;
+}
+
+/* Truncation. `--lines` controls the clamp. */
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.clamp {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--lines, 2);
+  line-clamp: var(--lines, 2);
+  overflow: hidden;
+}
+
+/* Tabular figures keep animated counters from jittering. */
+.tnum {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+}
+
+/* --------------------------------------------------------------------------
+   Visibility
+   -------------------------------------------------------------------------- */
+.hide-mobile {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .hide-mobile {
+    display: revert;
+  }
+  .hide-desktop {
+    display: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Content-visibility: skip layout/paint for long off-screen sections.
+   `contain-intrinsic-size` supplies a placeholder height so the scrollbar
+   stays stable and no CLS is introduced.
+   -------------------------------------------------------------------------- */
+.defer-paint {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 600px;
+}

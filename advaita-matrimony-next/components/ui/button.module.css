@@ -1,0 +1,279 @@
+/* ==========================================================================
+   Button
+   ==========================================================================
+   One box model, several paint treatments. Shared by <Button> and <ButtonLink>
+   so a link that looks like a button is never a second implementation.
+   ========================================================================== */
+
+.base {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  /* Never let a long label break a layout. */
+  max-width: 100%;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans);
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.01em;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  /* Only transform/opacity/colour animate — no layout properties. */
+  transition:
+    transform var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-base) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out),
+    opacity var(--duration-fast) var(--ease-out);
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Press feedback is on pointer-down, which is what makes a button feel physical. */
+.base:active:not(:disabled):not([aria-disabled='true']) {
+  transform: translate3d(0, 1px, 0) scale(0.985);
+}
+
+.base:disabled,
+.base[aria-disabled='true'] {
+  cursor: not-allowed;
+  opacity: 0.5;
+  transform: none;
+  box-shadow: none;
+}
+
+/* While a request is in flight the label stays put and only the icon changes,
+   so the button does not resize and shift the layout around it. */
+.base[data-loading='true'] {
+  cursor: progress;
+  pointer-events: none;
+}
+
+/* -------- Sizes --------
+   Heights are set with padding + line-height rather than fixed px so the
+   control grows correctly when a member scales up their browser font size.
+   The 44px minimum from base.css still applies underneath. */
+.sm {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-xs);
+  border-radius: var(--radius-sm);
+  gap: var(--space-1);
+}
+
+.md {
+  padding: var(--space-3) var(--space-5);
+  font-size: var(--text-sm);
+}
+
+.lg {
+  padding: var(--space-4) var(--space-7);
+  font-size: var(--text-base);
+  border-radius: var(--radius-lg);
+}
+
+/* -------- Primary: the single most important action on a screen -------- */
+.primary {
+  background: var(--action-bg);
+  color: var(--action-fg);
+  box-shadow: var(--shadow-md);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .primary:hover:not(:disabled) {
+    background: var(--action-bg-hover);
+    box-shadow: var(--shadow-lg);
+    transform: translate3d(0, -2px, 0);
+  }
+}
+
+/* -------- Secondary: outlined, for the alternative path -------- */
+.secondary {
+  background: var(--surface);
+  border-color: var(--border-strong);
+  color: var(--brand-text);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .secondary:hover:not(:disabled) {
+    border-color: var(--brand-text);
+    background: var(--surface-raised);
+    transform: translate3d(0, -2px, 0);
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+/* -------- Subtle: tonal fill, for in-card actions -------- */
+.subtle {
+  background: color-mix(in srgb, var(--brand-text) 8%, transparent);
+  color: var(--brand-text);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .subtle:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--brand-text) 14%, transparent);
+  }
+}
+
+/* -------- Ghost: lowest emphasis, for toolbars and dismissals -------- */
+.ghost {
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ghost:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--text) 7%, transparent);
+    color: var(--text);
+  }
+}
+
+/* -------- Accent: the "send interest" affordance -------- */
+.accent {
+  background: var(--accent);
+  color: var(--text-on-accent);
+  box-shadow: var(--shadow-sm);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .accent:hover:not(:disabled) {
+    background: var(--accent-strong);
+    box-shadow: var(--shadow-glow-accent);
+    transform: translate3d(0, -2px, 0);
+  }
+}
+
+/* -------- Premium: subscription only. Gold is never decorative. -------- */
+.premium {
+  background: linear-gradient(140deg, var(--gold-300), var(--gold-500));
+  /* Dark ink on gold — gold-on-white text would fail contrast. */
+  color: var(--plum-900);
+  box-shadow: var(--shadow-sm);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .premium:hover:not(:disabled) {
+    box-shadow: var(--shadow-glow-premium);
+    transform: translate3d(0, -2px, 0);
+  }
+}
+
+/* -------- Danger: destructive, and never the default -------- */
+.danger {
+  background: transparent;
+  border-color: var(--danger-border);
+  color: var(--danger);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .danger:hover:not(:disabled) {
+    background: var(--danger-soft);
+    border-color: var(--danger);
+  }
+}
+
+/* -------- Layout modifiers -------- */
+.block {
+  width: 100%;
+}
+
+/* Square icon-only button. Requires an aria-label — enforced by the types. */
+.iconOnly {
+  padding: 0;
+  aspect-ratio: 1;
+  border-radius: var(--radius-md);
+  gap: 0;
+}
+
+.iconOnly.sm {
+  width: 36px;
+  min-width: 36px;
+  height: 36px;
+  min-height: 36px;
+}
+
+.iconOnly.md {
+  width: 44px;
+  height: 44px;
+}
+
+.iconOnly.lg {
+  width: 52px;
+  height: 52px;
+}
+
+.round {
+  border-radius: var(--radius-pill);
+}
+
+/* -------- Content -------- */
+.label {
+  /* Truncate rather than overflow when a container is genuinely too narrow. */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  font-size: 1.15em;
+}
+
+/* Trailing chevron/arrow nudges forward on hover — a small "go" cue. */
+.trailing {
+  transition: transform var(--duration-base) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .base:hover .trailing {
+    transform: translate3d(3px, 0, 0);
+  }
+}
+
+/* Circular arrow badge used on the marketing CTAs. */
+.pip {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 1.75em;
+  height: 1.75em;
+  border-radius: var(--radius-circle);
+  background: var(--gold-400);
+  color: var(--plum-900);
+  font-size: 0.85em;
+  transition: transform var(--duration-base) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .base:hover .pip {
+    transform: translate3d(3px, 0, 0);
+  }
+}
+
+/* -------- Loading -------- */
+.spinner {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 1.1em;
+  height: 1.1em;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: var(--radius-circle);
+  animation: spin 640ms linear infinite;
+  opacity: 0.9;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    /* A spinner that cannot spin needs a different way to read as "busy". */
+    animation: none;
+    border-top-color: currentColor;
+    opacity: 0.55;
+  }
+}

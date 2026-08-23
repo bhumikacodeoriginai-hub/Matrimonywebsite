@@ -1,0 +1,201 @@
+/* ==========================================================================
+   Card + section heading
+   ==========================================================================
+   The single container shape the whole product uses. Tone changes the paint;
+   padding and radius stay on one scale so a dashboard of mixed cards still reads
+   as one surface family.
+   ========================================================================== */
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-xl);
+  /* Clips decorative gradients and image zoom to the rounded corner. */
+  isolation: isolate;
+  min-width: 0;
+}
+
+/* -------- Tones -------- */
+.plain {
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.glass {
+  background: var(--glass-bg-strong);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-md);
+}
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .glass {
+    background: var(--glass-bg);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.35);
+    backdrop-filter: blur(var(--glass-blur)) saturate(1.35);
+  }
+}
+
+/* Deep brand surface. Sets the .onDark token overrides itself. */
+.deep {
+  background: linear-gradient(148deg, var(--plum-900) 0%, var(--plum-700) 52%, var(--violet-700) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fffdfb;
+
+  --text: #fffdfb;
+  --text-secondary: rgba(255, 253, 251, 0.74);
+  --text-muted: rgba(255, 253, 251, 0.55);
+  --border: rgba(255, 255, 255, 0.14);
+  --border-strong: rgba(255, 255, 255, 0.26);
+  --brand-text: var(--gold-200);
+  --brand-text-soft: var(--gold-200);
+  --surface: rgba(255, 255, 255, 0.08);
+  --focus-ring: var(--gold-200);
+}
+
+/* Quiet grouping container — no border, just a tint. */
+.sunken {
+  background: var(--surface-sunken);
+  border: 1px solid transparent;
+}
+
+/* Premium/subscription emphasis. Gold border, never a gold fill. */
+.premium {
+  background: var(--surface);
+  border: 1px solid var(--premium-border);
+  box-shadow: var(--shadow-glow-premium);
+}
+
+/* -------- Padding -------- */
+.padNone {
+  padding: 0;
+}
+.padSm {
+  padding: var(--space-4);
+}
+.padMd {
+  padding: var(--space-5);
+}
+.padLg {
+  padding: clamp(var(--space-5), 2vw, var(--space-8));
+}
+
+/* -------- Interaction -------- */
+.interactive {
+  transition:
+    transform var(--duration-slow) var(--ease-out),
+    box-shadow var(--duration-slow) var(--ease-out),
+    border-color var(--duration-slow) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .interactive:hover {
+    transform: translate3d(0, -4px, 0);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--border-strong);
+  }
+}
+
+/* Keyboard parity: focusing anything inside lifts the card the same way hover
+   does, so keyboard users get the same feedback mouse users get. */
+.interactive:focus-within {
+  box-shadow: var(--shadow-lg);
+  border-color: var(--border-strong);
+}
+
+/* Makes the whole card a click target via a stretched overlay link.
+   The link itself must carry the accessible name. */
+.linkOverlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+/* Anything that must stay clickable above the overlay (secondary actions). */
+.aboveOverlay {
+  position: relative;
+  z-index: 2;
+}
+
+/* ==========================================================================
+   Section heading
+   ========================================================================== */
+
+.sectionHead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-5);
+  margin-bottom: var(--space-6);
+}
+
+.sectionHeadText {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-light);
+  letter-spacing: var(--tracking-tighter);
+  line-height: var(--leading-tight);
+  color: var(--text);
+}
+
+.sectionTitle em {
+  font-style: italic;
+  font-weight: var(--weight-medium);
+  color: var(--brand-text);
+}
+
+.sectionDescription {
+  margin: 0;
+  max-width: 58ch;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+}
+
+.sectionAction {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 640px) {
+  .sectionHead {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+    margin-bottom: var(--space-5);
+  }
+}
+
+/* ==========================================================================
+   Card header (inside a card)
+   ========================================================================== */
+
+.cardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: var(--text-base);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-tight);
+  color: var(--text);
+}
+
+.cardMeta {
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+}

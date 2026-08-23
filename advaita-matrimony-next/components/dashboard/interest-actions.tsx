@@ -24,13 +24,7 @@ import { useToast } from '../ui/toast';
 import { respondToInterest } from '../../lib/api/actions';
 import { useAction } from '../../lib/hooks/use-action';
 
-export function InterestActions({
-  interestId,
-  senderName,
-}: {
-  interestId: number;
-  senderName: string;
-}) {
+export function InterestActions({ interestId, senderName }: { interestId: number; senderName: string }) {
   const router = useRouter();
   const toast = useToast();
   const [outcome, setOutcome] = useState<'accepted' | 'rejected' | null>(null);

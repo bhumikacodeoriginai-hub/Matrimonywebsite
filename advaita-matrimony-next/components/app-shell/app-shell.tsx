@@ -148,9 +148,7 @@ export function AppShell({
   return (
     <div className={styles.shell}>
       {/* -------- Sidebar / mobile drawer -------- */}
-      {drawerOpen && (
-        <div className={styles.scrim} onClick={() => setDrawerOpen(false)} aria-hidden="true" />
-      )}
+      {drawerOpen && <div className={styles.scrim} onClick={() => setDrawerOpen(false)} aria-hidden="true" />}
 
       <nav
         ref={drawerRef}
@@ -186,13 +184,15 @@ export function AppShell({
             <span className={styles.meText}>
               <span className={styles.meName}>{member.name}</span>
               <span className={styles.meMeta}>
-                {metaLine(
-                  member.category ? PROFILE_CATEGORY_LABELS[member.category] : null,
-                  member.city,
-                ) || 'View your profile'}
+                {metaLine(member.category ? PROFILE_CATEGORY_LABELS[member.category] : null, member.city) ||
+                  'View your profile'}
               </span>
             </span>
-            {member.isPremium && <Badge tone="premium" icon="crown">{''}</Badge>}
+            {member.isPremium && (
+              <Badge tone="premium" icon="crown">
+                {''}
+              </Badge>
+            )}
           </Link>
 
           <Button

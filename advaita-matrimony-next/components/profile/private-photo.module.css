@@ -1,0 +1,210 @@
+/* ==========================================================================
+   Private photo
+   ==========================================================================
+   SECURITY CONTRACT — read before touching anything here.
+
+   This component renders EXACTLY the URL the server handed it. When the viewer is
+   not authorised, that URL is the server's pre-blurred file — a genuinely
+   different, genuinely blurred image.
+
+   It must never:
+     • apply `filter: blur()` to a clear source and call that privacy (a CSS filter
+       is one devtools toggle away from nothing), or
+     • preload, prefetch or hold the clear source behind an overlay.
+
+   The blur-to-clear transition therefore only runs AFTER a refetch has returned a
+   newly authorised URL — it animates the arrival of a different file, not the
+   unveiling of one that was already in the page.
+   ========================================================================== */
+
+.frame {
+  position: relative;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: var(--surface-sunken);
+  isolation: isolate;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Plays only when a newly authorised (clear) source has replaced a blurred one. */
+.revealing {
+  animation: unblur var(--duration-slower) var(--ease-out) both;
+}
+
+/* ==========================================================================
+   Locked state
+   ========================================================================== */
+
+/* Scrim over the server's blurred file, so overlay text stays legible. */
+.lockScrim {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  text-align: center;
+  background: linear-gradient(to top, rgba(26, 19, 25, 0.82), rgba(26, 19, 25, 0.46));
+  color: #fffdfb;
+}
+
+.lockIcon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-circle);
+  background: rgba(255, 255, 255, 0.12);
+  color: #fffdfb;
+  font-size: 1.3rem;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.lockTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-medium);
+  color: inherit;
+}
+
+.lockBody {
+  margin: 0;
+  max-width: 30ch;
+  color: rgba(255, 253, 251, 0.78);
+  font-size: var(--text-xs);
+  line-height: var(--leading-relaxed);
+}
+
+.lockActions {
+  margin-top: var(--space-2);
+}
+
+/* ==========================================================================
+   Gallery
+   ========================================================================== */
+
+.gallery {
+  display: grid;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.main {
+  aspect-ratio: 4 / 5;
+  max-height: 560px;
+}
+
+.thumbs {
+  display: flex;
+  gap: var(--space-2);
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+
+.thumbs::-webkit-scrollbar {
+  display: none;
+}
+
+.thumb {
+  position: relative;
+  flex: 0 0 auto;
+  width: 62px;
+  aspect-ratio: 1;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--surface-sunken);
+  cursor: pointer;
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    opacity var(--duration-fast) var(--ease-out);
+  opacity: 0.68;
+}
+
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .thumb:hover {
+    opacity: 1;
+  }
+}
+
+.thumbActive {
+  border-color: var(--brand-text);
+  opacity: 1;
+}
+
+/* Small lock glyph on thumbnails that are still blurred. */
+.thumbLock {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(26, 19, 25, 0.42);
+  color: #fff;
+  font-size: 0.85rem;
+}
+
+.counter {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  background: rgba(26, 19, 25, 0.68);
+  color: #fff;
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-extrabold);
+  font-variant-numeric: tabular-nums;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+/* No photos at all — a neutral placeholder, never a stock face. */
+.empty {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: var(--space-3);
+  aspect-ratio: 4 / 5;
+  max-height: 560px;
+  border-radius: var(--radius-xl);
+  background: linear-gradient(150deg, var(--plum-100), var(--rose-100));
+  color: var(--plum-600);
+  text-align: center;
+  padding: var(--space-6);
+}
+
+:root[data-theme='dark'] .empty {
+  background: linear-gradient(150deg, var(--plum-800), var(--plum-700));
+  color: var(--plum-200);
+}
+
+.emptyLabel {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+}
+
+.emptyBody {
+  margin: 0;
+  max-width: 26ch;
+  font-size: var(--text-xs);
+  opacity: 0.8;
+  line-height: var(--leading-relaxed);
+}

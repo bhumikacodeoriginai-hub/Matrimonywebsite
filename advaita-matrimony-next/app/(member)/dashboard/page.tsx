@@ -41,7 +41,15 @@ import {
 import { otherParty, pendingReceived } from '../../../lib/interests';
 import { strengthActions, strengthLabel, visibilityNotice } from '../../../lib/profile-strength';
 import { hasAnyPreference, preferenceGaps, SCORE_DISCLOSURE } from '../../../lib/compatibility';
-import { firstName, formatCount, greeting, metaLine, parseUsage, pluralise, relativeTime } from '../../../lib/format';
+import {
+  firstName,
+  formatCount,
+  greeting,
+  metaLine,
+  parseUsage,
+  pluralise,
+  relativeTime,
+} from '../../../lib/format';
 import { PROFILE_CATEGORY_LABELS } from '../../../lib/enums';
 import styles from '../../../components/dashboard/dashboard.module.css';
 
@@ -110,9 +118,7 @@ export default async function DashboardPage() {
 
         <div className={styles.welcomeRing}>
           <ProgressRing value={completion} size={116} aria-label="Profile completeness" />
-          <p className={styles.welcomeRingCaption}>
-            Profile {strengthLabel(completion)}
-          </p>
+          <p className={styles.welcomeRingCaption}>Profile {strengthLabel(completion)}</p>
         </div>
       </section>
 
@@ -120,7 +126,9 @@ export default async function DashboardPage() {
       {notice.tone !== 'live' && (
         <Alert
           tone={notice.tone === 'pending' ? 'warning' : 'error'}
-          title={notice.tone === 'pending' ? 'Your profile is being reviewed' : 'Your profile needs attention'}
+          title={
+            notice.tone === 'pending' ? 'Your profile is being reviewed' : 'Your profile needs attention'
+          }
         >
           {notice.message}
         </Alert>
@@ -165,12 +173,7 @@ export default async function DashboardPage() {
               <>
                 <div className={`${styles.cardGrid} ${styles.cardRail}`}>
                   {recommendations.slice(0, 6).map((profile, index) => (
-                    <ProfileCard
-                      key={profile.id}
-                      profile={profile}
-                      preferences={preferences}
-                      index={index}
-                    />
+                    <ProfileCard key={profile.id} profile={profile} preferences={preferences} index={index} />
                   ))}
                 </div>
 
@@ -187,9 +190,7 @@ export default async function DashboardPage() {
                 <h2 id="interests-heading" className={styles.sectionTitle}>
                   Interests waiting for you
                 </h2>
-                <p className={styles.sectionSubtitle}>
-                  Accepting one opens a conversation between you.
-                </p>
+                <p className={styles.sectionSubtitle}>Accepting one opens a conversation between you.</p>
               </div>
               {pending.length > 0 && (
                 <Badge tone="accent" size="lg">
@@ -290,9 +291,7 @@ export default async function DashboardPage() {
             />
 
             {actions.length === 0 ? (
-              <Note icon="check-circle">
-                Nothing outstanding. Your profile has everything we ask for.
-              </Note>
+              <Note icon="check-circle">Nothing outstanding. Your profile has everything we ask for.</Note>
             ) : (
               <ul className={styles.list}>
                 {actions.slice(0, 3).map((action) => (
@@ -349,13 +348,7 @@ export default async function DashboardPage() {
                 footnote="All time"
               />
               <StatTile label="Mutual matches" value={matchTotal} icon="heart" tone="verified" />
-              <StatTile
-                label="Profile complete"
-                value={completion}
-                suffix="%"
-                icon="user"
-                tone="premium"
-              />
+              <StatTile label="Profile complete" value={completion} suffix="%" icon="user" tone="premium" />
             </div>
 
             {/*
@@ -370,8 +363,8 @@ export default async function DashboardPage() {
                 Who shortlisted you
               </p>
               <p className={styles.unavailableBody}>
-                Not available yet — we can see the profiles you have saved, but not who has saved you. It is on
-                the list.
+                Not available yet — we can see the profiles you have saved, but not who has saved you. It is
+                on the list.
               </p>
             </div>
           </section>
@@ -471,7 +464,9 @@ export default async function DashboardPage() {
                     <div key={label} className={styles.usageRow}>
                       <p className={styles.usageLabel}>
                         <span>{label}</span>
-                        <span className={styles.usageValue}>{limit === null ? `${used} · unlimited` : raw}</span>
+                        <span className={styles.usageValue}>
+                          {limit === null ? `${used} · unlimited` : raw}
+                        </span>
                       </p>
                       {limit !== null && limit > 0 && (
                         <ProgressBar
@@ -497,7 +492,9 @@ export default async function DashboardPage() {
                 <h2 id="upgrade-heading" className={styles.railCardTitle}>
                   Free membership
                 </h2>
-                <VerifiedBadge basis={me.user.phone_verified_at ? 'Mobile number verified' : 'Not yet verified'} />
+                <VerifiedBadge
+                  basis={me.user.phone_verified_at ? 'Mobile number verified' : 'Not yet verified'}
+                />
               </div>
               <p className={styles.sectionSubtitle}>
                 Searching, receiving interests and messaging your matches are all included. A paid plan adds

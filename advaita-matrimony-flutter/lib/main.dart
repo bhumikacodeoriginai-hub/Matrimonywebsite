@@ -8,6 +8,7 @@ import 'providers/profile_provider.dart';
 import 'providers/match_provider.dart';
 import 'providers/chat_provider.dart';
 import 'providers/subscription_provider.dart';
+import 'localization/app_localizations.dart';
 import 'screens/splash/splash_screen.dart';
 import 'theme/app_theme.dart';
 
@@ -27,11 +28,15 @@ void main() async {
     systemNavigationBarColor: Colors.white,
   ));
 
-  runApp(const AdvaitaMatrimonyApp());
+  final languageProvider = AppLanguageProvider();
+  await languageProvider.load();
+  runApp(AdvaitaMatrimonyApp(languageProvider: languageProvider));
 }
 
 class AdvaitaMatrimonyApp extends StatelessWidget {
-  const AdvaitaMatrimonyApp({super.key});
+  final AppLanguageProvider languageProvider;
+
+  const AdvaitaMatrimonyApp({super.key, required this.languageProvider});
 
   @override
   Widget build(BuildContext context) {
@@ -42,14 +47,19 @@ class AdvaitaMatrimonyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => MatchProvider()),
         ChangeNotifierProvider(create: (_) => ChatProvider()),
         ChangeNotifierProvider(create: (_) => SubscriptionProvider()),
+        ChangeNotifierProvider.value(value: languageProvider),
       ],
-      child: MaterialApp(
+      child: Consumer<AppLanguageProvider>(
+        builder: (_, language, __) => MaterialApp(
         title: 'Advaita Matrimony',
+        locale: language.locale,
+        supportedLocales: const [Locale('en'), Locale('kn')],
         debugShowCheckedModeBanner: false,
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
         themeMode: ThemeMode.light,
         home: const SplashScreen(),
+      ),
       ),
     );
   }

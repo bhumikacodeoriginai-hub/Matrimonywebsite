@@ -3,513 +3,477 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advaita Matrimony – Where Every Heart Finds Its Match</title>
-    <meta name="description" content="India's first inclusive matrimonial platform for Divyangjan, Hearing Impaired, Vitiligo & General communities">
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Advaita Matrimony | ಅದ್ವೈತ ಮ್ಯಾಟ್ರಿಮೋನಿ – Where Every Heart Finds Its Match</title>
+    <meta name="description" content="India's first inclusive matrimonial platform for Divyangjan, Hearing Impaired, Vitiligo & General communities. ಎಲ್ಲರಿಗೂ ಪ್ರೀತಿಯ ಹಕ್ಕಿದೆ.">
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Noto+Sans+Kannada:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-    tailwind.config={theme:{extend:{fontFamily:{sans:['Plus Jakarta Sans','sans-serif'],serif:['Instrument Serif','serif'],display:['Space Grotesk','sans-serif']},colors:{dark:'#0a0a0f',surface:'#13131a',brand:{50:'#eef2ff',100:'#e0e7ff',200:'#c7d2fe',500:'#6366f1',600:'#4f46e5',700:'#4338ca'},warm:'#f5f0eb',cream:'#faf8f5'},borderRadius:{'4xl':'2rem','5xl':'3rem'},}}}
+    tailwind.config={theme:{extend:{fontFamily:{sans:['Plus Jakarta Sans','Noto Sans Kannada','sans-serif'],serif:['Instrument Serif','serif'],kannada:['Noto Sans Kannada','sans-serif']},colors:{dark:'#0a0a0f',brand:{50:'#eef2ff',100:'#e0e7ff',200:'#c7d2fe',400:'#818cf8',500:'#6366f1',600:'#4f46e5',700:'#4338ca',800:'#3730a3'},warm:'#f5f0eb',cream:'#faf8f5'},borderRadius:{'4xl':'2rem','5xl':'3rem'}}}}
     </script>
     <style>
-    *{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+    *{-webkit-font-smoothing:antialiased}
     html{scroll-behavior:smooth}
-    body{font-family:'Plus Jakarta Sans',sans-serif;background:#faf8f5;color:#1a1a2e;overflow-x:hidden}
-    
-    /* === CURSOR DOT === */
-    .cursor-dot{width:8px;height:8px;background:#4f46e5;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;transition:transform .15s ease;mix-blend-mode:difference}
-    .cursor-ring{width:40px;height:40px;border:1.5px solid rgba(79,70,229,.4);border-radius:50%;position:fixed;pointer-events:none;z-index:9998;transition:transform .2s ease, width .3s ease, height .3s ease;transform:translate(-50%,-50%)}
-    
-    /* === KINETIC TEXT === */
-    .kinetic{display:inline-block;transition:transform .3s cubic-bezier(.23,1,.32,1)}
-    .kinetic:hover{transform:translateY(-4px) rotate(-1deg)}
-    
-    /* === MAGNETIC BUTTON === */
-    .magnetic{transition:transform .4s cubic-bezier(.23,1,.32,1)}
-    
-    /* === SMOOTH REVEAL === */
-    [data-reveal]{opacity:0;transform:translateY(60px);transition:opacity 1s cubic-bezier(.23,1,.32,1),transform 1s cubic-bezier(.23,1,.32,1)}
-    [data-reveal].visible{opacity:1;transform:translateY(0)}
-    [data-reveal-delay="1"]{transition-delay:.1s}
-    [data-reveal-delay="2"]{transition-delay:.2s}
-    [data-reveal-delay="3"]{transition-delay:.3s}
-    [data-reveal-delay="4"]{transition-delay:.4s}
-    
-    /* === MARQUEE === */
-    .marquee{display:flex;overflow:hidden;user-select:none}
-    .marquee-content{display:flex;animation:marquee 30s linear infinite;flex-shrink:0}
-    @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-    
-    /* === PROFILE CARD TILT === */
-    .tilt-card{transition:transform .6s cubic-bezier(.23,1,.32,1),box-shadow .6s ease}
-    .tilt-card:hover{transform:translateY(-16px) rotateX(2deg) rotateY(-2deg);box-shadow:0 40px 80px -20px rgba(0,0,0,.15)}
-    
-    /* === GRADIENT TEXT === */
-    .gradient-text{background:linear-gradient(135deg,#4f46e5 0%,#7c3aed 40%,#ec4899 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-    
-    /* === PILL HOVER === */
-    .pill-hover{transition:all .3s ease}
-    .pill-hover:hover{transform:scale(1.05);box-shadow:0 8px 25px rgba(79,70,229,.2)}
-    
-    /* === STAGGER ANIMATION === */
-    @keyframes stagger-fade{0%{opacity:0;transform:translateY(30px) scale(.95)}100%{opacity:1;transform:translateY(0) scale(1)}}
-    .stagger>*{animation:stagger-fade .8s cubic-bezier(.23,1,.32,1) forwards;opacity:0}
-    .stagger>*:nth-child(1){animation-delay:.1s}
-    .stagger>*:nth-child(2){animation-delay:.2s}
-    .stagger>*:nth-child(3){animation-delay:.3s}
-    .stagger>*:nth-child(4){animation-delay:.4s}
-    .stagger>*:nth-child(5){animation-delay:.5s}
-    .stagger>*:nth-child(6){animation-delay:.6s}
-    
-    /* === HORIZONTAL SCROLL === */
-    .horizontal-scroll{display:flex;gap:1.5rem;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:2rem 0}
-    .horizontal-scroll::-webkit-scrollbar{display:none}
-    .horizontal-scroll>*{scroll-snap-align:start;flex-shrink:0}
-    
-    /* === LAVA BLOB === */
-    @keyframes blob{0%,100%{border-radius:33% 67% 70% 30%/30% 30% 70% 70%}25%{border-radius:37% 63% 51% 49%/37% 65% 35% 63%}50%{border-radius:36% 64% 64% 36%/64% 36% 36% 64%}75%{border-radius:60% 40% 30% 70%/50% 60% 40% 50%}}
-    .blob{animation:blob 10s ease-in-out infinite}
-    
-    /* === NOISE OVERLAY === */
-    .noise{position:relative}
-    .noise::before{content:'';position:absolute;inset:0;opacity:.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");pointer-events:none;z-index:1}
+    body{font-family:'Plus Jakarta Sans','Noto Sans Kannada',sans-serif;background:#faf8f5;overflow-x:hidden}
 
-    /* === NUMBER COUNTER === */
-    .count-up{font-variant-numeric:tabular-nums}
+    /* LANGUAGE TOGGLE */
+    .lang-en .kn{display:none}
+    .lang-kn .en{display:none}
+
+    /* CURSOR */
+    .cursor-dot{width:8px;height:8px;background:#4f46e5;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;transition:transform .1s}
+    .cursor-ring{width:40px;height:40px;border:1.5px solid rgba(79,70,229,.3);border-radius:50%;position:fixed;pointer-events:none;z-index:9998;transition:all .15s ease-out;transform:translate(-50%,-50%)}
+
+    /* SMOOTH REVEAL */
+    [data-r]{opacity:0;transform:translateY(50px);transition:opacity .9s cubic-bezier(.22,1,.36,1),transform .9s cubic-bezier(.22,1,.36,1)}
+    [data-r].vis{opacity:1;transform:translateY(0)}
+    [data-r][data-d="1"]{transition-delay:.12s}
+    [data-r][data-d="2"]{transition-delay:.24s}
+    [data-r][data-d="3"]{transition-delay:.36s}
+
+    /* AUTO-SCROLL PROFILES */
+    .profile-track{display:flex;gap:1.25rem;animation:scroll-left 40s linear infinite}
+    .profile-track:hover{animation-play-state:paused}
+    @keyframes scroll-left{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    .profile-track-reverse{animation-direction:reverse}
+
+    /* PROFILE CARD */
+    .pcard{flex-shrink:0;width:260px;transition:all .5s cubic-bezier(.22,1,.36,1)}
+    .pcard:hover{transform:translateY(-12px) scale(1.03);box-shadow:0 30px 60px -15px rgba(0,0,0,.18)}
+
+    /* VIDEO OVERLAY */
+    .video-overlay{background:linear-gradient(180deg,rgba(10,10,15,.3)0%,rgba(10,10,15,.7)100%)}
+
+    /* GRADIENT TEXT */
+    .gt{background:linear-gradient(135deg,#4f46e5,#7c3aed 50%,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+    /* MARQUEE */
+    .mq{display:flex;overflow:hidden}.mq-inner{display:flex;flex-shrink:0;animation:mq 25s linear infinite}
+    @keyframes mq{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+    /* MAGNETIC */
+    .mag{transition:transform .4s cubic-bezier(.22,1,.36,1)}
+
+    /* GLOW CARD */
+    .glow-card{position:relative;overflow:hidden}
+    .glow-card::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:conic-gradient(from 0deg,transparent,rgba(99,102,241,.08),transparent 25%);animation:spin 6s linear infinite}
+    @keyframes spin{100%{transform:rotate(360deg)}}
+    .glow-card>*{position:relative;z-index:1}
+
+    /* STATS COUNTER */
+    @keyframes count-up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    .stat-num{animation:count-up .6s ease-out forwards;font-variant-numeric:tabular-nums}
+
+    /* NOISE */
+    .noise::after{content:'';position:absolute;inset:0;opacity:.02;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");pointer-events:none}
+
+    /* PRODUCTION-SAFE MOTION */
+    .video-control{backdrop-filter:blur(14px);background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25)}
+    .hero-fallback{background:linear-gradient(180deg,rgba(10,10,15,.28),rgba(10,10,15,.78)),url('https://images.unsplash.com/photo-1519741497674-611481863552?w=2000&auto=format&fit=crop&q=85') center/cover}
+    .rail-control{width:38px;height:38px;border-radius:999px;background:#fff;border:1px solid #e5e7eb;color:#4f46e5;box-shadow:0 5px 18px rgba(15,23,42,.08);transition:all .25s ease}
+    .rail-control:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(15,23,42,.14)}
+    .profile-viewport{scrollbar-width:none;-ms-overflow-style:none}
+    .profile-viewport::-webkit-scrollbar{display:none}
+    .mobile-menu.open{max-height:320px}
+    @media (prefers-reduced-motion: reduce){
+        html{scroll-behavior:auto}
+        *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+        .profile-track{animation:none!important;transform:none!important;flex-wrap:wrap}
+        .profile-track .pcard:nth-child(n+7){display:none}
+    }
+    @media (max-width:640px){
+        .pcard{width:235px}
+        .profile-track{animation-duration:55s}
+    }
     </style>
 </head>
-<body>
+<body class="lang-en">
 
-<!-- Custom Cursor -->
-<div class="cursor-dot hidden lg:block" id="cursorDot"></div>
-<div class="cursor-ring hidden lg:block" id="cursorRing"></div>
+<!-- Cursor -->
+<div class="cursor-dot hidden lg:block" id="cd"></div>
+<div class="cursor-ring hidden lg:block" id="cr"></div>
 
-<!-- ===== NAVIGATION ===== -->
-<header class="fixed top-0 left-0 right-0 z-[999] px-4 pt-4">
-    <nav class="max-w-6xl mx-auto bg-white/70 backdrop-blur-xl border border-gray-200/50 rounded-2xl px-6 py-3 flex items-center justify-between shadow-sm">
-        <a href="#" class="flex items-center gap-2.5">
-            <div class="w-9 h-9 bg-gradient-to-br from-brand-600 to-purple-600 rounded-xl flex items-center justify-center">
+<!-- ====== NAVBAR ====== -->
+<header class="fixed top-0 left-0 right-0 z-[999] px-4 pt-3">
+    <nav class="max-w-6xl mx-auto bg-white/80 backdrop-blur-2xl border border-gray-200/60 rounded-2xl px-5 py-2.5 flex items-center justify-between shadow-sm">
+        <a href="#" class="flex items-center gap-2">
+            <div class="w-9 h-9 bg-gradient-to-br from-brand-600 to-purple-600 rounded-xl flex items-center justify-center shadow-md shadow-brand-600/20">
                 <span class="text-white font-bold text-sm">A</span>
             </div>
-            <span class="text-lg font-bold text-gray-900 tracking-tight">Advaita</span>
+            <div class="leading-tight">
+                <span class="text-base font-bold text-gray-900 block">Advaita</span>
+                <span class="text-[9px] text-gray-400 font-medium tracking-wide en">MATRIMONY</span>
+                <span class="text-[9px] text-gray-400 font-medium tracking-wide kn">ಮ್ಯಾಟ್ರಿಮೋನಿ</span>
+            </div>
         </a>
-        <div class="hidden md:flex items-center gap-7">
-            <a href="#profiles" class="text-[13px] font-medium text-gray-500 hover:text-gray-900 transition-colors">Profiles</a>
-            <a href="#communities" class="text-[13px] font-medium text-gray-500 hover:text-gray-900 transition-colors">Communities</a>
-            <a href="#safety" class="text-[13px] font-medium text-gray-500 hover:text-gray-900 transition-colors">Safety</a>
-            <a href="#pricing" class="text-[13px] font-medium text-gray-500 hover:text-gray-900 transition-colors">Pricing</a>
+        <div class="hidden lg:flex items-center gap-6">
+            <a href="#profiles" class="text-[13px] font-medium text-gray-500 hover:text-gray-900 transition-colors en">Profiles</a>
+            <a href="#profiles" class="text-[13px] font-medium text-gray-500 hover:text-gray-900 transition-colors kn">ಪ್ರೊಫೈಲ್‌ಗಳು</a>
+            <a href="#communities" class="text-[13px] font-medium text-gray-500 hover:text-gray-900 transition-colors en">Communities</a>
+            <a href="#communities" class="text-[13px] font-medium text-gray-500 hover:text-gray-900 transition-colors kn">ಸಮುದಾಯಗಳು</a>
+            <a href="#safety" class="text-[13px] font-medium text-gray-500 hover:text-gray-900 transition-colors en">Safety</a>
+            <a href="#safety" class="text-[13px] font-medium text-gray-500 hover:text-gray-900 transition-colors kn">ಸುರಕ್ಷತೆ</a>
+            <a href="#pricing" class="text-[13px] font-medium text-gray-500 hover:text-gray-900 transition-colors en">Pricing</a>
+            <a href="#pricing" class="text-[13px] font-medium text-gray-500 hover:text-gray-900 transition-colors kn">ಬೆಲೆ</a>
         </div>
         <div class="flex items-center gap-2">
-            <a href="login.html" class="text-[13px] font-semibold text-gray-700 px-4 py-2 rounded-xl hover:bg-gray-100 transition-all">Log in</a>
-            <a href="register.html" class="magnetic text-[13px] font-semibold text-white px-5 py-2.5 rounded-xl bg-gray-900 hover:bg-gray-800 transition-all">Get Started</a>
+            <!-- Language Toggle -->
+            <button onclick="toggleLang()" class="text-[11px] font-bold text-brand-600 bg-brand-50 px-3 py-1.5 rounded-lg border border-brand-100 hover:bg-brand-100 transition-all" id="langBtn" aria-label="Switch language" aria-pressed="false">
+                <span class="en">ಕನ್ನಡ</span><span class="kn">English</span>
+            </button>
+            <a href="login.html" class="text-[13px] font-semibold text-gray-600 px-3 py-2 rounded-xl hover:bg-gray-100 transition-all hidden sm:block en">Log in</a>
+            <a href="login.html" class="text-[13px] font-semibold text-gray-600 px-3 py-2 rounded-xl hover:bg-gray-100 transition-all hidden sm:block kn">ಲಾಗಿನ್</a>
+            <a href="register.html" class="mag text-[13px] font-semibold text-white px-4 py-2.5 rounded-xl bg-gray-900 hover:bg-gray-800 transition-all shadow-lg shadow-gray-900/10 en">Get Started</a>
+            <a href="register.html" class="mag text-[13px] font-semibold text-white px-4 py-2.5 rounded-xl bg-gray-900 hover:bg-gray-800 transition-all shadow-lg shadow-gray-900/10 kn">ಪ್ರಾರಂಭಿಸಿ</a>
+            <button type="button" onclick="toggleMobileMenu()" class="lg:hidden w-10 h-10 rounded-xl bg-gray-100 text-gray-700" aria-label="Open menu" aria-expanded="false" id="menuBtn"><i class="fas fa-bars"></i></button>
         </div>
     </nav>
+    <div id="mobileMenu" class="mobile-menu lg:hidden max-w-6xl mx-auto mt-2 bg-white/95 backdrop-blur-xl rounded-2xl border border-gray-200/60 shadow-lg">
+        <div class="p-4 grid gap-2">
+            <a href="#profiles" onclick="toggleMobileMenu()" class="rounded-xl px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-brand-50 en">Profiles</a>
+            <a href="#profiles" onclick="toggleMobileMenu()" class="rounded-xl px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-brand-50 kn">ಪ್ರೊಫೈಲ್‌ಗಳು</a>
+            <a href="#communities" onclick="toggleMobileMenu()" class="rounded-xl px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-brand-50 en">Communities</a>
+            <a href="#communities" onclick="toggleMobileMenu()" class="rounded-xl px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-brand-50 kn">ಸಮುದಾಯಗಳು</a>
+            <a href="#safety" onclick="toggleMobileMenu()" class="rounded-xl px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-brand-50 en">Safety & Privacy</a>
+            <a href="#safety" onclick="toggleMobileMenu()" class="rounded-xl px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-brand-50 kn">ಸುರಕ್ಷತೆ ಮತ್ತು ಗೋಪ್ಯತೆ</a>
+        </div>
+    </div>
 </header>
 
-<!-- ===== HERO ===== -->
-<section class="relative min-h-[100vh] flex items-center justify-center noise bg-cream overflow-hidden pt-24 pb-16" id="hero">
-    <!-- Subtle gradient orbs -->
-    <div class="absolute top-[10%] left-[10%] w-[500px] h-[500px] bg-brand-200/30 rounded-full blur-[120px]"></div>
-    <div class="absolute bottom-[10%] right-[10%] w-[400px] h-[400px] bg-pink-200/30 rounded-full blur-[120px]"></div>
-    
-    <div class="max-w-7xl mx-auto px-6 relative z-10">
-        <div class="text-center max-w-4xl mx-auto mb-16">
-            <!-- Badge -->
-            <div class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-full shadow-sm mb-8" data-reveal>
-                <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                <span class="text-xs font-medium text-gray-600">Trusted by 10,000+ families across India</span>
+<!-- ====== HERO WITH VIDEO ====== -->
+<section class="relative min-h-screen flex items-center justify-center overflow-hidden" id="hero">
+    <!-- Video Background -->
+    <video id="heroVideo" autoplay muted loop playsinline preload="metadata" poster="https://images.unsplash.com/photo-1519741497674-611481863552?w=2000&auto=format&fit=crop&q=85" class="absolute inset-0 w-full h-full object-cover" aria-label="A cinematic wedding celebration background video">
+        <source src="https://assets.mixkit.co/videos/1222/1222-720.mp4" type="video/mp4">
+    </video>
+    <div class="absolute inset-0 video-overlay"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60"></div>
+    <div class="absolute bottom-8 right-6 z-20 flex items-center gap-2">
+        <button id="videoToggle" type="button" class="video-control w-10 h-10 rounded-full text-white flex items-center justify-center hover:bg-white/25 transition-all" aria-label="Pause background video" aria-pressed="false"><i class="fas fa-pause text-xs"></i></button>
+        <span class="video-control rounded-full px-3 py-2 text-[10px] text-white/80 en">Cinematic preview</span>
+        <span class="video-control rounded-full px-3 py-2 text-[10px] text-white/80 kn">ಸಿನಿಮ್ಯಾಟಿಕ್ ಪೂರ್ವವೀಕ್ಷಣೆ</span>
+    </div>
+
+    <!-- Content -->
+    <div class="relative z-10 max-w-5xl mx-auto px-6 text-center pt-28 pb-20">
+        <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full mb-8" data-r>
+            <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+            <span class="text-xs font-medium text-white/80 en">Trusted by 10,000+ families across India</span>
+            <span class="text-xs font-medium text-white/80 kn">ಭಾರತದಾದ್ಯಂತ 10,000+ ಕುಟುಂಬಗಳ ವಿಶ್ವಾಸ</span>
+        </div>
+
+        <h1 class="text-5xl sm:text-6xl lg:text-8xl font-bold tracking-tight leading-[1.05] text-white mb-6" data-r data-d="1">
+            <span class="en">Find your <span class="font-serif italic text-brand-200">soulmate</span><br>with <span class="font-serif italic">dignity</span></span>
+            <span class="kn">ನಿಮ್ಮ <span class="font-serif italic text-brand-200">ಜೀವನ ಸಂಗಾತಿ</span>ಯನ್ನು<br><span class="font-serif italic">ಘನತೆ</span>ಯಿಂದ ಹುಡುಕಿ</span>
+        </h1>
+
+        <p class="text-lg sm:text-xl text-white/70 max-w-2xl mx-auto leading-relaxed mb-10" data-r data-d="2">
+            <span class="en">India's first matrimonial platform built for <strong class="text-white">everyone</strong> — including Divyangjan, hearing & speech impaired, and vitiligo communities.</span>
+            <span class="kn">ಎಲ್ಲರಿಗೂ — ದಿವ್ಯಾಂಗಜನ, ಶ್ರವಣ ಮತ್ತು ಮಾತು ದೋಷ, ಮತ್ತು ವಿಟಿಲಿಗೊ ಸಮುದಾಯಗಳಿಗೆ ನಿರ್ಮಿಸಲಾದ ಭಾರತದ ಮೊದಲ ವಿವಾಹ ವೇದಿಕೆ.</span>
+        </p>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4" data-r data-d="3">
+            <a href="register.html" class="mag group px-8 py-4 bg-white text-gray-900 rounded-2xl font-bold text-base flex items-center gap-3 shadow-2xl hover:shadow-3xl hover:scale-[1.03] transition-all duration-300">
+                <span class="en">Create Free Profile</span>
+                <span class="kn">ಉಚಿತ ಪ್ರೊಫೈಲ್ ರಚಿಸಿ</span>
+                <span class="w-7 h-7 bg-brand-600 rounded-full flex items-center justify-center group-hover:translate-x-1 transition-transform"><i class="fas fa-arrow-right text-white text-xs"></i></span>
+            </a>
+            <a href="#profiles" class="px-6 py-4 text-white/90 font-semibold text-base flex items-center gap-2 hover:text-white border border-white/20 rounded-2xl backdrop-blur-sm hover:bg-white/10 transition-all">
+                <i class="fas fa-play-circle text-brand-300"></i>
+                <span class="en">Browse Profiles</span>
+                <span class="kn">ಪ್ರೊಫೈಲ್ ನೋಡಿ</span>
+            </a>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="flex items-center justify-center gap-8 sm:gap-16 mt-16" data-r data-d="3">
+            <div class="text-center"><div class="text-3xl sm:text-4xl font-extrabold text-white stat-num">10K+</div><div class="text-xs text-white/50 mt-1 en">Profiles</div><div class="text-xs text-white/50 mt-1 kn">ಪ್ರೊಫೈಲ್</div></div>
+            <div class="w-px h-10 bg-white/20"></div>
+            <div class="text-center"><div class="text-3xl sm:text-4xl font-extrabold text-white stat-num">500+</div><div class="text-xs text-white/50 mt-1 en">Marriages</div><div class="text-xs text-white/50 mt-1 kn">ವಿವಾಹಗಳು</div></div>
+            <div class="w-px h-10 bg-white/20"></div>
+            <div class="text-center"><div class="text-3xl sm:text-4xl font-extrabold text-white stat-num">100%</div><div class="text-xs text-white/50 mt-1 en">Verified</div><div class="text-xs text-white/50 mt-1 kn">ಪರಿಶೀಲಿತ</div></div>
+        </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2">
+        <span class="text-[10px] text-white/40 uppercase tracking-widest en">Scroll</span>
+        <span class="text-[10px] text-white/40 uppercase tracking-widest kn">ಕೆಳಗೆ</span>
+        <div class="w-5 h-8 border border-white/30 rounded-full flex items-start justify-center p-1"><div class="w-1 h-2 bg-white/60 rounded-full animate-bounce"></div></div>
+    </div>
+</section>
+
+<!-- ====== AUTO-SCROLLING PROFILES ROW 1 ====== -->
+<section id="profiles" class="py-20 bg-cream overflow-hidden noise relative">
+    <div class="max-w-6xl mx-auto px-6 mb-12" data-r>
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
+            <div>
+                <span class="text-xs font-bold text-brand-600 tracking-widest uppercase en">Featured Profiles</span>
+                <span class="text-xs font-bold text-brand-600 tracking-widest uppercase kn">ವಿಶೇಷ ಪ್ರೊಫೈಲ್‌ಗಳು</span>
+                <h2 class="text-3xl sm:text-5xl font-bold text-gray-900 mt-2 tracking-tight en">Discover <span class="font-serif italic gt">amazing</span> people</h2>
+                <h2 class="text-3xl sm:text-5xl font-bold text-gray-900 mt-2 tracking-tight kn"><span class="font-serif italic gt">ಅದ್ಭುತ</span> ಜನರನ್ನು ಕಂಡುಕೊಳ್ಳಿ</h2>
             </div>
-            
-            <!-- Headline -->
-            <h1 class="text-5xl sm:text-6xl lg:text-8xl font-bold tracking-tight leading-[1.05] mb-6" data-reveal>
-                <span class="text-gray-900">Find your </span>
-                <span class="font-serif italic gradient-text">soulmate</span>
-                <br>
-                <span class="text-gray-900">with </span>
-                <span class="font-serif italic text-gray-900">dignity</span>
-            </h1>
-            
-            <!-- Subhead -->
-            <p class="text-lg sm:text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed mb-10" data-reveal data-reveal-delay="1">
-                India's first matrimonial platform built for <strong class="text-gray-700">everyone</strong> — including Divyangjan, hearing & speech impaired, and vitiligo communities.
-            </p>
-            
-            <!-- CTA Buttons -->
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4" data-reveal data-reveal-delay="2">
-                <a href="register.html" class="magnetic group relative px-8 py-4 bg-gray-900 text-white rounded-2xl font-semibold text-base flex items-center gap-3 hover:bg-gray-800 transition-all shadow-xl shadow-gray-900/10 hover:shadow-2xl hover:shadow-gray-900/20 hover:scale-[1.02]">
-                    Create Free Profile
-                    <span class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center group-hover:translate-x-1 transition-transform"><i class="fas fa-arrow-right text-xs"></i></span>
-                </a>
-                <a href="#profiles" class="px-8 py-4 text-gray-700 font-semibold text-base flex items-center gap-2 hover:text-gray-900 transition-colors">
-                    <i class="fas fa-play-circle text-brand-600"></i> Browse Profiles
-                </a>
+            <a href="#" class="text-sm font-semibold text-brand-600 flex items-center gap-1 hover:gap-2 transition-all en">View all <i class="fas fa-arrow-right text-xs"></i></a>
+            <a href="#" class="text-sm font-semibold text-brand-600 flex items-center gap-1 hover:gap-2 transition-all kn">ಎಲ್ಲಾ ನೋಡಿ <i class="fas fa-arrow-right text-xs"></i></a>
+        </div>
+    </div>
+
+    <!-- Motion controls: the showcase remains animated, but users can pause it for comfortable browsing. -->
+    <div class="max-w-6xl mx-auto px-6 mb-5 flex items-center justify-between" data-r>
+        <div class="flex items-center gap-2 text-xs text-gray-400"><i class="fas fa-sparkles text-brand-500"></i><span class="en">Live profile showcase</span><span class="kn">ಲೈವ್ ಪ್ರೊಫೈಲ್ ಪ್ರದರ್ಶನ</span></div>
+        <div class="flex items-center gap-2">
+            <button type="button" class="rail-control" onclick="moveRail('railOne',-1)" aria-label="Previous profiles"><i class="fas fa-chevron-left text-xs"></i></button>
+            <button type="button" class="rail-control" onclick="toggleRails(this)" aria-label="Pause profile animation" aria-pressed="false"><i class="fas fa-pause text-xs"></i></button>
+            <button type="button" class="rail-control" onclick="moveRail('railOne',1)" aria-label="Next profiles"><i class="fas fa-chevron-right text-xs"></i></button>
+        </div>
+    </div>
+
+    <!-- Row 1 - Left scroll -->
+    <div class="profile-viewport relative mb-6 overflow-x-auto">
+        <div class="profile-track" id="railOne">
+            <!-- Duplicate set for infinite scroll -->
+            <div class="pcard bg-white rounded-3xl overflow-hidden shadow-md border border-gray-100">
+                <div class="relative h-[280px]"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=350&h=400&fit=crop&crop=face&auto=format&q=80" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div><div class="absolute top-3 left-3"><span class="px-2 py-0.5 bg-white/90 backdrop-blur rounded-md text-[9px] font-bold text-green-700">✓ Verified</span></div><div class="absolute bottom-3 left-3 right-3"><h3 class="text-white font-bold">Priya, 26</h3><p class="text-white/70 text-xs">Designer • Mumbai</p></div></div>
+                <div class="p-3"><div class="bg-brand-50 rounded-xl p-2.5"><p class="text-[11px] text-gray-700">"Meaningful conversations over small talk."</p></div></div>
+            </div>
+            <div class="pcard bg-white rounded-3xl overflow-hidden shadow-md border border-gray-100">
+                <div class="relative h-[280px]"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=350&h=400&fit=crop&crop=face&auto=format&q=80" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div><div class="absolute top-3 left-3"><span class="px-2 py-0.5 bg-blue-500/90 rounded-md text-[9px] font-bold text-white">♿ Divyangjan</span></div><div class="absolute bottom-3 left-3 right-3"><h3 class="text-white font-bold">Aditya, 29</h3><p class="text-white/70 text-xs">CA • Jaipur</p></div></div>
+                <div class="p-3"><div class="bg-blue-50 rounded-xl p-2.5"><p class="text-[11px] text-gray-700">"My disability is one chapter, not my story."</p></div></div>
+            </div>
+            <div class="pcard bg-white rounded-3xl overflow-hidden shadow-md border border-gray-100">
+                <div class="relative h-[280px]"><img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=350&h=400&fit=crop&crop=face&auto=format&q=80" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div><div class="absolute top-3 left-3"><span class="px-2 py-0.5 bg-purple-500/90 rounded-md text-[9px] font-bold text-white">⭐ Vitiligo</span></div><div class="absolute bottom-3 left-3 right-3"><h3 class="text-white font-bold">Sneha, 25</h3><p class="text-white/70 text-xs">Doctor • Ahmedabad</p></div></div>
+                <div class="p-3"><div class="bg-purple-50 rounded-xl p-2.5"><p class="text-[11px] text-gray-700">"My skin tells my story of strength."</p></div></div>
+            </div>
+            <div class="pcard bg-white rounded-3xl overflow-hidden shadow-md border border-gray-100">
+                <div class="relative h-[280px]"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=350&h=400&fit=crop&crop=face&auto=format&q=80" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div><div class="absolute top-3 left-3"><span class="px-2 py-0.5 bg-emerald-500/90 rounded-md text-[9px] font-bold text-white">🤟 Deaf</span></div><div class="absolute bottom-3 left-3 right-3"><h3 class="text-white font-bold">Vikram, 31</h3><p class="text-white/70 text-xs">Designer • Hyderabad</p></div></div>
+                <div class="p-3"><div class="bg-emerald-50 rounded-xl p-2.5"><p class="text-[11px] text-gray-700">"Silence is my language, art is my voice."</p></div></div>
+            </div>
+            <div class="pcard bg-white rounded-3xl overflow-hidden shadow-md border border-gray-100">
+                <div class="relative h-[280px]"><img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=350&h=400&fit=crop&crop=face&auto=format&q=80" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div><div class="absolute top-3 left-3"><span class="px-2 py-0.5 bg-white/90 backdrop-blur rounded-md text-[9px] font-bold text-green-700">✓ Verified</span></div><div class="absolute bottom-3 left-3 right-3"><h3 class="text-white font-bold">Meera, 27</h3><p class="text-white/70 text-xs">Lawyer • Pune</p></div></div>
+                <div class="p-3"><div class="bg-brand-50 rounded-xl p-2.5"><p class="text-[11px] text-gray-700">"Looking for an equal partner in every sense."</p></div></div>
+            </div>
+            <div class="pcard bg-white rounded-3xl overflow-hidden shadow-md border border-gray-100">
+                <div class="relative h-[280px]"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=350&h=400&fit=crop&crop=face&auto=format&q=80" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div><div class="absolute top-3 left-3"><span class="px-2 py-0.5 bg-white/90 backdrop-blur rounded-md text-[9px] font-bold text-green-700">✓ Verified</span></div><div class="absolute bottom-3 left-3 right-3"><h3 class="text-white font-bold">Arjun, 28</h3><p class="text-white/70 text-xs">Engineer • Bengaluru</p></div></div>
+                <div class="p-3"><div class="bg-brand-50 rounded-xl p-2.5"><p class="text-[11px] text-gray-700">"Kind heart, strong values, big dreams."</p></div></div>
+            </div>
+            <!-- DUPLICATE for seamless loop -->
+            <div class="pcard bg-white rounded-3xl overflow-hidden shadow-md border border-gray-100">
+                <div class="relative h-[280px]"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=350&h=400&fit=crop&crop=face&auto=format&q=80" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div><div class="absolute top-3 left-3"><span class="px-2 py-0.5 bg-white/90 backdrop-blur rounded-md text-[9px] font-bold text-green-700">✓ Verified</span></div><div class="absolute bottom-3 left-3 right-3"><h3 class="text-white font-bold">Priya, 26</h3><p class="text-white/70 text-xs">Designer • Mumbai</p></div></div>
+                <div class="p-3"><div class="bg-brand-50 rounded-xl p-2.5"><p class="text-[11px] text-gray-700">"Meaningful conversations over small talk."</p></div></div>
+            </div>
+            <div class="pcard bg-white rounded-3xl overflow-hidden shadow-md border border-gray-100">
+                <div class="relative h-[280px]"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=350&h=400&fit=crop&crop=face&auto=format&q=80" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div><div class="absolute top-3 left-3"><span class="px-2 py-0.5 bg-blue-500/90 rounded-md text-[9px] font-bold text-white">♿ Divyangjan</span></div><div class="absolute bottom-3 left-3 right-3"><h3 class="text-white font-bold">Aditya, 29</h3><p class="text-white/70 text-xs">CA • Jaipur</p></div></div>
+                <div class="p-3"><div class="bg-blue-50 rounded-xl p-2.5"><p class="text-[11px] text-gray-700">"My disability is one chapter, not my story."</p></div></div>
+            </div>
+            <div class="pcard bg-white rounded-3xl overflow-hidden shadow-md border border-gray-100">
+                <div class="relative h-[280px]"><img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=350&h=400&fit=crop&crop=face&auto=format&q=80" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div><div class="absolute top-3 left-3"><span class="px-2 py-0.5 bg-purple-500/90 rounded-md text-[9px] font-bold text-white">⭐ Vitiligo</span></div><div class="absolute bottom-3 left-3 right-3"><h3 class="text-white font-bold">Sneha, 25</h3><p class="text-white/70 text-xs">Doctor • Ahmedabad</p></div></div>
+                <div class="p-3"><div class="bg-purple-50 rounded-xl p-2.5"><p class="text-[11px] text-gray-700">"My skin tells my story of strength."</p></div></div>
+            </div>
+            <div class="pcard bg-white rounded-3xl overflow-hidden shadow-md border border-gray-100">
+                <div class="relative h-[280px]"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=350&h=400&fit=crop&crop=face&auto=format&q=80" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div><div class="absolute top-3 left-3"><span class="px-2 py-0.5 bg-emerald-500/90 rounded-md text-[9px] font-bold text-white">🤟 Deaf</span></div><div class="absolute bottom-3 left-3 right-3"><h3 class="text-white font-bold">Vikram, 31</h3><p class="text-white/70 text-xs">Designer • Hyderabad</p></div></div>
+                <div class="p-3"><div class="bg-emerald-50 rounded-xl p-2.5"><p class="text-[11px] text-gray-700">"Silence is my language, art is my voice."</p></div></div>
+            </div>
+            <div class="pcard bg-white rounded-3xl overflow-hidden shadow-md border border-gray-100">
+                <div class="relative h-[280px]"><img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=350&h=400&fit=crop&crop=face&auto=format&q=80" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div><div class="absolute top-3 left-3"><span class="px-2 py-0.5 bg-white/90 backdrop-blur rounded-md text-[9px] font-bold text-green-700">✓ Verified</span></div><div class="absolute bottom-3 left-3 right-3"><h3 class="text-white font-bold">Meera, 27</h3><p class="text-white/70 text-xs">Lawyer • Pune</p></div></div>
+                <div class="p-3"><div class="bg-brand-50 rounded-xl p-2.5"><p class="text-[11px] text-gray-700">"Looking for an equal partner in every sense."</p></div></div>
+            </div>
+            <div class="pcard bg-white rounded-3xl overflow-hidden shadow-md border border-gray-100">
+                <div class="relative h-[280px]"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=350&h=400&fit=crop&crop=face&auto=format&q=80" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div><div class="absolute top-3 left-3"><span class="px-2 py-0.5 bg-white/90 backdrop-blur rounded-md text-[9px] font-bold text-green-700">✓ Verified</span></div><div class="absolute bottom-3 left-3 right-3"><h3 class="text-white font-bold">Arjun, 28</h3><p class="text-white/70 text-xs">Engineer • Bengaluru</p></div></div>
+                <div class="p-3"><div class="bg-brand-50 rounded-xl p-2.5"><p class="text-[11px] text-gray-700">"Kind heart, strong values, big dreams."</p></div></div>
             </div>
         </div>
-        
-        <!-- Profile Cards Showcase -->
-        <div class="relative max-w-5xl mx-auto" data-reveal data-reveal-delay="3">
-            <div class="horizontal-scroll pb-4">
-                <!-- Card 1 -->
-                <div class="tilt-card w-[280px] bg-white rounded-3xl overflow-hidden shadow-lg border border-gray-100">
-                    <div class="relative h-[320px]">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=500&fit=crop&crop=face&auto=format&q=80" class="w-full h-full object-cover" alt="Priya">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-                        <div class="absolute top-4 left-4 flex gap-2">
-                            <span class="px-2.5 py-1 bg-white/90 backdrop-blur-md rounded-lg text-[10px] font-bold text-green-700 flex items-center gap-1"><i class="fas fa-badge-check"></i> Verified</span>
-                        </div>
-                        <div class="absolute bottom-4 left-4 right-4">
-                            <h3 class="text-white text-xl font-bold">Priya, 26</h3>
-                            <p class="text-white/70 text-sm mt-0.5">Product Designer • Mumbai</p>
-                            <div class="flex gap-2 mt-2">
-                                <span class="px-2 py-0.5 bg-white/20 backdrop-blur-sm rounded text-[10px] text-white font-medium">Hindu</span>
-                                <span class="px-2 py-0.5 bg-white/20 backdrop-blur-sm rounded text-[10px] text-white font-medium">MBA</span>
-                                <span class="px-2 py-0.5 bg-white/20 backdrop-blur-sm rounded text-[10px] text-white font-medium">5'5"</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-4">
-                        <div class="bg-brand-50 rounded-xl p-3">
-                            <p class="text-[11px] font-medium text-brand-700 mb-1">💬 About Me</p>
-                            <p class="text-sm text-gray-700 leading-relaxed">"I believe in meaningful conversations over small talk. Looking for someone who values growth."</p>
-                        </div>
-                    </div>
-                </div>
+    </div>
 
-                <!-- Card 2 -->
-                <div class="tilt-card w-[280px] bg-white rounded-3xl overflow-hidden shadow-lg border border-gray-100">
-                    <div class="relative h-[320px]">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=500&fit=crop&crop=face&auto=format&q=80" class="w-full h-full object-cover" alt="Aditya">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-                        <div class="absolute top-4 left-4 flex gap-2">
-                            <span class="px-2.5 py-1 bg-blue-500/90 backdrop-blur-md rounded-lg text-[10px] font-bold text-white">♿ Divyangjan</span>
-                            <span class="px-2.5 py-1 bg-white/90 backdrop-blur-md rounded-lg text-[10px] font-bold text-green-700"><i class="fas fa-badge-check"></i> UDID</span>
-                        </div>
-                        <div class="absolute bottom-4 left-4 right-4">
-                            <h3 class="text-white text-xl font-bold">Aditya, 29</h3>
-                            <p class="text-white/70 text-sm mt-0.5">Chartered Accountant • Jaipur</p>
-                            <div class="flex gap-2 mt-2">
-                                <span class="px-2 py-0.5 bg-white/20 backdrop-blur-sm rounded text-[10px] text-white font-medium">Hindu</span>
-                                <span class="px-2 py-0.5 bg-white/20 backdrop-blur-sm rounded text-[10px] text-white font-medium">CA</span>
-                                <span class="px-2 py-0.5 bg-white/20 backdrop-blur-sm rounded text-[10px] text-white font-medium">₹15L+</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-4">
-                        <div class="bg-blue-50 rounded-xl p-3">
-                            <p class="text-[11px] font-medium text-blue-700 mb-1">♿ Locomotor (40%) • Wheelchair User</p>
-                            <p class="text-sm text-gray-700 leading-relaxed">"My disability is just one chapter, not my whole story. Looking for a partner who sees me."</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 3 -->
-                <div class="tilt-card w-[280px] bg-white rounded-3xl overflow-hidden shadow-lg border border-gray-100">
-                    <div class="relative h-[320px]">
-                        <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&h=500&fit=crop&crop=face&auto=format&q=80" class="w-full h-full object-cover" alt="Sneha">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-                        <div class="absolute top-4 left-4 flex gap-2">
-                            <span class="px-2.5 py-1 bg-purple-500/90 backdrop-blur-md rounded-lg text-[10px] font-bold text-white">⭐ Vitiligo Warrior</span>
-                        </div>
-                        <div class="absolute bottom-4 left-4 right-4">
-                            <h3 class="text-white text-xl font-bold">Sneha, 25</h3>
-                            <p class="text-white/70 text-sm mt-0.5">Doctor (MBBS) • Ahmedabad</p>
-                            <div class="flex gap-2 mt-2">
-                                <span class="px-2 py-0.5 bg-white/20 backdrop-blur-sm rounded text-[10px] text-white font-medium">Gujarat</span>
-                                <span class="px-2 py-0.5 bg-white/20 backdrop-blur-sm rounded text-[10px] text-white font-medium">MBBS</span>
-                                <span class="px-2 py-0.5 bg-white/20 backdrop-blur-sm rounded text-[10px] text-white font-medium">5'4"</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-4">
-                        <div class="bg-purple-50 rounded-xl p-3">
-                            <p class="text-[11px] font-medium text-purple-700 mb-1">⭐ Vitiligo • Moderate Coverage</p>
-                            <p class="text-sm text-gray-700 leading-relaxed">"My skin tells my story of strength. Seeking someone who celebrates uniqueness."</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 4 -->
-                <div class="tilt-card w-[280px] bg-white rounded-3xl overflow-hidden shadow-lg border border-gray-100">
-                    <div class="relative h-[320px]">
-                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=500&fit=crop&crop=face&auto=format&q=80" class="w-full h-full object-cover" alt="Vikram">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-                        <div class="absolute top-4 left-4 flex gap-2">
-                            <span class="px-2.5 py-1 bg-emerald-500/90 backdrop-blur-md rounded-lg text-[10px] font-bold text-white">🤟 Sign Language</span>
-                        </div>
-                        <div class="absolute bottom-4 left-4 right-4">
-                            <h3 class="text-white text-xl font-bold">Vikram, 31</h3>
-                            <p class="text-white/70 text-sm mt-0.5">Graphic Designer • Hyderabad</p>
-                            <div class="flex gap-2 mt-2">
-                                <span class="px-2 py-0.5 bg-white/20 backdrop-blur-sm rounded text-[10px] text-white font-medium">Telugu</span>
-                                <span class="px-2 py-0.5 bg-white/20 backdrop-blur-sm rounded text-[10px] text-white font-medium">B.Des</span>
-                                <span class="px-2 py-0.5 bg-white/20 backdrop-blur-sm rounded text-[10px] text-white font-medium">5'10"</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-4">
-                        <div class="bg-emerald-50 rounded-xl p-3">
-                            <p class="text-[11px] font-medium text-emerald-700 mb-1">🤟 Deaf since birth • ISL Fluent</p>
-                            <p class="text-sm text-gray-700 leading-relaxed">"Silence is my language, art is my voice. Want a partner who speaks with the heart."</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 5 -->
-                <div class="tilt-card w-[280px] bg-white rounded-3xl overflow-hidden shadow-lg border border-gray-100">
-                    <div class="relative h-[320px]">
-                        <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&h=500&fit=crop&crop=face&auto=format&q=80" class="w-full h-full object-cover" alt="Meera">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-                        <div class="absolute top-4 left-4 flex gap-2">
-                            <span class="px-2.5 py-1 bg-white/90 backdrop-blur-md rounded-lg text-[10px] font-bold text-green-700"><i class="fas fa-badge-check"></i> Verified</span>
-                        </div>
-                        <div class="absolute bottom-4 left-4 right-4">
-                            <h3 class="text-white text-xl font-bold">Meera, 27</h3>
-                            <p class="text-white/70 text-sm mt-0.5">Lawyer • Pune, Maharashtra</p>
-                            <div class="flex gap-2 mt-2">
-                                <span class="px-2 py-0.5 bg-white/20 backdrop-blur-sm rounded text-[10px] text-white font-medium">Maratha</span>
-                                <span class="px-2 py-0.5 bg-white/20 backdrop-blur-sm rounded text-[10px] text-white font-medium">LLB</span>
-                                <span class="px-2 py-0.5 bg-white/20 backdrop-blur-sm rounded text-[10px] text-white font-medium">5'6"</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-4">
-                        <div class="bg-brand-50 rounded-xl p-3">
-                            <p class="text-[11px] font-medium text-brand-700 mb-1">💬 What I'm looking for</p>
-                            <p class="text-sm text-gray-700 leading-relaxed">"An equal partner who respects ambition. Someone with kind eyes and a strong moral compass."</p>
-                        </div>
-                    </div>
-                </div>
+    <!-- Row 2 - Right scroll (reverse) -->
+    <div class="profile-viewport relative overflow-x-auto">
+        <div class="profile-track profile-track-reverse" id="railTwo">
+            <div class="pcard bg-white rounded-3xl overflow-hidden shadow-md border border-gray-100">
+                <div class="relative h-[280px]"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=350&h=400&fit=crop&crop=face&auto=format&q=80" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div><div class="absolute top-3 left-3"><span class="px-2 py-0.5 bg-white/90 backdrop-blur rounded-md text-[9px] font-bold text-green-700">✓ Verified</span></div><div class="absolute bottom-3 left-3 right-3"><h3 class="text-white font-bold">Ananya, 24</h3><p class="text-white/70 text-xs">Software Eng • Bangalore</p></div></div>
+                <div class="p-3"><div class="bg-rose-50 rounded-xl p-2.5"><p class="text-[11px] text-gray-700">"Love is a verb, not just a feeling."</p></div></div>
             </div>
-            <!-- Scroll hint -->
-            <div class="text-center mt-4">
-                <span class="text-xs text-gray-400 flex items-center justify-center gap-2"><i class="fas fa-arrow-left-long"></i> Scroll to explore profiles <i class="fas fa-arrow-right-long"></i></span>
+            <div class="pcard bg-white rounded-3xl overflow-hidden shadow-md border border-gray-100">
+                <div class="relative h-[280px]"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=350&h=400&fit=crop&crop=face&auto=format&q=80" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div><div class="absolute top-3 left-3"><span class="px-2 py-0.5 bg-blue-500/90 rounded-md text-[9px] font-bold text-white">♿ 60% PwD</span></div><div class="absolute bottom-3 left-3 right-3"><h3 class="text-white font-bold">Karthik, 32</h3><p class="text-white/70 text-xs">Professor • Chennai</p></div></div>
+                <div class="p-3"><div class="bg-blue-50 rounded-xl p-2.5"><p class="text-[11px] text-gray-700">"Teaching is my passion. Looking for a supportive partner."</p></div></div>
             </div>
+            <div class="pcard bg-white rounded-3xl overflow-hidden shadow-md border border-gray-100">
+                <div class="relative h-[280px]"><img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=350&h=400&fit=crop&crop=face&auto=format&q=80" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div><div class="absolute top-3 left-3"><span class="px-2 py-0.5 bg-purple-500/90 rounded-md text-[9px] font-bold text-white">⭐ Vitiligo</span></div><div class="absolute bottom-3 left-3 right-3"><h3 class="text-white font-bold">Divya, 26</h3><p class="text-white/70 text-xs">Banker • Kolkata</p></div></div>
+                <div class="p-3"><div class="bg-purple-50 rounded-xl p-2.5"><p class="text-[11px] text-gray-700">"My spots are my stars. ✨"</p></div></div>
+            </div>
+            <div class="pcard bg-white rounded-3xl overflow-hidden shadow-md border border-gray-100">
+                <div class="relative h-[280px]"><img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=350&h=400&fit=crop&crop=face&auto=format&q=80" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div><div class="absolute top-3 left-3"><span class="px-2 py-0.5 bg-white/90 backdrop-blur rounded-md text-[9px] font-bold text-green-700">✓ Premium</span></div><div class="absolute bottom-3 left-3 right-3"><h3 class="text-white font-bold">Rohan, 30</h3><p class="text-white/70 text-xs">Business • Delhi</p></div></div>
+                <div class="p-3"><div class="bg-amber-50 rounded-xl p-2.5"><p class="text-[11px] text-gray-700">"Family first. Looking for someone with similar values."</p></div></div>
+            </div>
+            <div class="pcard bg-white rounded-3xl overflow-hidden shadow-md border border-gray-100">
+                <div class="relative h-[280px]"><img src="https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=350&h=400&fit=crop&crop=face&auto=format&q=80" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div><div class="absolute top-3 left-3"><span class="px-2 py-0.5 bg-emerald-500/90 rounded-md text-[9px] font-bold text-white">🤟 Mute</span></div><div class="absolute bottom-3 left-3 right-3"><h3 class="text-white font-bold">Kavitha, 28</h3><p class="text-white/70 text-xs">Artist • Mysore</p></div></div>
+                <div class="p-3"><div class="bg-emerald-50 rounded-xl p-2.5"><p class="text-[11px] text-gray-700">"My paintings speak louder than words ever could."</p></div></div>
+            </div>
+            <div class="pcard bg-white rounded-3xl overflow-hidden shadow-md border border-gray-100">
+                <div class="relative h-[280px]"><img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=350&h=400&fit=crop&crop=face&auto=format&q=80" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div><div class="absolute top-3 left-3"><span class="px-2 py-0.5 bg-white/90 backdrop-blur rounded-md text-[9px] font-bold text-green-700">✓ Verified</span></div><div class="absolute bottom-3 left-3 right-3"><h3 class="text-white font-bold">Suresh, 33</h3><p class="text-white/70 text-xs">Doctor • Lucknow</p></div></div>
+                <div class="p-3"><div class="bg-brand-50 rounded-xl p-2.5"><p class="text-[11px] text-gray-700">"Healing others by day, seeking my own healer."</p></div></div>
+            </div>
+            <!-- DUPLICATE -->
+            <div class="pcard bg-white rounded-3xl overflow-hidden shadow-md border border-gray-100"><div class="relative h-[280px]"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=350&h=400&fit=crop&crop=face&auto=format&q=80" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div><div class="absolute bottom-3 left-3 right-3"><h3 class="text-white font-bold">Ananya, 24</h3><p class="text-white/70 text-xs">Software Eng • Bangalore</p></div></div><div class="p-3"><div class="bg-rose-50 rounded-xl p-2.5"><p class="text-[11px] text-gray-700">"Love is a verb, not just a feeling."</p></div></div></div>
+            <div class="pcard bg-white rounded-3xl overflow-hidden shadow-md border border-gray-100"><div class="relative h-[280px]"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=350&h=400&fit=crop&crop=face&auto=format&q=80" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div><div class="absolute bottom-3 left-3 right-3"><h3 class="text-white font-bold">Karthik, 32</h3><p class="text-white/70 text-xs">Professor • Chennai</p></div></div><div class="p-3"><div class="bg-blue-50 rounded-xl p-2.5"><p class="text-[11px] text-gray-700">"Teaching is my passion."</p></div></div></div>
+            <div class="pcard bg-white rounded-3xl overflow-hidden shadow-md border border-gray-100"><div class="relative h-[280px]"><img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=350&h=400&fit=crop&crop=face&auto=format&q=80" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div><div class="absolute bottom-3 left-3 right-3"><h3 class="text-white font-bold">Divya, 26</h3><p class="text-white/70 text-xs">Banker • Kolkata</p></div></div><div class="p-3"><div class="bg-purple-50 rounded-xl p-2.5"><p class="text-[11px] text-gray-700">"My spots are my stars. ✨"</p></div></div></div>
+            <div class="pcard bg-white rounded-3xl overflow-hidden shadow-md border border-gray-100"><div class="relative h-[280px]"><img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=350&h=400&fit=crop&crop=face&auto=format&q=80" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div><div class="absolute bottom-3 left-3 right-3"><h3 class="text-white font-bold">Rohan, 30</h3><p class="text-white/70 text-xs">Business • Delhi</p></div></div><div class="p-3"><div class="bg-amber-50 rounded-xl p-2.5"><p class="text-[11px] text-gray-700">"Family first."</p></div></div></div>
+            <div class="pcard bg-white rounded-3xl overflow-hidden shadow-md border border-gray-100"><div class="relative h-[280px]"><img src="https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=350&h=400&fit=crop&crop=face&auto=format&q=80" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div><div class="absolute bottom-3 left-3 right-3"><h3 class="text-white font-bold">Kavitha, 28</h3><p class="text-white/70 text-xs">Artist • Mysore</p></div></div><div class="p-3"><div class="bg-emerald-50 rounded-xl p-2.5"><p class="text-[11px] text-gray-700">"My paintings speak louder."</p></div></div></div>
+            <div class="pcard bg-white rounded-3xl overflow-hidden shadow-md border border-gray-100"><div class="relative h-[280px]"><img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=350&h=400&fit=crop&crop=face&auto=format&q=80" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div><div class="absolute bottom-3 left-3 right-3"><h3 class="text-white font-bold">Suresh, 33</h3><p class="text-white/70 text-xs">Doctor • Lucknow</p></div></div><div class="p-3"><div class="bg-brand-50 rounded-xl p-2.5"><p class="text-[11px] text-gray-700">"Healing others by day."</p></div></div></div>
         </div>
     </div>
 </section>
 
-<!-- ===== SOCIAL PROOF MARQUEE ===== -->
-<div class="py-6 bg-white border-y border-gray-100 overflow-hidden">
-    <div class="marquee">
-        <div class="marquee-content flex items-center gap-12 px-6">
-            <span class="text-sm font-medium text-gray-400 whitespace-nowrap">✓ 10,000+ Verified Profiles</span>
-            <span class="text-gray-200">|</span>
-            <span class="text-sm font-medium text-gray-400 whitespace-nowrap">✓ 500+ Successful Marriages</span>
-            <span class="text-gray-200">|</span>
-            <span class="text-sm font-medium text-gray-400 whitespace-nowrap">✓ Manual Profile Approval</span>
-            <span class="text-gray-200">|</span>
-            <span class="text-sm font-medium text-gray-400 whitespace-nowrap">✓ UDID Certificate Verification</span>
-            <span class="text-gray-200">|</span>
-            <span class="text-sm font-medium text-gray-400 whitespace-nowrap">✓ Razorpay Secure Payments</span>
-            <span class="text-gray-200">|</span>
-            <span class="text-sm font-medium text-gray-400 whitespace-nowrap">✓ Photo Privacy Controls</span>
-            <span class="text-gray-200">|</span>
-            <span class="text-sm font-medium text-gray-400 whitespace-nowrap">✓ 10,000+ Verified Profiles</span>
-            <span class="text-gray-200">|</span>
-            <span class="text-sm font-medium text-gray-400 whitespace-nowrap">✓ 500+ Successful Marriages</span>
-            <span class="text-gray-200">|</span>
-            <span class="text-sm font-medium text-gray-400 whitespace-nowrap">✓ Manual Profile Approval</span>
-            <span class="text-gray-200">|</span>
-            <span class="text-sm font-medium text-gray-400 whitespace-nowrap">✓ UDID Certificate Verification</span>
-            <span class="text-gray-200">|</span>
-            <span class="text-sm font-medium text-gray-400 whitespace-nowrap">✓ Razorpay Secure Payments</span>
-            <span class="text-gray-200">|</span>
-            <span class="text-sm font-medium text-gray-400 whitespace-nowrap">✓ Photo Privacy Controls</span>
-        </div>
-    </div>
-</div>
-
-<!-- ===== COMMUNITIES ===== -->
+<!-- ====== COMMUNITIES ====== -->
 <section id="communities" class="py-28 bg-white">
     <div class="max-w-6xl mx-auto px-6">
-        <div class="max-w-2xl mb-16" data-reveal>
-            <span class="text-xs font-bold text-brand-600 tracking-widest uppercase">Our Communities</span>
-            <h2 class="text-4xl sm:text-5xl font-bold text-gray-900 mt-3 tracking-tight leading-tight">One platform.<br><span class="font-serif italic gradient-text">Four communities.</span></h2>
-            <p class="text-gray-500 mt-4 text-lg">Specialized matching, filters, and verification for each community. Because everyone's journey to love is unique.</p>
+        <div class="max-w-2xl mb-14" data-r>
+            <span class="text-xs font-bold text-brand-600 tracking-widest uppercase en">Our Communities</span>
+            <span class="text-xs font-bold text-brand-600 tracking-widest uppercase kn">ನಮ್ಮ ಸಮುದಾಯಗಳು</span>
+            <h2 class="text-4xl sm:text-5xl font-bold text-gray-900 mt-3 tracking-tight leading-tight en">One platform. <span class="font-serif italic gt">Four hearts.</span></h2>
+            <h2 class="text-4xl sm:text-5xl font-bold text-gray-900 mt-3 tracking-tight leading-tight kn">ಒಂದು ವೇದಿಕೆ. <span class="font-serif italic gt">ನಾಲ್ಕು ಹೃದಯ.</span></h2>
+            <p class="text-gray-500 mt-4 text-lg en">Specialized matching, filters, and verification for each community.</p>
+            <p class="text-gray-500 mt-4 text-lg kn">ಪ್ರತಿ ಸಮುದಾಯಕ್ಕೆ ವಿಶೇಷ ಹೊಂದಾಣಿಕೆ ಮತ್ತು ಫಿಲ್ಟರ್‌ಗಳು.</p>
         </div>
-
-        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 stagger">
-            <a href="#" class="group bg-gradient-to-br from-rose-50 to-pink-50 border border-rose-100 rounded-3xl p-7 hover:shadow-xl hover:-translate-y-2 transition-all duration-500">
-                <div class="w-14 h-14 bg-white rounded-2xl shadow-sm flex items-center justify-center mb-5 group-hover:scale-110 transition-transform"><span class="text-2xl">❤️</span></div>
-                <h3 class="text-lg font-bold text-gray-900 mb-2">General</h3>
-                <p class="text-sm text-gray-500 leading-relaxed mb-4">Standard matrimony for all. AI-powered matching & verified profiles.</p>
-                <span class="text-xs font-bold text-rose-600 flex items-center gap-1">8,000+ profiles <i class="fas fa-arrow-right text-[9px] group-hover:translate-x-1 transition-transform"></i></span>
-            </a>
-
-            <a href="#" class="group bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 rounded-3xl p-7 hover:shadow-xl hover:-translate-y-2 transition-all duration-500">
-                <div class="w-14 h-14 bg-white rounded-2xl shadow-sm flex items-center justify-center mb-5 group-hover:scale-110 transition-transform"><span class="text-2xl">♿</span></div>
-                <h3 class="text-lg font-bold text-gray-900 mb-2">Divyangjan</h3>
-                <p class="text-sm text-gray-500 leading-relaxed mb-4">Physically challenged community with UDID verification & disability % filters.</p>
-                <span class="text-xs font-bold text-blue-600 flex items-center gap-1">1,200+ profiles <i class="fas fa-arrow-right text-[9px] group-hover:translate-x-1 transition-transform"></i></span>
-            </a>
-
-            <a href="#" class="group bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100 rounded-3xl p-7 hover:shadow-xl hover:-translate-y-2 transition-all duration-500">
-                <div class="w-14 h-14 bg-white rounded-2xl shadow-sm flex items-center justify-center mb-5 group-hover:scale-110 transition-transform"><span class="text-2xl">🤟</span></div>
-                <h3 class="text-lg font-bold text-gray-900 mb-2">Hearing & Speech</h3>
-                <p class="text-sm text-gray-500 leading-relaxed mb-4">Deaf & Mute community. Sign language proficiency indicators & video-first.</p>
-                <span class="text-xs font-bold text-emerald-600 flex items-center gap-1">800+ profiles <i class="fas fa-arrow-right text-[9px] group-hover:translate-x-1 transition-transform"></i></span>
-            </a>
-
-            <a href="#" class="group bg-gradient-to-br from-purple-50 to-violet-50 border border-purple-100 rounded-3xl p-7 hover:shadow-xl hover:-translate-y-2 transition-all duration-500">
-                <div class="w-14 h-14 bg-white rounded-2xl shadow-sm flex items-center justify-center mb-5 group-hover:scale-110 transition-transform"><span class="text-2xl">⭐</span></div>
-                <h3 class="text-lg font-bold text-gray-900 mb-2">Vitiligo</h3>
-                <p class="text-sm text-gray-500 leading-relaxed mb-4">Vitiligo / Leucoderma community. Celebrate uniqueness in a safe space.</p>
-                <span class="text-xs font-bold text-purple-600 flex items-center gap-1">600+ profiles <i class="fas fa-arrow-right text-[9px] group-hover:translate-x-1 transition-transform"></i></span>
-            </a>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <a href="#" class="group bg-gradient-to-br from-rose-50 to-pink-50 border border-rose-100 rounded-3xl p-7 hover:shadow-xl hover:-translate-y-2 transition-all duration-500" data-r><div class="w-14 h-14 bg-white rounded-2xl shadow-sm flex items-center justify-center mb-5 group-hover:scale-110 transition-transform text-2xl">❤️</div><h3 class="text-lg font-bold text-gray-900 mb-2 en">General</h3><h3 class="text-lg font-bold text-gray-900 mb-2 kn">ಸಾಮಾನ್ಯ</h3><p class="text-sm text-gray-500 mb-4 en">Standard matrimony for everyone. AI matching.</p><p class="text-sm text-gray-500 mb-4 kn">ಎಲ್ಲರಿಗೂ ಸಾಮಾನ್ಯ ವಿವಾಹ ವೇದಿಕೆ.</p><span class="text-xs font-bold text-rose-600">8,000+</span></a>
+            <a href="#" class="group bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 rounded-3xl p-7 hover:shadow-xl hover:-translate-y-2 transition-all duration-500" data-r data-d="1"><div class="w-14 h-14 bg-white rounded-2xl shadow-sm flex items-center justify-center mb-5 group-hover:scale-110 transition-transform text-2xl">♿</div><h3 class="text-lg font-bold text-gray-900 mb-2 en">Divyangjan</h3><h3 class="text-lg font-bold text-gray-900 mb-2 kn">ದಿವ್ಯಾಂಗಜನ</h3><p class="text-sm text-gray-500 mb-4 en">UDID verified. Disability % filters.</p><p class="text-sm text-gray-500 mb-4 kn">UDID ಪರಿಶೀಲಿತ. ಅಂಗವೈಕಲ್ಯ % ಫಿಲ್ಟರ್.</p><span class="text-xs font-bold text-blue-600">1,200+</span></a>
+            <a href="#" class="group bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100 rounded-3xl p-7 hover:shadow-xl hover:-translate-y-2 transition-all duration-500" data-r data-d="2"><div class="w-14 h-14 bg-white rounded-2xl shadow-sm flex items-center justify-center mb-5 group-hover:scale-110 transition-transform text-2xl">🤟</div><h3 class="text-lg font-bold text-gray-900 mb-2 en">Hearing & Speech</h3><h3 class="text-lg font-bold text-gray-900 mb-2 kn">ಶ್ರವಣ ಮತ್ತು ಮಾತು</h3><p class="text-sm text-gray-500 mb-4 en">Deaf & Mute community. Sign language.</p><p class="text-sm text-gray-500 mb-4 kn">ಕಿವುಡ & ಮೂಕ ಸಮುದಾಯ. ಸಂಜ್ಞಾ ಭಾಷೆ.</p><span class="text-xs font-bold text-emerald-600">800+</span></a>
+            <a href="#" class="group bg-gradient-to-br from-purple-50 to-violet-50 border border-purple-100 rounded-3xl p-7 hover:shadow-xl hover:-translate-y-2 transition-all duration-500" data-r data-d="3"><div class="w-14 h-14 bg-white rounded-2xl shadow-sm flex items-center justify-center mb-5 group-hover:scale-110 transition-transform text-2xl">⭐</div><h3 class="text-lg font-bold text-gray-900 mb-2 en">Vitiligo</h3><h3 class="text-lg font-bold text-gray-900 mb-2 kn">ವಿಟಿಲಿಗೊ</h3><p class="text-sm text-gray-500 mb-4 en">Vitiligo / Leucoderma. Safe space.</p><p class="text-sm text-gray-500 mb-4 kn">ವಿಟಿಲಿಗೊ / ಲ್ಯೂಕೋಡರ್ಮಾ. ಸುರಕ್ಷಿತ ಜಾಗ.</p><span class="text-xs font-bold text-purple-600">600+</span></a>
         </div>
     </div>
 </section>
 
-<!-- ===== SAFETY FEATURES ===== -->
-<section id="safety" class="py-28 bg-cream noise">
+<!-- ====== SAFETY ====== -->
+<section id="safety" class="py-28 bg-cream noise relative">
     <div class="max-w-6xl mx-auto px-6 relative z-10">
-        <div class="text-center max-w-2xl mx-auto mb-16" data-reveal>
-            <span class="text-xs font-bold text-brand-600 tracking-widest uppercase">Privacy & Security</span>
-            <h2 class="text-4xl sm:text-5xl font-bold text-gray-900 mt-3 tracking-tight">Your safety is<br><span class="font-serif italic">non-negotiable.</span></h2>
+        <div class="text-center max-w-2xl mx-auto mb-16" data-r>
+            <span class="text-xs font-bold text-brand-600 tracking-widest uppercase en">Privacy & Security</span>
+            <span class="text-xs font-bold text-brand-600 tracking-widest uppercase kn">ಗೋಪ್ಯತೆ ಮತ್ತು ಸುರಕ್ಷತೆ</span>
+            <h2 class="text-4xl sm:text-5xl font-bold text-gray-900 mt-3 tracking-tight en">Your safety is <span class="font-serif italic">non-negotiable.</span></h2>
+            <h2 class="text-4xl sm:text-5xl font-bold text-gray-900 mt-3 tracking-tight kn">ನಿಮ್ಮ ಸುರಕ್ಷತೆ <span class="font-serif italic">ರಾಜಿಯಿಲ್ಲ.</span></h2>
         </div>
-
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 stagger">
-            <div class="bg-white rounded-3xl p-7 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-500">
-                <div class="w-11 h-11 bg-blue-100 rounded-xl flex items-center justify-center mb-4"><i class="fas fa-eye-slash text-blue-600"></i></div>
-                <h3 class="font-bold text-gray-900 mb-2">Photo Blur + Request</h3>
-                <p class="text-sm text-gray-500 leading-relaxed">Photos blurred by default. Only those you approve can view your full photos.</p>
-            </div>
-            <div class="bg-white rounded-3xl p-7 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-500">
-                <div class="w-11 h-11 bg-purple-100 rounded-xl flex items-center justify-center mb-4"><i class="fas fa-stamp text-purple-600"></i></div>
-                <h3 class="font-bold text-gray-900 mb-2">Auto Watermark</h3>
-                <p class="text-sm text-gray-500 leading-relaxed">"Advaita Matrimony" watermark on every photo. Prevents misuse & unauthorized sharing.</p>
-            </div>
-            <div class="bg-white rounded-3xl p-7 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-500">
-                <div class="w-11 h-11 bg-green-100 rounded-xl flex items-center justify-center mb-4"><i class="fas fa-user-check text-green-600"></i></div>
-                <h3 class="font-bold text-gray-900 mb-2">Manual Approval</h3>
-                <p class="text-sm text-gray-500 leading-relaxed">Every profile reviewed by humans. Zero fake profiles, zero spam.</p>
-            </div>
-            <div class="bg-white rounded-3xl p-7 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-500">
-                <div class="w-11 h-11 bg-amber-100 rounded-xl flex items-center justify-center mb-4"><i class="fas fa-id-card text-amber-600"></i></div>
-                <h3 class="font-bold text-gray-900 mb-2">UDID Verification</h3>
-                <p class="text-sm text-gray-500 leading-relaxed">Disability certificates verified by admin for trust & authenticity.</p>
-            </div>
-            <div class="bg-white rounded-3xl p-7 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-500">
-                <div class="w-11 h-11 bg-rose-100 rounded-xl flex items-center justify-center mb-4"><i class="fas fa-mobile-screen-button text-rose-600"></i></div>
-                <h3 class="font-bold text-gray-900 mb-2">Screenshot Block</h3>
-                <p class="text-sm text-gray-500 leading-relaxed">App prevents screenshots on profile pages. Your photos stay safe.</p>
-            </div>
-            <div class="bg-white rounded-3xl p-7 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-500">
-                <div class="w-11 h-11 bg-cyan-100 rounded-xl flex items-center justify-center mb-4"><i class="fas fa-phone-slash text-cyan-600"></i></div>
-                <h3 class="font-bold text-gray-900 mb-2">Contact Masking</h3>
-                <p class="text-sm text-gray-500 leading-relaxed">Phone numbers masked (91XX****XX). Premium members only see full details.</p>
-            </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div class="bg-white rounded-3xl p-7 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-500" data-r><div class="w-11 h-11 bg-blue-100 rounded-xl flex items-center justify-center mb-4"><i class="fas fa-eye-slash text-blue-600"></i></div><h3 class="font-bold text-gray-900 mb-2 en">Photo Blur + Request</h3><h3 class="font-bold text-gray-900 mb-2 kn">ಫೋಟೋ ಬ್ಲರ್ + ವಿನಂತಿ</h3><p class="text-sm text-gray-500 en">Photos blurred by default. Only approved viewers see full photos.</p><p class="text-sm text-gray-500 kn">ಫೋಟೋಗಳು ಪೂರ್ವನಿಯೋಜಿತವಾಗಿ ಮಸುಕಾಗಿರುತ್ತವೆ.</p></div>
+            <div class="bg-white rounded-3xl p-7 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-500" data-r data-d="1"><div class="w-11 h-11 bg-purple-100 rounded-xl flex items-center justify-center mb-4"><i class="fas fa-stamp text-purple-600"></i></div><h3 class="font-bold text-gray-900 mb-2 en">Auto Watermark</h3><h3 class="font-bold text-gray-900 mb-2 kn">ಸ್ವಯಂ ವಾಟರ್‌ಮಾರ್ಕ್</h3><p class="text-sm text-gray-500 en">"Advaita Matrimony" watermark prevents misuse.</p><p class="text-sm text-gray-500 kn">"ಅದ್ವೈತ ಮ್ಯಾಟ್ರಿಮೋನಿ" ವಾಟರ್‌ಮಾರ್ಕ್ ದುರ್ಬಳಕೆ ತಡೆಯುತ್ತದೆ.</p></div>
+            <div class="bg-white rounded-3xl p-7 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-500" data-r data-d="2"><div class="w-11 h-11 bg-green-100 rounded-xl flex items-center justify-center mb-4"><i class="fas fa-user-check text-green-600"></i></div><h3 class="font-bold text-gray-900 mb-2 en">Manual Approval</h3><h3 class="font-bold text-gray-900 mb-2 kn">ಹಸ್ತಚಾಲಿತ ಅನುಮೋದನೆ</h3><p class="text-sm text-gray-500 en">Every profile reviewed by humans. Zero fake profiles.</p><p class="text-sm text-gray-500 kn">ಪ್ರತಿ ಪ್ರೊಫೈಲ್ ಮಾನವರಿಂದ ಪರಿಶೀಲಿತ.</p></div>
+            <div class="bg-white rounded-3xl p-7 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-500" data-r><div class="w-11 h-11 bg-amber-100 rounded-xl flex items-center justify-center mb-4"><i class="fas fa-id-card text-amber-600"></i></div><h3 class="font-bold text-gray-900 mb-2 en">UDID Verification</h3><h3 class="font-bold text-gray-900 mb-2 kn">UDID ಪರಿಶೀಲನೆ</h3><p class="text-sm text-gray-500 en">Disability certificates verified by admin.</p><p class="text-sm text-gray-500 kn">ಅಂಗವೈಕಲ್ಯ ಪ್ರಮಾಣಪತ್ರಗಳು ನಿರ್ವಾಹಕರಿಂದ ಪರಿಶೀಲಿತ.</p></div>
+            <div class="bg-white rounded-3xl p-7 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-500" data-r data-d="1"><div class="w-11 h-11 bg-rose-100 rounded-xl flex items-center justify-center mb-4"><i class="fas fa-mobile-screen-button text-rose-600"></i></div><h3 class="font-bold text-gray-900 mb-2 en">Screenshot Block</h3><h3 class="font-bold text-gray-900 mb-2 kn">ಸ್ಕ್ರೀನ್‌ಶಾಟ್ ನಿರ್ಬಂಧ</h3><p class="text-sm text-gray-500 en">App prevents screenshots on profile photos.</p><p class="text-sm text-gray-500 kn">ಆಪ್ ಪ್ರೊಫೈಲ್ ಫೋಟೋಗಳ ಸ್ಕ್ರೀನ್‌ಶಾಟ್ ತಡೆಯುತ್ತದೆ.</p></div>
+            <div class="bg-white rounded-3xl p-7 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-500" data-r data-d="2"><div class="w-11 h-11 bg-cyan-100 rounded-xl flex items-center justify-center mb-4"><i class="fas fa-phone-slash text-cyan-600"></i></div><h3 class="font-bold text-gray-900 mb-2 en">Contact Masking</h3><h3 class="font-bold text-gray-900 mb-2 kn">ಸಂಪರ್ಕ ಮರೆಮಾಚುವಿಕೆ</h3><p class="text-sm text-gray-500 en">Phone masked (91XX****XX). Premium sees full.</p><p class="text-sm text-gray-500 kn">ಫೋನ್ ಮರೆಮಾಡಲಾಗಿದೆ. ಪ್ರೀಮಿಯಂ ಪೂರ್ಣ ವೀಕ್ಷಿಸುತ್ತದೆ.</p></div>
         </div>
     </div>
 </section>
 
-<!-- ===== PRICING ===== -->
+<!-- ====== PRICING ====== -->
 <section id="pricing" class="py-28 bg-white">
     <div class="max-w-5xl mx-auto px-6">
-        <div class="text-center max-w-2xl mx-auto mb-16" data-reveal>
-            <span class="text-xs font-bold text-brand-600 tracking-widest uppercase">Plans</span>
-            <h2 class="text-4xl sm:text-5xl font-bold text-gray-900 mt-3 tracking-tight">Simple pricing.<br><span class="font-serif italic gradient-text">Honest value.</span></h2>
+        <div class="text-center max-w-2xl mx-auto mb-16" data-r>
+            <span class="text-xs font-bold text-brand-600 tracking-widest uppercase en">Plans</span>
+            <span class="text-xs font-bold text-brand-600 tracking-widest uppercase kn">ಯೋಜನೆಗಳು</span>
+            <h2 class="text-4xl sm:text-5xl font-bold text-gray-900 mt-3 tracking-tight en">Simple pricing. <span class="font-serif italic gt">Honest value.</span></h2>
+            <h2 class="text-4xl sm:text-5xl font-bold text-gray-900 mt-3 tracking-tight kn">ಸರಳ ಬೆಲೆ. <span class="font-serif italic gt">ಪ್ರಾಮಾಣಿಕ ಮೌಲ್ಯ.</span></h2>
         </div>
-
-        <div class="grid md:grid-cols-3 gap-6" data-reveal>
-            <!-- Silver -->
+        <div class="grid md:grid-cols-3 gap-6" data-r>
             <div class="rounded-3xl border border-gray-200 p-7 hover:border-gray-300 hover:shadow-lg transition-all duration-500">
-                <p class="text-sm font-semibold text-gray-400 mb-1">Silver</p>
-                <div class="flex items-baseline gap-1 mb-1"><span class="text-4xl font-extrabold text-gray-900">₹999</span><span class="text-sm text-gray-400">/ 3 months</span></div>
-                <p class="text-xs text-gray-400 mb-6"><s>₹1,999</s> — Save 50%</p>
-                <ul class="space-y-3 mb-8">
-                    <li class="flex items-center gap-2.5 text-sm text-gray-600"><i class="fas fa-check text-green-500 text-xs w-4"></i>50 profile views</li>
-                    <li class="flex items-center gap-2.5 text-sm text-gray-600"><i class="fas fa-check text-green-500 text-xs w-4"></i>30 interests</li>
-                    <li class="flex items-center gap-2.5 text-sm text-gray-600"><i class="fas fa-check text-green-500 text-xs w-4"></i>Chat enabled</li>
-                    <li class="flex items-center gap-2.5 text-sm text-gray-600"><i class="fas fa-check text-green-500 text-xs w-4"></i>Contact details</li>
-                    <li class="flex items-center gap-2.5 text-sm text-gray-300"><i class="fas fa-xmark text-xs w-4"></i>Profile highlight</li>
-                </ul>
-                <button class="w-full py-3 rounded-xl border border-gray-200 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-all">Get Silver</button>
+                <p class="text-sm font-semibold text-gray-400">Silver</p>
+                <div class="flex items-baseline gap-1 mb-1 mt-2"><span class="text-4xl font-extrabold text-gray-900">₹999</span><span class="text-sm text-gray-400">/ 3 mo</span></div>
+                <p class="text-xs text-gray-400 mb-6"><s>₹1,999</s> • 50% off</p>
+                <ul class="space-y-3 mb-8"><li class="flex items-center gap-2.5 text-sm text-gray-600"><i class="fas fa-check text-green-500 text-xs w-4"></i><span class="en">50 profile views</span><span class="kn">50 ಪ್ರೊಫೈಲ್ ವೀಕ್ಷಣೆ</span></li><li class="flex items-center gap-2.5 text-sm text-gray-600"><i class="fas fa-check text-green-500 text-xs w-4"></i><span class="en">30 interests</span><span class="kn">30 ಆಸಕ್ತಿಗಳು</span></li><li class="flex items-center gap-2.5 text-sm text-gray-600"><i class="fas fa-check text-green-500 text-xs w-4"></i><span class="en">Chat</span><span class="kn">ಚಾಟ್</span></li><li class="flex items-center gap-2.5 text-sm text-gray-600"><i class="fas fa-check text-green-500 text-xs w-4"></i><span class="en">Contact details</span><span class="kn">ಸಂಪರ್ಕ ವಿವರ</span></li></ul>
+                <button class="w-full py-3 rounded-xl border border-gray-200 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-all en">Get Silver</button>
+                <button class="w-full py-3 rounded-xl border border-gray-200 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-all kn">ಸಿಲ್ವರ್ ಪಡೆಯಿರಿ</button>
             </div>
-
-            <!-- Gold -->
             <div class="rounded-3xl bg-gray-900 p-7 text-white relative shadow-2xl shadow-gray-900/20 md:-translate-y-4">
-                <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-brand-600 rounded-full text-[10px] font-bold text-white tracking-wide">RECOMMENDED</div>
-                <p class="text-sm font-semibold text-gray-400 mb-1">Gold</p>
-                <div class="flex items-baseline gap-1 mb-1"><span class="text-4xl font-extrabold">₹1,999</span><span class="text-sm text-gray-400">/ 6 months</span></div>
-                <p class="text-xs text-gray-500 mb-6"><s>₹3,999</s> — Save 50%</p>
-                <ul class="space-y-3 mb-8">
-                    <li class="flex items-center gap-2.5 text-sm text-gray-300"><i class="fas fa-check text-brand-400 text-xs w-4"></i>Unlimited views</li>
-                    <li class="flex items-center gap-2.5 text-sm text-gray-300"><i class="fas fa-check text-brand-400 text-xs w-4"></i>100 interests</li>
-                    <li class="flex items-center gap-2.5 text-sm text-gray-300"><i class="fas fa-check text-brand-400 text-xs w-4"></i>Unlimited chat</li>
-                    <li class="flex items-center gap-2.5 text-sm text-gray-300"><i class="fas fa-check text-brand-400 text-xs w-4"></i>All contacts</li>
-                    <li class="flex items-center gap-2.5 text-sm text-gray-300"><i class="fas fa-check text-brand-400 text-xs w-4"></i>Profile highlight</li>
-                </ul>
-                <button class="w-full py-3 rounded-xl bg-white text-gray-900 text-sm font-bold hover:bg-gray-100 transition-all">Get Gold</button>
+                <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-brand-600 rounded-full text-[10px] font-bold text-white">RECOMMENDED</div>
+                <p class="text-sm font-semibold text-gray-400">Gold</p>
+                <div class="flex items-baseline gap-1 mb-1 mt-2"><span class="text-4xl font-extrabold">₹1,999</span><span class="text-sm text-gray-500">/ 6 mo</span></div>
+                <p class="text-xs text-gray-500 mb-6"><s>₹3,999</s> • 50% off</p>
+                <ul class="space-y-3 mb-8"><li class="flex items-center gap-2.5 text-sm text-gray-300"><i class="fas fa-check text-brand-400 text-xs w-4"></i><span class="en">Unlimited views</span><span class="kn">ಅನಿಯಮಿತ ವೀಕ್ಷಣೆ</span></li><li class="flex items-center gap-2.5 text-sm text-gray-300"><i class="fas fa-check text-brand-400 text-xs w-4"></i><span class="en">100 interests</span><span class="kn">100 ಆಸಕ್ತಿಗಳು</span></li><li class="flex items-center gap-2.5 text-sm text-gray-300"><i class="fas fa-check text-brand-400 text-xs w-4"></i><span class="en">Unlimited chat</span><span class="kn">ಅನಿಯಮಿತ ಚಾಟ್</span></li><li class="flex items-center gap-2.5 text-sm text-gray-300"><i class="fas fa-check text-brand-400 text-xs w-4"></i><span class="en">Profile highlight</span><span class="kn">ಪ್ರೊಫೈಲ್ ಹೈಲೈಟ್</span></li></ul>
+                <button class="w-full py-3 rounded-xl bg-white text-gray-900 text-sm font-bold hover:bg-gray-100 transition-all en">Get Gold</button>
+                <button class="w-full py-3 rounded-xl bg-white text-gray-900 text-sm font-bold hover:bg-gray-100 transition-all kn">ಗೋಲ್ಡ್ ಪಡೆಯಿರಿ</button>
             </div>
-
-            <!-- Platinum -->
             <div class="rounded-3xl border border-gray-200 p-7 hover:border-gray-300 hover:shadow-lg transition-all duration-500">
-                <p class="text-sm font-semibold text-gray-400 mb-1">Platinum</p>
-                <div class="flex items-baseline gap-1 mb-1"><span class="text-4xl font-extrabold text-gray-900">₹2,999</span><span class="text-sm text-gray-400">/ 12 months</span></div>
-                <p class="text-xs text-gray-400 mb-6"><s>₹5,999</s> — Save 50%</p>
-                <ul class="space-y-3 mb-8">
-                    <li class="flex items-center gap-2.5 text-sm text-gray-600"><i class="fas fa-check text-green-500 text-xs w-4"></i>Everything in Gold</li>
-                    <li class="flex items-center gap-2.5 text-sm text-gray-600"><i class="fas fa-check text-green-500 text-xs w-4"></i>Video calls</li>
-                    <li class="flex items-center gap-2.5 text-sm text-gray-600"><i class="fas fa-check text-green-500 text-xs w-4"></i>Profile boost 2×</li>
-                    <li class="flex items-center gap-2.5 text-sm text-gray-600"><i class="fas fa-check text-green-500 text-xs w-4"></i>VIP badge</li>
-                    <li class="flex items-center gap-2.5 text-sm text-gray-600"><i class="fas fa-check text-green-500 text-xs w-4"></i>Dedicated manager</li>
-                </ul>
-                <button class="w-full py-3 rounded-xl bg-gradient-to-r from-brand-600 to-purple-600 text-white text-sm font-bold hover:opacity-90 transition-all">Get Platinum</button>
+                <p class="text-sm font-semibold text-gray-400">Platinum</p>
+                <div class="flex items-baseline gap-1 mb-1 mt-2"><span class="text-4xl font-extrabold text-gray-900">₹2,999</span><span class="text-sm text-gray-400">/ 12 mo</span></div>
+                <p class="text-xs text-gray-400 mb-6"><s>₹5,999</s> • 50% off</p>
+                <ul class="space-y-3 mb-8"><li class="flex items-center gap-2.5 text-sm text-gray-600"><i class="fas fa-check text-green-500 text-xs w-4"></i><span class="en">Everything in Gold</span><span class="kn">ಗೋಲ್ಡ್‌ನಲ್ಲಿ ಎಲ್ಲಾ</span></li><li class="flex items-center gap-2.5 text-sm text-gray-600"><i class="fas fa-check text-green-500 text-xs w-4"></i><span class="en">Video calls</span><span class="kn">ವಿಡಿಯೋ ಕಾಲ್</span></li><li class="flex items-center gap-2.5 text-sm text-gray-600"><i class="fas fa-check text-green-500 text-xs w-4"></i><span class="en">VIP badge</span><span class="kn">VIP ಬ್ಯಾಡ್ಜ್</span></li><li class="flex items-center gap-2.5 text-sm text-gray-600"><i class="fas fa-check text-green-500 text-xs w-4"></i><span class="en">Dedicated manager</span><span class="kn">ಸಮರ್ಪಿತ ನಿರ್ವಾಹಕ</span></li></ul>
+                <button class="w-full py-3 rounded-xl bg-gradient-to-r from-brand-600 to-purple-600 text-white text-sm font-bold hover:opacity-90 transition-all en">Get Platinum</button>
+                <button class="w-full py-3 rounded-xl bg-gradient-to-r from-brand-600 to-purple-600 text-white text-sm font-bold hover:opacity-90 transition-all kn">ಪ್ಲಾಟಿನಂ ಪಡೆಯಿರಿ</button>
             </div>
         </div>
     </div>
 </section>
 
-<!-- ===== FINAL CTA ===== -->
+<!-- ====== FINAL CTA ====== -->
 <section class="py-28 bg-gray-900 noise relative overflow-hidden">
-    <div class="absolute top-0 left-1/3 w-[500px] h-[500px] bg-brand-600/20 rounded-full blur-[150px]"></div>
-    <div class="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-purple-600/20 rounded-full blur-[150px]"></div>
-    <div class="max-w-3xl mx-auto px-6 text-center relative z-10" data-reveal>
-        <h2 class="text-4xl sm:text-6xl font-bold text-white tracking-tight leading-tight">Your story deserves<br>a <span class="font-serif italic bg-gradient-to-r from-brand-400 to-purple-400 bg-clip-text text-transparent">beautiful beginning</span>.</h2>
-        <p class="text-lg text-gray-400 mt-6 mb-10 max-w-xl mx-auto">Join 10,000+ families who trust Advaita Matrimony. Create your profile in 2 minutes — it's free.</p>
-        <a href="register.html" class="magnetic inline-flex items-center gap-3 px-8 py-4 bg-white text-gray-900 rounded-2xl font-bold text-base hover:bg-gray-100 transition-all shadow-2xl hover:scale-[1.03]">
-            Start Your Journey <i class="fas fa-arrow-right"></i>
+    <div class="absolute top-0 left-1/3 w-[500px] h-[500px] bg-brand-600/15 rounded-full blur-[150px]"></div>
+    <div class="max-w-3xl mx-auto px-6 text-center relative z-10" data-r>
+        <h2 class="text-4xl sm:text-6xl font-bold text-white tracking-tight leading-tight en">Your story deserves a <span class="font-serif italic bg-gradient-to-r from-brand-400 to-purple-400 bg-clip-text text-transparent">beautiful beginning</span>.</h2>
+        <h2 class="text-4xl sm:text-6xl font-bold text-white tracking-tight leading-tight kn">ನಿಮ್ಮ ಕಥೆಗೆ <span class="font-serif italic bg-gradient-to-r from-brand-400 to-purple-400 bg-clip-text text-transparent">ಸುಂದರ ಆರಂಭ</span> ಅಗತ್ಯವಿದೆ.</h2>
+        <p class="text-lg text-gray-400 mt-6 mb-10 en">Join 10,000+ families. Create your profile in 2 minutes — it's free.</p>
+        <p class="text-lg text-gray-400 mt-6 mb-10 kn">10,000+ ಕುಟುಂಬಗಳನ್ನು ಸೇರಿ. 2 ನಿಮಿಷಗಳಲ್ಲಿ ಪ್ರೊಫೈಲ್ ರಚಿಸಿ — ಉಚಿತ.</p>
+        <a href="register.html" class="mag inline-flex items-center gap-3 px-8 py-4 bg-white text-gray-900 rounded-2xl font-bold hover:scale-[1.03] transition-all shadow-2xl">
+            <span class="en">Start Your Journey</span><span class="kn">ನಿಮ್ಮ ಪ್ರಯಾಣ ಪ್ರಾರಂಭಿಸಿ</span> <i class="fas fa-arrow-right"></i>
         </a>
     </div>
 </section>
 
-<!-- ===== FOOTER ===== -->
-<footer class="bg-gray-950 text-gray-500 py-16">
+<!-- ====== FOOTER ====== -->
+<footer class="bg-gray-950 text-gray-500 py-14">
     <div class="max-w-6xl mx-auto px-6">
-        <div class="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
-            <div class="col-span-2">
-                <div class="flex items-center gap-2 mb-4"><div class="w-8 h-8 bg-gradient-to-br from-brand-500 to-purple-500 rounded-lg flex items-center justify-center"><span class="text-white font-bold text-xs">A</span></div><span class="text-white font-bold">Advaita Matrimony</span></div>
-                <p class="text-sm text-gray-600 leading-relaxed max-w-xs">India's most inclusive matrimonial platform. Built with love for every heart.</p>
-            </div>
-            <div><h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Platform</h4><ul class="space-y-2 text-sm"><li><a href="#" class="hover:text-white transition-colors">Search</a></li><li><a href="#" class="hover:text-white transition-colors">Plans</a></li><li><a href="#" class="hover:text-white transition-colors">App</a></li></ul></div>
-            <div><h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Company</h4><ul class="space-y-2 text-sm"><li><a href="#" class="hover:text-white transition-colors">About</a></li><li><a href="#" class="hover:text-white transition-colors">Careers</a></li><li><a href="#" class="hover:text-white transition-colors">Contact</a></li></ul></div>
-            <div><h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Legal</h4><ul class="space-y-2 text-sm"><li><a href="#" class="hover:text-white transition-colors">Terms</a></li><li><a href="#" class="hover:text-white transition-colors">Privacy</a></li><li><a href="#" class="hover:text-white transition-colors">Refund</a></li></ul></div>
-        </div>
-        <div class="border-t border-gray-800/50 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p class="text-xs text-gray-700">© 2024 Advaita Matrimony. All rights reserved.</p>
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-2"><div class="w-8 h-8 bg-gradient-to-br from-brand-500 to-purple-500 rounded-lg flex items-center justify-center"><span class="text-white font-bold text-xs">A</span></div><span class="text-white font-bold">Advaita Matrimony</span></div>
+            <div class="flex gap-6 text-sm"><a href="#" class="hover:text-white transition-colors en">Terms</a><a href="#" class="hover:text-white transition-colors kn">ನಿಯಮಗಳು</a><a href="#" class="hover:text-white transition-colors en">Privacy</a><a href="#" class="hover:text-white transition-colors kn">ಗೋಪ್ಯತೆ</a><a href="#" class="hover:text-white transition-colors en">Refund</a><a href="#" class="hover:text-white transition-colors kn">ಮರುಪಾವತಿ</a></div>
             <div class="flex gap-4"><a href="#" class="text-gray-600 hover:text-white transition-colors"><i class="fab fa-instagram"></i></a><a href="#" class="text-gray-600 hover:text-white transition-colors"><i class="fab fa-facebook"></i></a><a href="#" class="text-gray-600 hover:text-white transition-colors"><i class="fab fa-youtube"></i></a><a href="#" class="text-gray-600 hover:text-white transition-colors"><i class="fab fa-whatsapp"></i></a></div>
         </div>
+        <div class="text-center mt-10 text-xs text-gray-700">© 2024 Advaita Matrimony | ಅದ್ವೈತ ಮ್ಯಾಟ್ರಿಮೋನಿ. All rights reserved.</div>
     </div>
 </footer>
 
 <script>
-// === CUSTOM CURSOR ===
-const dot=document.getElementById('cursorDot'),ring=document.getElementById('cursorRing');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx-4+'px';dot.style.top=my-4+'px'});
-function animateCursor(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animateCursor)}
-animateCursor();
+// Cursor
+const cd=document.getElementById('cd'),cr=document.getElementById('cr');let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;if(cd){cd.style.left=mx-4+'px';cd.style.top=my-4+'px'}});
+(function loop(){if(cr){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;cr.style.left=rx+'px';cr.style.top=ry+'px'}requestAnimationFrame(loop)})();
 
-// === SCROLL REVEAL ===
-const obs=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})},{threshold:.1,rootMargin:'0px 0px -50px 0px'});
-document.querySelectorAll('[data-reveal]').forEach(el=>obs.observe(el));
+// Reveal
+const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');io.unobserve(e.target)}})},{threshold:.08,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('[data-r]').forEach(el=>io.observe(el));
 
-// === MAGNETIC BUTTONS ===
-document.querySelectorAll('.magnetic').forEach(btn=>{
-    btn.addEventListener('mousemove',e=>{const r=btn.getBoundingClientRect();const x=e.clientX-r.left-r.width/2;const y=e.clientY-r.top-r.height/2;btn.style.transform=`translate(${x*.15}px,${y*.15}px)`});
-    btn.addEventListener('mouseleave',()=>{btn.style.transform='translate(0,0)'});
-});
+// Magnetic buttons
+if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){document.querySelectorAll('.mag').forEach(b=>{b.addEventListener('mousemove',e=>{const r=b.getBoundingClientRect();b.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.12}px,${(e.clientY-r.top-r.height/2)*.12}px)`});b.addEventListener('mouseleave',()=>{b.style.transform=''})})}
+
+// Persisted English/Kannada preference, with semantic document language.
+function applyLang(lang){
+    const isKannada=lang==='kn';
+    document.body.classList.toggle('lang-kn',isKannada);
+    document.body.classList.toggle('lang-en',!isKannada);
+    document.documentElement.lang=isKannada?'kn':'en';
+    document.getElementById('langBtn')?.setAttribute('aria-pressed',String(isKannada));
+    localStorage.setItem('advaita-language',lang);
+}
+function toggleLang(){applyLang(document.body.classList.contains('lang-kn')?'en':'kn')}
+applyLang(localStorage.getItem('advaita-language')||'en');
+
+// Mobile navigation
+function toggleMobileMenu(){
+    const menu=document.getElementById('mobileMenu');const btn=document.getElementById('menuBtn');
+    const open=menu.classList.toggle('open');btn?.setAttribute('aria-expanded',String(open));
+    if(btn)btn.innerHTML=open?'<i class="fas fa-xmark"></i>':'<i class="fas fa-bars"></i>';
+}
+
+// Video control + graceful fallback. Poster remains visible if the remote demo asset fails.
+const video=document.getElementById('heroVideo');const videoToggle=document.getElementById('videoToggle');
+function syncVideoButton(){if(!videoToggle||!video)return;const paused=video.paused;videoToggle.innerHTML=paused?'<i class="fas fa-play text-xs"></i>':'<i class="fas fa-pause text-xs"></i>';videoToggle.setAttribute('aria-label',paused?'Play background video':'Pause background video');videoToggle.setAttribute('aria-pressed',String(paused))}
+videoToggle?.addEventListener('click',()=>{if(video.paused)video.play().catch(()=>{});else video.pause();syncVideoButton()});
+video?.addEventListener('error',()=>{video.classList.add('hidden');document.getElementById('hero')?.classList.add('hero-fallback')});
+if(window.matchMedia('(prefers-reduced-motion: reduce)').matches||window.matchMedia('(prefers-reduced-data: reduce)').matches)video?.pause();
+syncVideoButton();
+
+// Profile rail controls. Auto-motion is paused on demand and arrows move the showcase manually.
+function toggleRails(button){
+    document.querySelectorAll('.profile-track').forEach(rail=>rail.style.animationPlayState=rail.style.animationPlayState==='paused'?'running':'paused');
+    const paused=document.getElementById('railOne')?.style.animationPlayState==='paused';
+    button.setAttribute('aria-pressed',String(paused));button.innerHTML=paused?'<i class="fas fa-play text-xs"></i>':'<i class="fas fa-pause text-xs"></i>';
+}
+function moveRail(id,direction){document.getElementById(id)?.scrollBy({left:direction*285,behavior:'smooth'})}
 </script>
 </body>
 </html>

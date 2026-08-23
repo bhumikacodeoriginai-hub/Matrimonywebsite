@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../theme/app_theme.dart';
+import '../../localization/app_localizations.dart';
 import '../auth/login_screen.dart';
 
 class MyProfileScreen extends StatelessWidget {
@@ -11,14 +12,19 @@ class MyProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Profile'),
+        title: Text(AppStrings.of(context).myProfile),
         actions: [
+          TextButton(
+            onPressed: () => context.read<AppLanguageProvider>().toggle(),
+            child: Text(AppStrings.of(context).languageLabel),
+          ),
           IconButton(icon: const Icon(Icons.edit), onPressed: () {}),
           IconButton(icon: const Icon(Icons.settings), onPressed: () {}),
         ],
       ),
       body: Consumer<AuthProvider>(
         builder: (_, auth, __) {
+          final strings = AppStrings.of(context);
           final user = auth.userData;
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16),
@@ -64,7 +70,7 @@ class MyProfileScreen extends StatelessWidget {
                             children: [
                               Icon(Icons.crown_rounded, color: Colors.white, size: 16),
                               SizedBox(width: 6),
-                              Text('Premium Member', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600)),
+                              Text(strings.premiumMember, style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600)),
                             ],
                           ),
                         ),
@@ -77,7 +83,7 @@ class MyProfileScreen extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text('Profile: ${user?['profile_completion'] ?? 0}% Complete',
+                              Text('${strings.profileComplete}: ${user?['profile_completion'] ?? 0}% ${strings.complete}',
                                   style: const TextStyle(color: Colors.white, fontSize: 13)),
                             ],
                           ),
@@ -99,25 +105,25 @@ class MyProfileScreen extends StatelessWidget {
 
                 // Menu Items
                 _MenuSection(
-                  title: 'My Activity',
+                  title: strings.myActivity,
                   items: [
-                    _MenuItem(icon: Icons.visibility, label: 'Who Viewed Me', count: '12', color: Colors.blue),
-                    _MenuItem(icon: Icons.favorite, label: 'Interests Received', count: '5', color: Colors.red),
-                    _MenuItem(icon: Icons.send, label: 'Interests Sent', count: '8', color: Colors.orange),
-                    _MenuItem(icon: Icons.bookmark, label: 'Shortlisted', count: '15', color: Colors.purple),
+                    _MenuItem(icon: Icons.visibility, label: strings.whoViewedMe, count: '12', color: Colors.blue),
+                    _MenuItem(icon: Icons.favorite, label: strings.interestsReceived, count: '5', color: Colors.red),
+                    _MenuItem(icon: Icons.send, label: strings.interestsSent, count: '8', color: Colors.orange),
+                    _MenuItem(icon: Icons.bookmark, label: strings.shortlisted, count: '15', color: Colors.purple),
                   ],
                 ),
 
                 const SizedBox(height: 16),
 
                 _MenuSection(
-                  title: 'Account',
+                  title: strings.account,
                   items: [
-                    _MenuItem(icon: Icons.card_membership, label: 'My Subscription', color: Colors.amber),
-                    _MenuItem(icon: Icons.receipt_long, label: 'Payment History', color: Colors.green),
-                    _MenuItem(icon: Icons.privacy_tip, label: 'Privacy Settings', color: Colors.teal),
-                    _MenuItem(icon: Icons.notifications, label: 'Notifications', color: Colors.indigo),
-                    _MenuItem(icon: Icons.help, label: 'Help & Support', color: Colors.cyan),
+                    _MenuItem(icon: Icons.card_membership, label: strings.subscription, color: Colors.amber),
+                    _MenuItem(icon: Icons.receipt_long, label: strings.paymentHistory, color: Colors.green),
+                    _MenuItem(icon: Icons.privacy_tip, label: strings.privacySettings, color: Colors.teal),
+                    _MenuItem(icon: Icons.notifications, label: strings.notifications, color: Colors.indigo),
+                    _MenuItem(icon: Icons.help, label: strings.helpSupport, color: Colors.cyan),
                   ],
                 ),
 
@@ -138,7 +144,7 @@ class MyProfileScreen extends StatelessWidget {
                       }
                     },
                     icon: const Icon(Icons.logout, color: Colors.red),
-                    label: const Text('Logout', style: TextStyle(color: Colors.red)),
+                    label: Text(strings.logout, style: const TextStyle(color: Colors.red)),
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: Colors.red),
                       padding: const EdgeInsets.symmetric(vertical: 14),

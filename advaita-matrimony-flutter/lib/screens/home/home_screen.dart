@@ -42,9 +42,14 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: IndexedStack(index: _currentIndex, children: _screens),
       bottomNavigationBar: Container(
+        margin: const EdgeInsets.fromLTRB(12, 0, 12, 10),
+        clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: AppColors.divider),
           boxShadow: [
-            BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 20, offset: const Offset(0, -5)),
+            BoxShadow(color: AppColors.primary.withOpacity(0.12), blurRadius: 30, offset: const Offset(0, 10)),
           ],
         ),
         child: BottomNavigationBar(
@@ -85,6 +90,8 @@ class _HomeTab extends StatelessWidget {
           // App Bar
           SliverAppBar(
             floating: true,
+            surfaceTintColor: Colors.transparent,
+            backgroundColor: AppColors.background.withOpacity(0.96),
             title: Row(
               children: [
                 Container(
@@ -94,14 +101,14 @@ class _HomeTab extends StatelessWidget {
                     gradient: AppColors.primaryGradient,
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: const Center(child: Text('A', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18))),
+                  child: Center(child: Text('A', style: TextStyle(color: AppColors.goldLight, fontWeight: FontWeight.bold, fontSize: 20, fontStyle: FontStyle.italic))),
                 ),
                 const SizedBox(width: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Advaita', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                    Text('Matrimony', style: TextStyle(fontSize: 11, color: Colors.grey.shade600)),
+                    Text('Advaita', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 21)),
+                    const Text('M A T R I M O N Y', style: TextStyle(fontSize: 8, color: AppColors.textSecondary, letterSpacing: 1.4, fontWeight: FontWeight.w700)),
                   ],
                 ),
               ],
@@ -117,11 +124,13 @@ class _HomeTab extends StatelessWidget {
           // Welcome Banner
           SliverToBoxAdapter(
             child: Container(
-              margin: const EdgeInsets.all(16),
-              padding: const EdgeInsets.all(20),
+              margin: const EdgeInsets.fromLTRB(16, 16, 16, 20),
+              padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
                 gradient: AppColors.primaryGradient,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(28),
+                border: Border.all(color: AppColors.gold.withOpacity(0.28)),
+                boxShadow: [BoxShadow(color: AppColors.primary.withOpacity(0.22), blurRadius: 30, offset: const Offset(0, 16))],
               ),
               child: Consumer<AuthProvider>(
                 builder: (_, auth, __) => Column(
@@ -129,12 +138,12 @@ class _HomeTab extends StatelessWidget {
                   children: [
                     Text(
                       'Hi ${auth.userData?['name']?.split(' ').first ?? 'User'}! 👋',
-                      style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: AppColors.background, fontSize: 28),
                     ),
                     const SizedBox(height: 4),
                     const Text(
-                      'Let\'s find your perfect match today',
-                      style: TextStyle(color: Colors.white70, fontSize: 14),
+                      'Your next chapter could begin today',
+                      style: TextStyle(color: AppColors.goldLight, fontSize: 13, letterSpacing: 0.2),
                     ),
                     const SizedBox(height: 16),
                     Row(
@@ -157,7 +166,7 @@ class _HomeTab extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Browse by Community', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  Text('Browse by Community', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 22)),
                   const SizedBox(height: 12),
                   Row(
                     children: [
@@ -182,7 +191,7 @@ class _HomeTab extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('Recommended for You', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  Text('Curated for You', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 23)),
                   TextButton(onPressed: () {}, child: const Text('View All')),
                 ],
               ),
@@ -298,9 +307,10 @@ class _ProfileCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 10, offset: const Offset(0, 4))],
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: AppColors.divider),
+        boxShadow: [BoxShadow(color: AppColors.primary.withOpacity(0.08), blurRadius: 24, offset: const Offset(0, 10))],
       ),
       child: Row(
         children: [
@@ -309,12 +319,12 @@ class _ProfileCard extends StatelessWidget {
             width: 80,
             height: 80,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(14),
-              color: AppColors.primary.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(18),
+              color: AppColors.goldLight.withOpacity(0.25),
             ),
             child: profile['photo'] != null
                 ? ClipRRect(
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(18),
                     child: Image.network(profile['photo'], fit: BoxFit.cover),
                   )
                 : Icon(Icons.person, size: 36, color: AppColors.primary.withOpacity(0.5)),

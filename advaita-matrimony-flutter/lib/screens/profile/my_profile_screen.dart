@@ -33,10 +33,12 @@ class MyProfileScreen extends StatelessWidget {
                 // Profile Header Card
                 Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.all(24),
+                  padding: const EdgeInsets.all(28),
                   decoration: BoxDecoration(
                     gradient: AppColors.primaryGradient,
-                    borderRadius: BorderRadius.circular(24),
+                    borderRadius: BorderRadius.circular(30),
+                    border: Border.all(color: AppColors.gold.withOpacity(0.3)),
+                    boxShadow: [BoxShadow(color: AppColors.primary.withOpacity(0.22), blurRadius: 32, offset: const Offset(0, 16))],
                   ),
                   child: Column(
                     children: [
@@ -65,12 +67,12 @@ class MyProfileScreen extends StatelessWidget {
                             gradient: AppColors.goldGradient,
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: const Row(
+                          child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(Icons.crown_rounded, color: Colors.white, size: 16),
-                              SizedBox(width: 6),
-                              Text(strings.premiumMember, style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600)),
+                              const Icon(Icons.auto_awesome, color: AppColors.primaryDark, size: 16),
+                              const SizedBox(width: 6),
+                              Text(strings.premiumMember, style: const TextStyle(color: AppColors.primaryDark, fontSize: 12, fontWeight: FontWeight.w700)),
                             ],
                           ),
                         ),
@@ -90,8 +92,8 @@ class MyProfileScreen extends StatelessWidget {
                           const SizedBox(height: 8),
                           LinearProgressIndicator(
                             value: (user?['profile_completion'] ?? 0) / 100,
-                            backgroundColor: Colors.white.withOpacity(0.2),
-                            valueColor: const AlwaysStoppedAnimation<Color>(AppColors.gold),
+                            backgroundColor: AppColors.background.withOpacity(0.16),
+                            valueColor: const AlwaysStoppedAnimation<Color>(AppColors.goldLight),
                             borderRadius: BorderRadius.circular(10),
                             minHeight: 6,
                           ),
@@ -107,10 +109,10 @@ class MyProfileScreen extends StatelessWidget {
                 _MenuSection(
                   title: strings.myActivity,
                   items: [
-                    _MenuItem(icon: Icons.visibility, label: strings.whoViewedMe, count: '12', color: Colors.blue),
-                    _MenuItem(icon: Icons.favorite, label: strings.interestsReceived, count: '5', color: Colors.red),
-                    _MenuItem(icon: Icons.send, label: strings.interestsSent, count: '8', color: Colors.orange),
-                    _MenuItem(icon: Icons.bookmark, label: strings.shortlisted, count: '15', color: Colors.purple),
+                    _MenuItem(icon: Icons.visibility, label: strings.whoViewedMe, count: '12', color: AppColors.primary),
+                    _MenuItem(icon: Icons.favorite, label: strings.interestsReceived, count: '5', color: AppColors.rose),
+                    _MenuItem(icon: Icons.send, label: strings.interestsSent, count: '8', color: AppColors.gold),
+                    _MenuItem(icon: Icons.bookmark, label: strings.shortlisted, count: '15', color: AppColors.primaryLight),
                   ],
                 ),
 
@@ -119,11 +121,11 @@ class MyProfileScreen extends StatelessWidget {
                 _MenuSection(
                   title: strings.account,
                   items: [
-                    _MenuItem(icon: Icons.card_membership, label: strings.subscription, color: Colors.amber),
-                    _MenuItem(icon: Icons.receipt_long, label: strings.paymentHistory, color: Colors.green),
-                    _MenuItem(icon: Icons.privacy_tip, label: strings.privacySettings, color: Colors.teal),
-                    _MenuItem(icon: Icons.notifications, label: strings.notifications, color: Colors.indigo),
-                    _MenuItem(icon: Icons.help, label: strings.helpSupport, color: Colors.cyan),
+                    _MenuItem(icon: Icons.card_membership, label: strings.subscription, color: AppColors.gold),
+                    _MenuItem(icon: Icons.receipt_long, label: strings.paymentHistory, color: AppColors.green),
+                    _MenuItem(icon: Icons.privacy_tip, label: strings.privacySettings, color: AppColors.primary),
+                    _MenuItem(icon: Icons.notifications, label: strings.notifications, color: AppColors.rose),
+                    _MenuItem(icon: Icons.help, label: strings.helpSupport, color: AppColors.primaryLight),
                   ],
                 ),
 
@@ -179,9 +181,10 @@ class _MenuSection extends StatelessWidget {
         ),
         Container(
           decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 10)],
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(color: AppColors.divider),
+            boxShadow: [BoxShadow(color: AppColors.primary.withOpacity(0.07), blurRadius: 24, offset: const Offset(0, 10))],
           ),
           child: Column(
             children: items.map((item) => _buildMenuItem(item)).toList(),
@@ -216,7 +219,7 @@ class _MenuSection extends StatelessWidget {
               child: Text(item.count!, style: TextStyle(fontSize: 12, color: item.color, fontWeight: FontWeight.w600)),
             ),
           const SizedBox(width: 8),
-          Icon(Icons.chevron_right, color: Colors.grey.shade400, size: 20),
+          Icon(Icons.chevron_right, color: AppColors.textHint, size: 20),
         ],
       ),
       onTap: () {},

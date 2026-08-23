@@ -43,10 +43,13 @@ class _SearchScreenState extends State<SearchScreen> {
           // Search Filters
           if (_showFilters)
             Container(
-              padding: const EdgeInsets.all(16),
+              margin: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+              padding: const EdgeInsets.all(18),
               decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10)],
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(color: AppColors.divider),
+                boxShadow: [BoxShadow(color: AppColors.primary.withOpacity(0.08), blurRadius: 24, offset: const Offset(0, 10))],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -194,8 +197,8 @@ class _SearchResultCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.only(bottom: 12),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      margin: const EdgeInsets.only(bottom: 14),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24), side: const BorderSide(color: AppColors.divider)),
       child: Padding(
         padding: const EdgeInsets.all(14),
         child: Row(
@@ -204,10 +207,10 @@ class _SearchResultCard extends StatelessWidget {
               width: 70,
               height: 70,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: AppColors.primary.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(18),
+                color: AppColors.goldLight.withOpacity(0.25),
               ),
-              child: const Icon(Icons.person, color: AppColors.primary, size: 32),
+              child: const Icon(Icons.person_outline_rounded, color: AppColors.primary, size: 32),
             ),
             const SizedBox(width: 14),
             Expanded(

@@ -25,7 +25,7 @@ void main() async {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
     statusBarIconBrightness: Brightness.dark,
-    systemNavigationBarColor: Colors.white,
+    systemNavigationBarColor: AppColors.background,
   ));
 
   final languageProvider = AppLanguageProvider();
@@ -51,15 +51,15 @@ class AdvaitaMatrimonyApp extends StatelessWidget {
       ],
       child: Consumer<AppLanguageProvider>(
         builder: (_, language, __) => MaterialApp(
-        title: 'Advaita Matrimony',
-        locale: language.locale,
-        supportedLocales: const [Locale('en'), Locale('kn')],
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
-        themeMode: ThemeMode.light,
-        home: const SplashScreen(),
-      ),
+          title: 'Advaita Matrimony',
+          locale: language.locale,
+          supportedLocales: const [Locale('en'), Locale('kn')],
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          themeMode: ThemeMode.light,
+          home: const SplashScreen(),
+        ),
       ),
     );
   }

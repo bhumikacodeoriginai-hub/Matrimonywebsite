@@ -51,6 +51,25 @@
     .hero-intent { background: rgba(255,252,248,.97); color: var(--color-ink); box-shadow: 0 24px 60px rgba(20,8,20,.28); }
     .hero-intent select { min-height: 50px; border: 1px solid var(--color-ivory-300); border-radius: 8px; background: var(--color-ivory-light); padding: .8rem .9rem; color: var(--color-ink); font: inherit; font-size: .85rem; }
     .hero-intent select:focus { outline: 2px solid var(--color-gold-400); outline-offset: 1px; }
+    .connection-compass-home { position: relative; overflow: hidden; background: linear-gradient(125deg, var(--color-plum-900), var(--color-plum-700) 58%, var(--color-plum-600)); color: var(--color-ivory-light); isolation: isolate; }
+    .connection-compass-home::before { content: ''; position: absolute; inset: -35%; z-index: -1; background: radial-gradient(circle at 78% 18%, rgba(231,207,161,.24), transparent 28%), radial-gradient(circle at 14% 100%, rgba(232,104,143,.18), transparent 32%); animation: compass-breathe-home 10s ease-in-out infinite alternate; }
+    @keyframes compass-breathe-home { from { transform: scale(1) rotate(0deg); } to { transform: scale(1.12) rotate(5deg); } }
+    .compass-home-grid { display: grid; grid-template-columns: .95fr 1.05fr; gap: 2rem; align-items: center; }
+    .compass-home-kicker { color: var(--color-gold-300); font-size: .65rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+    .compass-home-title { color: var(--color-ivory-light); font: 500 clamp(2rem, 4vw, 3.6rem)/.95 var(--font-display); }
+    .compass-home-copy { color: rgba(255,252,248,.7); font-size: .82rem; line-height: 1.6; max-width: 30rem; }
+    .compass-home-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: .65rem; }
+    .compass-home-option { min-height: 112px; padding: 1rem; border: 1px solid rgba(255,255,255,.18); border-radius: 18px; background: rgba(255,255,255,.07); color: rgba(255,255,255,.72); text-align: left; cursor: pointer; transition: transform .3s var(--motion-ease), background .3s ease, border-color .3s ease; }
+    .compass-home-option:hover, .compass-home-option.is-active { transform: translateY(-4px); background: rgba(255,255,255,.14); border-color: var(--color-gold-300); color: var(--color-white); }
+    .compass-home-option i { display: block; color: var(--color-gold-300); font-size: 1.15rem; margin-bottom: .7rem; }
+    .compass-home-option strong { display: block; font-size: .72rem; line-height: 1.15; }
+    .compass-home-option small { display: block; color: rgba(255,255,255,.56); font-size: .62rem; line-height: 1.35; margin-top: .35rem; }
+    .compass-home-result { display: flex; align-items: center; gap: 1rem; margin-top: 1rem; padding: 1rem 1.1rem; border: 1px solid rgba(255,255,255,.16); border-radius: 18px; background: rgba(20,8,20,.18); }
+    .compass-home-score { width: 48px; height: 48px; border: 1px solid var(--color-gold-300); border-radius: 50%; display: grid; place-items: center; color: var(--color-gold-300); font: 500 1.15rem var(--font-display); flex: 0 0 auto; }
+    .compass-home-result strong { display: block; font-size: .82rem; }.compass-home-result span { display: block; color: rgba(255,255,255,.62); font-size: .7rem; margin-top: .2rem; }
+    @media (max-width: 900px) { .compass-home-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 640px) { .compass-home-options { gap: .4rem; }.compass-home-option { padding: .75rem; min-height: 104px; } }
+    @media (prefers-reduced-motion: reduce) { .connection-compass-home::before { animation: none; } .compass-home-option, .compass-home-option:hover, .compass-home-option.is-active { transition: none; transform: none; } }
     .trust-line { border-top: 1px solid var(--color-ivory-300); border-bottom: 1px solid var(--color-ivory-300); background: var(--color-ivory-light); }
     .trust-item { display: flex; align-items: center; gap: .8rem; padding: 1.45rem 0; }
     .trust-item + .trust-item { border-left: 1px solid var(--color-ivory-300); padding-left: 2rem; }
@@ -253,6 +272,28 @@
         </div>
     </section>
 
+    <!-- CONNECTION COMPASS: an explainable, consent-led discovery preference -->
+    <section class="editorial-section connection-compass-home" id="compass" aria-labelledby="compass-home-title">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="compass-home-grid">
+                <div>
+                    <p class="compass-home-kicker">Your discovery signal</p>
+                    <h2 class="compass-home-title mt-3" id="compass-home-title">Meet with intention.</h2>
+                    <p class="compass-home-copy mt-4">Set the lens for your discovery. Choose what matters most today and keep your next introduction focused on what feels right.</p>
+                    <div class="compass-home-result" aria-live="polite"><div class="compass-home-score" id="compass-home-score">92</div><div><strong><span id="compass-home-result-title">Values first</span></strong><span id="compass-home-result-copy">Start with the details that shape everyday life.</span></div></div>
+                </div>
+                <div>
+                    <p class="text-xs tracking-[.16em] uppercase text-white/45 mb-3">What should guide your next introduction?</p>
+                    <div class="compass-home-options" id="compass-home-options" role="group" aria-label="Choose your discovery intention">
+                        <button class="compass-home-option is-active" type="button" data-compass-home="values" aria-pressed="true"><i class="fas fa-heart-pulse" aria-hidden="true"></i><strong>Shared values</strong><small>Life, family, and outlook</small></button>
+                        <button class="compass-home-option" type="button" data-compass-home="access" aria-pressed="false"><i class="fas fa-universal-access" aria-hidden="true"></i><strong>Accessibility</strong><small>Be understood, fully</small></button>
+                        <button class="compass-home-option" type="button" data-compass-home="pace" aria-pressed="false"><i class="fas fa-hourglass-half" aria-hidden="true"></i><strong>Your pace</strong><small>No pressure, ever</small></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- TRUST: quiet proof, no invented numbers -->
     <section class="trust-line" aria-label="Advaita trust commitments">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 lg:grid-cols-4 gap-x-5">
@@ -446,6 +487,38 @@
                 }
             });
         }
+
+        const compassHomeData = {
+            values: { score: '92', title: 'Values first', copy: 'Start with the details that shape everyday life.' },
+            access: { score: '88', title: 'Designed for understanding', copy: 'Keep accessibility and communication visible from the beginning.' },
+            pace: { score: '96', title: 'At your pace', copy: 'Choose a thoughtful introduction without pressure or timers.' },
+        };
+        const compassHomeButtons = document.querySelectorAll('[data-compass-home]');
+        const compassHomeScore = document.getElementById('compass-home-score');
+        const compassHomeTitle = document.getElementById('compass-home-result-title');
+        const compassHomeCopy = document.getElementById('compass-home-result-copy');
+        const compassHomeOptions = document.getElementById('compass-home-options');
+        const compassHomeStorage = {
+            get() { try { return window.localStorage.getItem('advaita-compass'); } catch (_) { return null; } },
+            set(value) { try { window.localStorage.setItem('advaita-compass', value); } catch (_) {} },
+        };
+        const normalizeCompassHomeKey = (key) => Object.prototype.hasOwnProperty.call(compassHomeData, key) ? key : 'values';
+        const applyCompassHome = (key) => {
+            const selected = normalizeCompassHomeKey(key);
+            const item = compassHomeData[selected];
+            compassHomeButtons.forEach((button) => {
+                const active = button.dataset.compassHome === selected;
+                button.classList.toggle('is-active', active);
+                button.setAttribute('aria-pressed', String(active));
+            });
+            if (compassHomeScore) compassHomeScore.textContent = item.score;
+            if (compassHomeTitle) compassHomeTitle.textContent = item.title;
+            if (compassHomeCopy) compassHomeCopy.textContent = item.copy;
+            if (compassHomeOptions) compassHomeOptions.setAttribute('aria-label', 'Choose your discovery intention');
+            compassHomeStorage.set(selected);
+        };
+        compassHomeButtons.forEach((button) => button.addEventListener('click', () => applyCompassHome(button.dataset.compassHome)));
+        applyCompassHome(compassHomeStorage.get() || 'values');
 
         const reveals = document.querySelectorAll('.reveal-home');
         if (!('IntersectionObserver' in window) || reduceMotion.matches) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/match_provider.dart';
 import '../../providers/chat_provider.dart';
@@ -79,11 +80,58 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 // ============ HOME TAB ============
-class _HomeTab extends StatelessWidget {
+class _HomeTab extends StatefulWidget {
   const _HomeTab();
 
   @override
+  State<_HomeTab> createState() => _HomeTabState();
+}
+
+class _HomeTabState extends State<_HomeTab> {
+  static const _compassPreferenceKey = 'advaita-compass-index';
+  int _compassIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCompassPreference();
+  }
+
+  Future<void> _loadCompassPreference() async {
+    try {
+      final preferences = await SharedPreferences.getInstance();
+      final savedIndex = preferences.getInt(_compassPreferenceKey);
+      if (!mounted || savedIndex == null || savedIndex < 0 || savedIndex >= _compassItems.length) return;
+      setState(() => _compassIndex = savedIndex);
+    } catch (_) {
+      // The compass remains usable with its in-memory default if storage is unavailable.
+    }
+  }
+
+  void _selectCompass(int index) {
+    setState(() => _compassIndex = index);
+    _saveCompassPreference(index);
+  }
+
+  Future<void> _saveCompassPreference(int index) async {
+    try {
+      final preferences = await SharedPreferences.getInstance();
+      await preferences.setInt(_compassPreferenceKey, index);
+    } catch (_) {
+      // Preference persistence is optional; the current selection still works.
+    }
+  }
+
+  static const _compassItems = [
+    {'icon': Icons.favorite_rounded, 'title': 'Shared values', 'subtitle': 'Life, family, and outlook', 'score': '92', 'copy': 'Start with the details that shape everyday life.'},
+    {'icon': Icons.accessibility_new_rounded, 'title': 'Accessibility', 'subtitle': 'Be understood, fully', 'score': '88', 'copy': 'Keep accessibility and communication visible from the beginning.'},
+    {'icon': Icons.hourglass_bottom_rounded, 'title': 'Your pace', 'subtitle': 'No pressure, ever', 'score': '96', 'copy': 'Choose a thoughtful introduction without pressure or timers.'},
+  ];
+
+  @override
   Widget build(BuildContext context) {
+    final compass = _compassItems[_compassIndex];
+    final disableAnimations = MediaQuery.maybeOf(context)?.disableAnimations ?? false;
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -156,6 +204,16 @@ class _HomeTab extends StatelessWidget {
                   ],
                 ),
               ),
+            ),
+          ),
+
+          // Connection Compass: a calm, explainable discovery signal.
+          SliverToBoxAdapter(
+            child: _ConnectionCompass(
+              selectedIndex: _compassIndex,
+              items: _compassItems,
+              disableAnimations: disableAnimations,
+              onSelected: _selectCompass,
             ),
           ),
 
@@ -234,6 +292,125 @@ class _HomeTab extends StatelessWidget {
                 ),
               );
             },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ConnectionCompass extends StatelessWidget {
+  final int selectedIndex;
+  final List<Map<String, Object>> items;
+  final bool disableAnimations;
+  final ValueChanged<int> onSelected;
+
+  const _ConnectionCompass({required this.selectedIndex, required this.items, required this.disableAnimations, required this.onSelected});
+
+  Widget _buildOptionCard(BuildContext context, int index) {
+    final item = items[index];
+    final active = index == selectedIndex;
+    return Semantics(
+      button: true,
+      selected: active,
+      label: item['title'] as String,
+      child: InkWell(
+        onTap: () => onSelected(index),
+        borderRadius: BorderRadius.circular(16),
+        child: AnimatedContainer(
+          duration: disableAnimations ? Duration.zero : const Duration(milliseconds: 260),
+          constraints: const BoxConstraints(minHeight: 102),
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: active ? AppColors.goldLight.withOpacity(0.2) : Colors.white.withOpacity(0.07),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: active ? AppColors.goldLight : Colors.white24),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(item['icon'] as IconData, color: AppColors.goldLight, size: 19),
+              const SizedBox(height: 16),
+              Text(item['title'] as String, style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w700)),
+              const SizedBox(height: 3),
+              Text(item['subtitle'] as String, style: const TextStyle(color: Colors.white60, fontSize: 9, height: 1.2)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final selected = items[selectedIndex];
+    return Container(
+      margin: const EdgeInsets.fromLTRB(16, 4, 16, 20),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [AppColors.primaryDark, AppColors.primary, AppColors.primaryLight],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(28),
+        border: Border.all(color: AppColors.goldLight.withOpacity(0.3)),
+        boxShadow: [BoxShadow(color: AppColors.primary.withOpacity(0.2), blurRadius: 28, offset: const Offset(0, 14))],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.explore_rounded, color: AppColors.goldLight, size: 18),
+              const SizedBox(width: 8),
+              Text('YOUR DISCOVERY SIGNAL', style: TextStyle(color: AppColors.goldLight.withOpacity(0.9), fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 1.4)),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text('Meet with intention.', style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: AppColors.background, fontSize: 30)),
+          const SizedBox(height: 5),
+          const Text('Set the lens for your discovery. Choose what matters most today and keep your next introduction focused on what feels right.', style: TextStyle(color: Colors.white70, fontSize: 12, height: 1.45)),
+          const SizedBox(height: 18),
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final cards = List.generate(items.length, (index) => _buildOptionCard(context, index));
+              if (constraints.maxWidth < 380) {
+                return Column(
+                  children: cards.map((card) => Padding(padding: const EdgeInsets.only(bottom: 7), child: card)).toList(),
+                );
+              }
+              return Row(
+                children: List.generate(cards.length, (index) => Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(right: index == cards.length - 1 ? 0 : 7),
+                    child: cards[index],
+                  ),
+                )),
+              );
+            },
+          ),
+          const SizedBox(height: 14),
+          Semantics(
+            liveRegion: true,
+            label: '${selected['title']} — ${selected['score']} out of 100. ${selected['copy']}',
+            child: AnimatedSwitcher(
+              duration: disableAnimations ? Duration.zero : const Duration(milliseconds: 260),
+              child: Row(
+                key: ValueKey(selectedIndex),
+                children: [
+                  Container(
+                    width: 46,
+                    height: 46,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: AppColors.goldLight)),
+                    child: Text(selected['score'] as String, style: const TextStyle(color: AppColors.goldLight, fontSize: 16, fontWeight: FontWeight.w700)),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(child: Text(selected['copy'] as String, style: const TextStyle(color: Colors.white70, fontSize: 11, height: 1.35))),
+                ],
+              ),
+            ),
           ),
         ],
       ),

@@ -86,6 +86,27 @@ body{font-family:'Plus Jakarta Sans','Noto Sans Kannada',sans-serif;background:v
 
 /* FLOAT */
 .float{animation:float 6s ease-in-out infinite}
+/* CONNECTION COMPASS */
+.connection-compass{position:relative;overflow:hidden;background:linear-gradient(125deg,#2a1526 0%,#54234c 58%,#6d2f63 100%);color:#fbf7f1;isolation:isolate}
+.connection-compass::before{content:'';position:absolute;inset:-35%;z-index:-1;background:radial-gradient(circle at 78% 18%,rgba(231,207,161,.25),transparent 28%),radial-gradient(circle at 14% 100%,rgba(232,104,143,.18),transparent 32%);animation:compass-breathe 10s ease-in-out infinite alternate}
+@keyframes compass-breathe{from{transform:scale(1) rotate(0deg)}to{transform:scale(1.12) rotate(5deg)}}
+.compass-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:2rem;align-items:center}
+.compass-kicker{color:#e7cfa1;font-size:.65rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
+.compass-title{font-size:clamp(2rem,4vw,3.6rem);line-height:.95;font-weight:500}
+.compass-copy{color:rgba(251,247,241,.7);font-size:.82rem;line-height:1.6;max-width:30rem}
+.compass-options{display:grid;grid-template-columns:repeat(3,1fr);gap:.65rem}
+.compass-option{min-height:112px;padding:1rem;border:1px solid rgba(255,255,255,.18);border-radius:20px;background:rgba(255,255,255,.07);color:rgba(255,255,255,.72);text-align:left;cursor:pointer;transition:transform .3s cubic-bezier(.22,1,.36,1),background .3s ease,border-color .3s ease}
+.compass-option:hover{transform:translateY(-4px);background:rgba(255,255,255,.13);border-color:rgba(231,207,161,.6)}
+.compass-option.is-active{background:linear-gradient(145deg,rgba(231,207,161,.25),rgba(255,255,255,.1));border-color:#e7cfa1;color:#fff;box-shadow:0 14px 30px rgba(20,8,20,.18)}
+.compass-option i{display:block;color:#e7cfa1;font-size:1.15rem;margin-bottom:.7rem}
+.compass-option strong{display:block;font-size:.72rem;line-height:1.15}
+.compass-option small{display:block;color:rgba(255,255,255,.56);font-size:.62rem;line-height:1.35;margin-top:.35rem}
+.compass-result{display:flex;align-items:center;gap:1rem;margin-top:1rem;padding:1rem 1.1rem;border:1px solid rgba(255,255,255,.16);border-radius:18px;background:rgba(20,8,20,.18)}
+.compass-ring{width:48px;height:48px;border:1px solid #e7cfa1;border-radius:50%;display:grid;place-items:center;color:#e7cfa1;font:500 1.15rem 'Fraunces',serif;flex:0 0 auto}
+.compass-result strong{display:block;font-size:.82rem}.compass-result span{display:block;color:rgba(255,255,255,.62);font-size:.7rem;margin-top:.2rem}
+@media (max-width:760px){.compass-grid{grid-template-columns:1fr;gap:1.5rem}.compass-options{gap:.45rem}.compass-option{padding:.8rem;min-height:104px}}
+@media (prefers-reduced-motion:reduce){.connection-compass::before{animation:none}.compass-option:hover,.compass-option.is-active{transform:none}}
+
 /* HERO VIDEO EXPERIENCE */
 .hero-media-tile{min-height:420px;background:#2a1526;position:relative;isolation:isolate;overflow:hidden}
 .hero-media-tile .hero-poster,.hero-media-tile video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block}
@@ -148,6 +169,7 @@ body{font-family:'Plus Jakarta Sans','Noto Sans Kannada',sans-serif;background:v
       </div>
     </a>
     <div class="hidden lg:flex items-center gap-7 text-[13px] font-semibold text-ink/70">
+      <a href="#compass" class="underline-anim en">Compass</a><a href="#compass" class="underline-anim kn">ನಿಮ್ಮ ದಿಕ್ಕು</a>
       <a href="#profiles" class="underline-anim en">Profiles</a><a href="#profiles" class="underline-anim kn">ಪ್ರೊಫೈಲ್</a>
       <a href="#communities" class="underline-anim en">Communities</a><a href="#communities" class="underline-anim kn">ಸಮುದಾಯ</a>
       <a href="#safety" class="underline-anim en">Safety</a><a href="#safety" class="underline-anim kn">ಸುರಕ್ಷತೆ</a>
@@ -164,6 +186,7 @@ body{font-family:'Plus Jakarta Sans','Noto Sans Kannada',sans-serif;background:v
   </nav>
   <div id="mobileMenu" class="mobile-menu lg:hidden max-w-6xl mx-auto mt-2 glass rounded-2xl">
     <div class="p-4 grid gap-1.5">
+      <a href="#compass" onclick="toggleMobileMenu()" class="rounded-xl px-4 py-3 text-sm font-semibold text-ink/80 hover:bg-white/60"><span class="en">Connection Compass</span><span class="kn">ಸಂಪರ್ಕ ದಿಕ್ಸೂಚಿ</span></a>
       <a href="#profiles" onclick="toggleMobileMenu()" class="rounded-xl px-4 py-3 text-sm font-semibold text-ink/80 hover:bg-white/60"><span class="en">Profiles</span><span class="kn">ಪ್ರೊಫೈಲ್‌ಗಳು</span></a>
       <a href="#communities" onclick="toggleMobileMenu()" class="rounded-xl px-4 py-3 text-sm font-semibold text-ink/80 hover:bg-white/60"><span class="en">Communities</span><span class="kn">ಸಮುದಾಯಗಳು</span></a>
       <a href="#safety" onclick="toggleMobileMenu()" class="rounded-xl px-4 py-3 text-sm font-semibold text-ink/80 hover:bg-white/60"><span class="en">Safety & Privacy</span><span class="kn">ಸುರಕ್ಷತೆ</span></a>
@@ -229,6 +252,26 @@ body{font-family:'Plus Jakarta Sans','Noto Sans Kannada',sans-serif;background:v
           <button class="hero-media-toggle" id="previewHeroVideoToggle" type="button" aria-controls="previewHeroVideo" aria-label="Pause hero video" aria-pressed="false"><i class="fas fa-pause text-xs" aria-hidden="true"></i></button>
         </div>
       </div>
+
+      <!-- CONNECTION COMPASS: a calm, explainable discovery signal -->
+      <section class="lg:col-span-12 connection-compass bento rounded-[30px] p-6 sm:p-8" id="compass" data-r data-d="3" aria-labelledby="compassTitle">
+        <div class="compass-grid">
+          <div>
+            <p class="compass-kicker"><span class="en">Your discovery signal</span><span class="kn">ನಿಮ್ಮ ಸಂಪರ್ಕ ದಿಕ್ಕು</span></p>
+            <h2 class="display compass-title mt-3" id="compassTitle"><span class="en">Meet with intention.</span><span class="kn">ಉದ್ದೇಶದೊಂದಿಗೆ ಭೇಟಿ.</span></h2>
+            <p class="compass-copy mt-4"><span class="en">Set the lens for your discovery. Choose what matters most today and keep your next introduction focused on what feels right.</span><span class="kn">ನಿಮ್ಮ ಸಂಪರ್ಕದ ದಿಕ್ಕನ್ನು ಆರಿಸಿ. ಇಂದು ಮುಖ್ಯವಾದುದನ್ನು ಆಯ್ಕೆ ಮಾಡಿ, ಸರಿಯಾದ ಪರಿಚಯದ ಮೇಲೆ ಗಮನವಿರಲಿ.</span></p>
+            <div class="compass-result" aria-live="polite"><div class="compass-ring" id="compassScore">92</div><div><strong><span class="en" id="compassResultTitleEn">Values first</span><span class="kn" id="compassResultTitleKn">ಮೌಲ್ಯಗಳು ಮೊದಲು</span></strong><span><span class="en" id="compassResultCopyEn">Start with the details that shape everyday life.</span><span class="kn" id="compassResultCopyKn">ದೈನಂದಿನ ಜೀವನವನ್ನು ರೂಪಿಸುವ ವಿವರಗಳಿಂದ ಪ್ರಾರಂಭಿಸಿ.</span></span></div></div>
+          </div>
+          <div>
+            <p class="text-[10px] tracking-[.16em] uppercase text-white/45 mb-3"><span class="en">What should guide your next introduction?</span><span class="kn">ನಿಮ್ಮ ಮುಂದಿನ ಪರಿಚಯಕ್ಕೆ ಏನು ದಾರಿ ತೋರಿಸಬೇಕು?</span></p>
+            <div class="compass-options" id="compassOptions" role="group" aria-label="Choose your discovery intention">
+              <button class="compass-option is-active" type="button" data-compass="values" aria-pressed="true"><i class="fas fa-heart-pulse" aria-hidden="true"></i><strong><span class="en">Shared values</span><span class="kn">ಹಂಚಿದ ಮೌಲ್ಯಗಳು</span></strong><small><span class="en">Life, family, and outlook</span><span class="kn">ಜೀವನ ಮತ್ತು ಕುಟುಂಬ</span></small></button>
+              <button class="compass-option" type="button" data-compass="access" aria-pressed="false"><i class="fas fa-universal-access" aria-hidden="true"></i><strong><span class="en">Accessibility</span><span class="kn">ಸುಲಭ ಪ್ರವೇಶ</span></strong><small><span class="en">Be understood, fully</span><span class="kn">ಸಂಪೂರ್ಣವಾಗಿ ಅರ್ಥವಾಗಿರಿ</span></small></button>
+              <button class="compass-option" type="button" data-compass="pace" aria-pressed="false"><i class="fas fa-hourglass-half" aria-hidden="true"></i><strong><span class="en">Your pace</span><span class="kn">ನಿಮ್ಮ ವೇಗ</span></strong><small><span class="en">No pressure, ever</span><span class="kn">ಯಾವ ಒತ್ತಡವೂ ಇಲ್ಲ</span></small></button>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <!-- Stat tiles -->
       <div class="lg:col-span-3 bento ink-card rounded-[28px] p-6 text-porcelain flex flex-col justify-center min-h-[150px]" data-r>
@@ -534,6 +577,43 @@ if(previewHeroVideo&&previewHeroVideoToggle&&previewHeroVideoStatus){
   syncHeroAudioControl();
 }
 
+// Connection Compass: a local, explainable discovery preference.
+const compassData={
+  values:{score:'92',titleEn:'Values first',titleKn:'ಮೌಲ್ಯಗಳು ಮೊದಲು',copyEn:'Start with the details that shape everyday life.',copyKn:'ದೈನಂದಿನ ಜೀವನವನ್ನು ರೂಪಿಸುವ ವಿವರಗಳಿಂದ ಪ್ರಾರಂಭಿಸಿ.'},
+  access:{score:'88',titleEn:'Designed for understanding',titleKn:'ಅರ್ಥಮಾಡಿಕೊಳ್ಳಲು ವಿನ್ಯಾಸ',copyEn:'Keep accessibility and communication visible from the beginning.',copyKn:'ಆರಂಭದಿಂದಲೇ ಸುಲಭ ಪ್ರವೇಶ ಮತ್ತು ಸಂವಹನವನ್ನು ಗಮನದಲ್ಲಿಡಿ.'},
+  pace:{score:'96',titleEn:'At your pace',titleKn:'ನಿಮ್ಮ ವೇಗದಲ್ಲಿ',copyEn:'Choose a thoughtful introduction without pressure or timers.',copyKn:'ಯಾವುದೇ ಒತ್ತಡ ಅಥವಾ ಸಮಯ ಮಿತಿಯಿಲ್ಲದೆ ಪರಿಚಯವನ್ನು ಆರಿಸಿ.'}
+};
+const compassButtons=document.querySelectorAll('[data-compass]');
+const compassScore=document.getElementById('compassScore');
+const compassResultTitleEn=document.getElementById('compassResultTitleEn');
+const compassResultTitleKn=document.getElementById('compassResultTitleKn');
+const compassResultCopyEn=document.getElementById('compassResultCopyEn');
+const compassResultCopyKn=document.getElementById('compassResultCopyKn');
+const compassOptions=document.getElementById('compassOptions');
+const compassStorage={
+  get(){try{return window.localStorage.getItem('advaita-compass')}catch(_){return null}},
+  set(value){try{window.localStorage.setItem('advaita-compass',value)}catch(_){}
+  }
+};
+const normalizeCompassKey=key=>Object.prototype.hasOwnProperty.call(compassData,key)?key:'values';
+const applyCompass=key=>{
+  const selected=normalizeCompassKey(key),item=compassData[selected];
+  compassButtons.forEach(button=>{
+    const active=button.dataset.compass===selected;
+    button.classList.toggle('is-active',active);
+    button.setAttribute('aria-pressed',String(active));
+  });
+  if(compassScore)compassScore.textContent=item.score;
+  if(compassResultTitleEn)compassResultTitleEn.textContent=item.titleEn;
+  if(compassResultTitleKn)compassResultTitleKn.textContent=item.titleKn;
+  if(compassResultCopyEn)compassResultCopyEn.textContent=item.copyEn;
+  if(compassResultCopyKn)compassResultCopyKn.textContent=item.copyKn;
+  if(compassOptions)compassOptions.setAttribute('aria-label',document.body.classList.contains('lang-kn')?'ನಿಮ್ಮ ಸಂಪರ್ಕದ ದಿಕ್ಕನ್ನು ಆರಿಸಿ':'Choose your discovery intention');
+  compassStorage.set(selected);
+};
+compassButtons.forEach(button=>button.addEventListener('click',()=>applyCompass(button.dataset.compass)));
+applyCompass(compassStorage.get()||'values');
+
 // Cursor glow (desktop, fine pointer only)
 const cglow=document.getElementById('cglow');
 if(cglow&&window.matchMedia('(pointer:fine)').matches&&!reduceMotion){
@@ -578,6 +658,7 @@ function applyLang(lang){
   document.body.classList.toggle('lang-kn',kn);
   document.body.classList.toggle('lang-en',!kn);
   document.documentElement.lang=kn?'kn':'en';
+  if(typeof applyCompass==='function')applyCompass(compassStorage.get()||'values');
   document.getElementById('langBtn')?.setAttribute('aria-pressed',String(kn));
   localStorage.setItem('advaita-language',lang);
 }

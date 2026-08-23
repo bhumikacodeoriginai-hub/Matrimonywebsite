@@ -201,11 +201,11 @@ body{font-family:'Plus Jakarta Sans','Noto Sans Kannada',sans-serif;background:v
         </div>
       </div>
 
-      <!-- Cinematic video tile: poster remains visible when remote video is unavailable -->
+      <!-- Cinematic video tile: local MP4 with a poster fallback if playback is unavailable -->
       <div class="lg:col-span-4 bento hero-media-tile rounded-[34px] group" data-r data-d="2">
         <img class="hero-poster" src="media/hero-poster.svg" alt="A joyful couple celebrating together" loading="eager">
         <video id="previewHeroVideo" autoplay muted loop playsinline preload="auto" poster="media/hero-poster.svg" aria-describedby="previewHeroVideoDescription">
-          <source src="https://videos.pexels.com/video-files/853801/853801-hd_1920_1080_30fps.mp4" type="video/mp4">
+          <source src="media/advaithamatrimony.mp4" type="video/mp4">
           <track kind="descriptions" src="media/hero-video-description.vtt" srclang="en" label="Video description">
         </video>
         <span id="previewHeroVideoDescription" class="sr-only">A quiet cinematic moment of a couple walking together in warm light.</span>

@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Advaita Matrimony - India's most inclusive matrimonial platform">
+    <title>Advaita Matrimony - Find Your Perfect Match</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { 50: '#eff6ff', 100: '#dbeafe', 200: '#bfdbfe', 300: '#93c5fd', 400: '#60a5fa', 500: '#3b82f6', 600: '#1e40af', 700: '#1e3a8a', 800: '#1e2d6d', 900: '#0f1b4d' },
+                        accent: { 50: '#fdf4ff', 100: '#fae8ff', 200: '#f5d0fe', 300: '#f0abfc', 400: '#e879f9', 500: '#d946ef', 600: '#c026d3', 700: '#a21caf' },
+                        gold: { 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706' },
+                        rose: { 400: '#fb7185', 500: '#f43f5e', 600: '#e11d48' },
+                    },
+                    fontFamily: { 'poppins': ['Poppins', 'sans-serif'], 'playfair': ['Playfair Display', 'serif'] },
+                    animation: {
+                        'float': 'float 3s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'slide-up': 'slideUp 0.6s ease-out',
+                        'fade-in': 'fadeIn 0.8s ease-out',
+                    },
+                    keyframes: {
+                        float: { '0%, 100%': { transform: 'translateY(0px)' }, '50%': { transform: 'translateY(-10px)' } },
+                        slideUp: { '0%': { transform: 'translateY(30px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } },
+                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- AOS Animation Library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #1e40af 0%, #7c3aed 50%, #c026d3 100%); }
+        .glass-card { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); }
+        .text-gradient { background: linear-gradient(135deg, #1e40af, #c026d3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-8px); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15); }
+        .hero-pattern { background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); }
+        .scroll-smooth { scroll-behavior: smooth; }
+        @keyframes heartbeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .heartbeat { animation: heartbeat 1.5s ease-in-out infinite; }
+        .counter { font-variant-numeric: tabular-nums; }
+    </style>
+</head>
+<body class="scroll-smooth bg-gray-50">
+
+<!-- ============ NAVIGATION ============ -->
+<nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" id="navbar">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-20">
+            <a href="/" class="flex items-center space-x-3">
+                <div class="w-12 h-12 rounded-xl gradient-bg flex items-center justify-center shadow-lg">
+                    <span class="text-white font-bold text-xl font-playfair">A</span>
+                </div>
+                <div>
+                    <span class="text-2xl font-bold text-gradient font-playfair">Advaita</span>
+                    <span class="block text-xs text-gray-500 -mt-1">Matrimony</span>
+                </div>
+            </a>
+
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#home" class="text-gray-700 hover:text-primary-600 font-medium transition-colors">Home</a>
+                <a href="#communities" class="text-gray-700 hover:text-primary-600 font-medium transition-colors">Communities</a>
+                <a href="#how-it-works" class="text-gray-700 hover:text-primary-600 font-medium transition-colors">How It Works</a>
+                <a href="#features" class="text-gray-700 hover:text-primary-600 font-medium transition-colors">Features</a>
+                <a href="#plans" class="text-gray-700 hover:text-primary-600 font-medium transition-colors">Plans</a>
+                <a href="#stories" class="text-gray-700 hover:text-primary-600 font-medium transition-colors">Success Stories</a>
+            </div>
+
+            <div class="hidden md:flex items-center space-x-4">
+                <a href="login.html" class="text-primary-600 hover:text-primary-700 font-semibold transition-colors">Sign In</a>
+                <a href="register.html" class="px-6 py-2.5 gradient-bg text-white rounded-full font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">Register Free</a>
+            </div>
+
+            <button class="md:hidden text-gray-700" id="mobileMenuBtn">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="md:hidden hidden bg-white shadow-2xl rounded-b-3xl" id="mobileMenu">
+        <div class="px-4 py-6 space-y-4">
+            <a href="#home" class="block py-2 text-gray-700 font-medium">Home</a>
+            <a href="#communities" class="block py-2 text-gray-700 font-medium">Communities</a>
+            <a href="#how-it-works" class="block py-2 text-gray-700 font-medium">How It Works</a>
+            <a href="#features" class="block py-2 text-gray-700 font-medium">Features</a>
+            <a href="#plans" class="block py-2 text-gray-700 font-medium">Plans</a>
+            <div class="pt-4 border-t flex space-x-4">
+                <a href="login.html" class="flex-1 text-center py-2.5 border-2 border-primary-600 text-primary-600 rounded-full font-semibold">Sign In</a>
+                <a href="register.html" class="flex-1 text-center py-2.5 gradient-bg text-white rounded-full font-semibold">Register</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- ============ HERO SECTION ============ -->
+<section id="home" class="relative min-h-screen flex items-center gradient-bg hero-pattern overflow-hidden">
+    <div class="absolute top-20 left-10 w-72 h-72 bg-white/5 rounded-full blur-3xl animate-pulse-slow"></div>
+    <div class="absolute bottom-20 right-10 w-96 h-96 bg-accent-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
+    <div class="absolute top-40 right-40 w-4 h-4 bg-gold-400 rounded-full animate-float"></div>
+    <div class="absolute bottom-40 left-40 w-3 h-3 bg-rose-400 rounded-full animate-float" style="animation-delay: 1s;"></div>
+    <div class="absolute top-60 left-1/3 w-2 h-2 bg-white/40 rounded-full animate-float" style="animation-delay: 2s;"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 relative z-10">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+            <div class="text-white animate-slide-up">
+                <div class="inline-flex items-center px-4 py-2 bg-white/10 rounded-full backdrop-blur-sm mb-6">
+                    <span class="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></span>
+                    <span class="text-sm font-medium">India's #1 Inclusive Matrimony Platform</span>
+                </div>
+
+                <h1 class="text-5xl lg:text-7xl font-bold font-playfair leading-tight mb-6">
+                    Where Every
+                    <span class="block text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-rose-400">
+                        Heart Finds
+                    </span>
+                    Its Match
+                </h1>
+
+                <p class="text-xl text-white/80 mb-8 leading-relaxed max-w-lg">
+                    We celebrate uniqueness. Whether you're differently-abled, living with vitiligo, or seeking a life partner from the general community — your perfect match is here.
+                </p>
+
+                <!-- Quick Search Form -->
+                <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 mb-8">
+                    <h3 class="text-lg font-semibold mb-4">Quick Search</h3>
+                    <form class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <select class="px-4 py-3 rounded-xl bg-white/20 border border-white/30 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-gold-400">
+                            <option value="" class="text-gray-900">I'm looking for</option>
+                            <option value="female" class="text-gray-900">Bride</option>
+                            <option value="male" class="text-gray-900">Groom</option>
+                        </select>
+                        <select class="px-4 py-3 rounded-xl bg-white/20 border border-white/30 text-white focus:outline-none focus:ring-2 focus:ring-gold-400">
+                            <option value="" class="text-gray-900">Age From</option>
+                            <option value="18" class="text-gray-900">18 yrs</option>
+                            <option value="21" class="text-gray-900">21 yrs</option>
+                            <option value="25" class="text-gray-900">25 yrs</option>
+                            <option value="30" class="text-gray-900">30 yrs</option>
+                            <option value="35" class="text-gray-900">35 yrs</option>
+                            <option value="40" class="text-gray-900">40 yrs</option>
+                        </select>
+                        <select class="px-4 py-3 rounded-xl bg-white/20 border border-white/30 text-white focus:outline-none focus:ring-2 focus:ring-gold-400">
+                            <option value="" class="text-gray-900">Age To</option>
+                            <option value="25" class="text-gray-900">25 yrs</option>
+                            <option value="30" class="text-gray-900">30 yrs</option>
+                            <option value="35" class="text-gray-900">35 yrs</option>
+                            <option value="40" class="text-gray-900">40 yrs</option>
+                            <option value="50" class="text-gray-900">50 yrs</option>
+                            <option value="60" class="text-gray-900">60 yrs</option>
+                        </select>
+                        <select class="px-4 py-3 rounded-xl bg-white/20 border border-white/30 text-white focus:outline-none focus:ring-2 focus:ring-gold-400">
+                            <option value="" class="text-gray-900">Community</option>
+                            <option value="general" class="text-gray-900">General</option>
+                            <option value="physically_challenged" class="text-gray-900">Divyangjan</option>
+                            <option value="hearing_speech_impaired" class="text-gray-900">Hearing & Speech</option>
+                            <option value="vitiligo_skin_condition" class="text-gray-900">Vitiligo</option>
+                        </select>
+                        <button type="button" class="col-span-2 md:col-span-4 py-3.5 bg-gradient-to-r from-gold-500 to-rose-500 text-white rounded-xl font-bold text-lg hover:from-gold-600 hover:to-rose-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02]">
+                            <i class="fas fa-search mr-2"></i> Search Profiles
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Stats -->
+                <div class="flex space-x-8">
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-gold-400 counter" id="stat1">10,000+</div>
+                        <div class="text-sm text-white/60">Active Profiles</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-rose-400 counter">500+</div>
+                        <div class="text-sm text-white/60">Successful Matches</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-green-400 counter">100%</div>
+                        <div class="text-sm text-white/60">Verified Profiles</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side Visual -->
+            <div class="hidden lg:block relative">
+                <div class="relative">
+                    <div class="absolute -top-10 -left-10 bg-white rounded-2xl shadow-2xl p-4 animate-float z-20">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check-circle text-green-500 text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-900 text-sm">Profile Verified!</p>
+                                <p class="text-xs text-gray-500">UDID Certificate Approved</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="absolute -bottom-5 -right-5 bg-white rounded-2xl shadow-2xl p-4 animate-float z-20" style="animation-delay: 1.5s;">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 bg-rose-100 rounded-full flex items-center justify-center heartbeat">
+                                <i class="fas fa-heart text-rose-500 text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-900 text-sm">New Match Found!</p>
+                                <p class="text-xs text-gray-500">95% Compatible</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="absolute top-1/2 -right-16 bg-white rounded-2xl shadow-2xl p-3 animate-float z-20" style="animation-delay: 0.7s;">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-shield-alt text-blue-500 text-sm"></i>
+                            </div>
+                            <p class="font-medium text-gray-900 text-xs">100% Safe</p>
+                        </div>
+                    </div>
+
+                    <!-- Main Card -->
+                    <div class="w-full h-[500px] bg-gradient-to-br from-white/20 to-white/5 rounded-3xl backdrop-blur-sm border border-white/20 flex items-center justify-center overflow-hidden">
+                        <div class="text-center p-8">
+                            <div class="w-32 h-32 mx-auto mb-6 bg-gradient-to-br from-gold-400 to-rose-500 rounded-full flex items-center justify-center shadow-2xl">
+                                <i class="fas fa-heart text-white text-5xl"></i>
+                            </div>
+                            <h3 class="text-white text-2xl font-bold mb-2">Find Love Today</h3>
+                            <p class="text-white/70">Join thousands who found their soulmate</p>
+                            <div class="mt-6 flex justify-center space-x-2">
+                                <div class="w-10 h-10 bg-rose-300/50 rounded-full border-2 border-white/50"></div>
+                                <div class="w-10 h-10 bg-blue-300/50 rounded-full border-2 border-white/50 -ml-3"></div>
+                                <div class="w-10 h-10 bg-green-300/50 rounded-full border-2 border-white/50 -ml-3"></div>
+                                <div class="w-10 h-10 bg-purple-300/50 rounded-full border-2 border-white/50 -ml-3 flex items-center justify-center text-white text-xs font-bold">+9K</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="absolute bottom-0 left-0 right-0">
+        <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 120L60 105C120 90 240 60 360 45C480 30 600 30 720 37.5C840 45 960 60 1080 67.5C1200 75 1320 75 1380 75L1440 75V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="#f9fafb"/>
+        </svg>
+    </div>
+</section>
+
+<!-- ============ CATEGORIES SECTION ============ -->
+<section id="communities" class="py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16" data-aos="fade-up">
+            <span class="inline-block px-4 py-1.5 bg-primary-100 text-primary-600 rounded-full text-sm font-semibold mb-4">OUR COMMUNITIES</span>
+            <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 font-playfair mb-4">
+                Everyone Deserves <span class="text-gradient">Love</span>
+            </h2>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">We serve diverse communities with specialized matching, privacy, and support systems.</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="card-hover bg-white rounded-3xl p-8 shadow-lg border border-gray-100 text-center" data-aos="fade-up" data-aos-delay="100">
+                <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-rose-100 to-rose-200 rounded-2xl flex items-center justify-center">
+                    <i class="fas fa-heart text-3xl text-rose-500"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">General Matrimony</h3>
+                <p class="text-gray-600 text-sm leading-relaxed">Standard matrimonial profiles for the general public. Find your perfect life partner.</p>
+                <a href="register.html" class="inline-block mt-6 px-6 py-2.5 bg-rose-50 text-rose-600 rounded-full font-semibold text-sm hover:bg-rose-100 transition-colors">
+                    Register Now <i class="fas fa-arrow-right ml-1"></i>
+                </a>
+            </div>
+
+            <div class="card-hover bg-white rounded-3xl p-8 shadow-lg border border-gray-100 text-center" data-aos="fade-up" data-aos-delay="200">
+                <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center">
+                    <i class="fas fa-wheelchair text-3xl text-blue-600"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">Divyangjan (PwD)</h3>
+                <p class="text-gray-600 text-sm leading-relaxed">Physically Challenged / Locomotor Impairment community. UDID verified profiles.</p>
+                <a href="register.html" class="inline-block mt-6 px-6 py-2.5 bg-blue-50 text-blue-600 rounded-full font-semibold text-sm hover:bg-blue-100 transition-colors">
+                    Register Now <i class="fas fa-arrow-right ml-1"></i>
+                </a>
+            </div>
+
+            <div class="card-hover bg-white rounded-3xl p-8 shadow-lg border border-gray-100 text-center" data-aos="fade-up" data-aos-delay="300">
+                <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-green-100 to-green-200 rounded-2xl flex items-center justify-center">
+                    <i class="fas fa-sign-language text-3xl text-green-600"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">Hearing & Speech</h3>
+                <p class="text-gray-600 text-sm leading-relaxed">Dedicated profiles for Deaf & Mute community with sign language support indicators.</p>
+                <a href="register.html" class="inline-block mt-6 px-6 py-2.5 bg-green-50 text-green-600 rounded-full font-semibold text-sm hover:bg-green-100 transition-colors">
+                    Register Now <i class="fas fa-arrow-right ml-1"></i>
+                </a>
+            </div>
+
+            <div class="card-hover bg-white rounded-3xl p-8 shadow-lg border border-gray-100 text-center" data-aos="fade-up" data-aos-delay="400">
+                <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-purple-100 to-purple-200 rounded-2xl flex items-center justify-center">
+                    <i class="fas fa-star text-3xl text-purple-600"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">Vitiligo Community</h3>
+                <p class="text-gray-600 text-sm leading-relaxed">Specialized profiles for those with Vitiligo / Leucoderma. Embrace your uniqueness.</p>
+                <a href="register.html" class="inline-block mt-6 px-6 py-2.5 bg-purple-50 text-purple-600 rounded-full font-semibold text-sm hover:bg-purple-100 transition-colors">
+                    Register Now <i class="fas fa-arrow-right ml-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section id="how-it-works" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16" data-aos="fade-up">
+            <span class="inline-block px-4 py-1.5 bg-gold-400/20 text-gold-600 rounded-full text-sm font-semibold mb-4">SIMPLE PROCESS</span>
+            <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 font-playfair mb-4">
+                How It <span class="text-gradient">Works</span>
+            </h2>
+            <p class="text-xl text-gray-600">Four simple steps to find your life partner</p>
+        </div>
+
+        <div class="grid md:grid-cols-4 gap-8 relative">
+            <div class="hidden md:block absolute top-24 left-[12%] right-[12%] h-0.5 bg-gradient-to-r from-primary-200 via-accent-200 to-rose-200"></div>
+
+            <div class="text-center relative" data-aos="fade-up" data-aos-delay="100">
+                <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-primary-500 to-primary-700 rounded-full flex items-center justify-center shadow-lg relative z-10">
+                    <i class="fas fa-user-plus text-2xl text-white"></i>
+                </div>
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2 w-8 h-8 bg-gold-400 rounded-full flex items-center justify-center text-white font-bold text-sm z-20">1</div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2">Register Free</h3>
+                <p class="text-gray-600 text-sm">Create your profile with OTP verification. It's 100% free to register.</p>
+            </div>
+
+            <div class="text-center relative" data-aos="fade-up" data-aos-delay="200">
+                <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-accent-500 to-accent-700 rounded-full flex items-center justify-center shadow-lg relative z-10">
+                    <i class="fas fa-id-card text-2xl text-white"></i>
+                </div>
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2 w-8 h-8 bg-gold-400 rounded-full flex items-center justify-center text-white font-bold text-sm z-20">2</div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2">Complete Profile</h3>
+                <p class="text-gray-600 text-sm">Add your details, photos, and partner preferences for better matches.</p>
+            </div>
+
+            <div class="text-center relative" data-aos="fade-up" data-aos-delay="300">
+                <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-rose-500 to-rose-700 rounded-full flex items-center justify-center shadow-lg relative z-10">
+                    <i class="fas fa-search-plus text-2xl text-white"></i>
+                </div>
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2 w-8 h-8 bg-gold-400 rounded-full flex items-center justify-center text-white font-bold text-sm z-20">3</div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2">Search & Connect</h3>
+                <p class="text-gray-600 text-sm">Use advanced filters to find compatible matches and send interests.</p>
+            </div>
+
+            <div class="text-center relative" data-aos="fade-up" data-aos-delay="400">
+                <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-gold-500 to-gold-600 rounded-full flex items-center justify-center shadow-lg relative z-10">
+                    <i class="fas fa-ring text-2xl text-white"></i>
+                </div>
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2 w-8 h-8 bg-gold-400 rounded-full flex items-center justify-center text-white font-bold text-sm z-20">4</div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2">Get Married!</h3>
+                <p class="text-gray-600 text-sm">Connect, chat, and take the relationship forward towards a beautiful union.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ FEATURES SECTION ============ -->
+<section id="features" class="py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16" data-aos="fade-up">
+            <span class="inline-block px-4 py-1.5 bg-green-100 text-green-700 rounded-full text-sm font-semibold mb-4">WHY CHOOSE US</span>
+            <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 font-playfair mb-4">
+                Safety & Privacy <span class="text-gradient">First</span>
+            </h2>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">Your security is our top priority. Advanced protection features built into every profile.</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="card-hover bg-white rounded-2xl p-8 shadow-sm border border-gray-100" data-aos="fade-up">
+                <div class="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center mb-5">
+                    <i class="fas fa-shield-alt text-2xl text-blue-600"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2">Photo Privacy Controls</h3>
+                <p class="text-gray-600 text-sm">Your photos are blurred for non-members. Grant access only to people you trust via Request Access.</p>
+            </div>
+
+            <div class="card-hover bg-white rounded-2xl p-8 shadow-sm border border-gray-100" data-aos="fade-up" data-aos-delay="100">
+                <div class="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-5">
+                    <i class="fas fa-image text-2xl text-purple-600"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2">Watermarked Photos</h3>
+                <p class="text-gray-600 text-sm">All photos are automatically watermarked with "Advaita Matrimony" to prevent misuse.</p>
+            </div>
+
+            <div class="card-hover bg-white rounded-2xl p-8 shadow-sm border border-gray-100" data-aos="fade-up" data-aos-delay="200">
+                <div class="w-14 h-14 bg-rose-100 rounded-xl flex items-center justify-center mb-5">
+                    <i class="fas fa-phone-slash text-2xl text-rose-600"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2">Contact Masking</h3>
+                <p class="text-gray-600 text-sm">Phone numbers and email IDs are hidden from free users. Only premium members can view contacts.</p>
+            </div>
+
+            <div class="card-hover bg-white rounded-2xl p-8 shadow-sm border border-gray-100" data-aos="fade-up" data-aos-delay="300">
+                <div class="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center mb-5">
+                    <i class="fas fa-user-check text-2xl text-green-600"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2">Manual Verification</h3>
+                <p class="text-gray-600 text-sm">Every profile is manually reviewed and approved by our admin team before going live.</p>
+            </div>
+
+            <div class="card-hover bg-white rounded-2xl p-8 shadow-sm border border-gray-100" data-aos="fade-up" data-aos-delay="400">
+                <div class="w-14 h-14 bg-amber-100 rounded-xl flex items-center justify-center mb-5">
+                    <i class="fas fa-certificate text-2xl text-amber-600"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2">UDID Verification</h3>
+                <p class="text-gray-600 text-sm">Disability certificate / UDID verification for authenticity and trust within the differently-abled community.</p>
+            </div>
+
+            <div class="card-hover bg-white rounded-2xl p-8 shadow-sm border border-gray-100" data-aos="fade-up" data-aos-delay="500">
+                <div class="w-14 h-14 bg-indigo-100 rounded-xl flex items-center justify-center mb-5">
+                    <i class="fas fa-mobile-alt text-2xl text-indigo-600"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2">Screenshot Protection</h3>
+                <p class="text-gray-600 text-sm">Screenshot restrictions on mobile app to prevent unauthorized saving of profile photos.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ PRICING SECTION ============ -->
+<section id="plans" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16" data-aos="fade-up">
+            <span class="inline-block px-4 py-1.5 bg-accent-100 text-accent-700 rounded-full text-sm font-semibold mb-4">MEMBERSHIP PLANS</span>
+            <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 font-playfair mb-4">
+                Choose Your <span class="text-gradient">Plan</span>
+            </h2>
+            <p class="text-xl text-gray-600">Affordable plans to help you connect with your perfect match</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            <!-- Silver -->
+            <div class="card-hover bg-white rounded-3xl p-8 shadow-lg border-2 border-gray-100 relative" data-aos="fade-up">
+                <div class="text-center">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-2xl flex items-center justify-center">
+                        <i class="fas fa-star text-2xl text-gray-500"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900">Silver</h3>
+                    <p class="text-gray-500 text-sm mt-1">3 Months</p>
+                    <div class="mt-4">
+                        <span class="text-4xl font-bold text-gray-900">₹999</span>
+                        <span class="text-gray-500 line-through ml-2">₹1,999</span>
+                    </div>
+                    <span class="inline-block mt-2 px-3 py-1 bg-green-50 text-green-700 rounded-full text-xs font-bold">50% OFF</span>
+                </div>
+                <ul class="mt-8 space-y-3">
+                    <li class="flex items-center text-sm text-gray-600"><i class="fas fa-check text-green-500 mr-3 w-4"></i>View 50 Profiles</li>
+                    <li class="flex items-center text-sm text-gray-600"><i class="fas fa-check text-green-500 mr-3 w-4"></i>Send 30 Interests</li>
+                    <li class="flex items-center text-sm text-gray-600"><i class="fas fa-check text-green-500 mr-3 w-4"></i>Chat with Matches</li>
+                    <li class="flex items-center text-sm text-gray-600"><i class="fas fa-check text-green-500 mr-3 w-4"></i>View Contact Details</li>
+                    <li class="flex items-center text-sm text-gray-400"><i class="fas fa-times text-gray-300 mr-3 w-4"></i>Profile Highlight</li>
+                    <li class="flex items-center text-sm text-gray-400"><i class="fas fa-times text-gray-300 mr-3 w-4"></i>Video Call</li>
+                </ul>
+                <button class="w-full mt-8 py-3 border-2 border-primary-600 text-primary-600 rounded-xl font-bold hover:bg-primary-50 transition-colors">Get Started</button>
+            </div>
+
+            <!-- Gold (Popular) -->
+            <div class="card-hover bg-gradient-to-b from-primary-600 to-primary-800 rounded-3xl p-8 shadow-2xl relative transform md:scale-105" data-aos="fade-up" data-aos-delay="100">
+                <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                    <span class="px-6 py-1.5 bg-gradient-to-r from-gold-400 to-gold-500 text-white text-sm font-bold rounded-full shadow-lg">MOST POPULAR</span>
+                </div>
+                <div class="text-center text-white">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-white/20 rounded-2xl flex items-center justify-center">
+                        <i class="fas fa-crown text-2xl text-gold-400"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold">Gold</h3>
+                    <p class="text-white/70 text-sm mt-1">6 Months</p>
+                    <div class="mt-4">
+                        <span class="text-4xl font-bold">₹1,999</span>
+                        <span class="text-white/50 line-through ml-2">₹3,999</span>
+                    </div>
+                    <span class="inline-block mt-2 px-3 py-1 bg-white/20 text-white rounded-full text-xs font-bold">50% OFF</span>
+                </div>
+                <ul class="mt-8 space-y-3">
+                    <li class="flex items-center text-sm text-white/90"><i class="fas fa-check text-gold-400 mr-3 w-4"></i>Unlimited Profile Views</li>
+                    <li class="flex items-center text-sm text-white/90"><i class="fas fa-check text-gold-400 mr-3 w-4"></i>Send 100 Interests</li>
+                    <li class="flex items-center text-sm text-white/90"><i class="fas fa-check text-gold-400 mr-3 w-4"></i>Unlimited Chat</li>
+                    <li class="flex items-center text-sm text-white/90"><i class="fas fa-check text-gold-400 mr-3 w-4"></i>View All Contact Details</li>
+                    <li class="flex items-center text-sm text-white/90"><i class="fas fa-check text-gold-400 mr-3 w-4"></i>Profile Highlight</li>
+                    <li class="flex items-center text-sm text-white/90"><i class="fas fa-check text-gold-400 mr-3 w-4"></i>Priority Support</li>
+                </ul>
+                <button class="w-full mt-8 py-3 bg-gradient-to-r from-gold-400 to-gold-500 text-gray-900 rounded-xl font-bold hover:from-gold-500 hover:to-gold-600 transition-all shadow-lg">Get Gold Plan</button>
+            </div>
+
+            <!-- Platinum -->
+            <div class="card-hover bg-white rounded-3xl p-8 shadow-lg border-2 border-gray-100 relative" data-aos="fade-up" data-aos-delay="200">
+                <div class="text-center">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-purple-100 to-rose-100 rounded-2xl flex items-center justify-center">
+                        <i class="fas fa-gem text-2xl text-purple-600"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900">Platinum</h3>
+                    <p class="text-gray-500 text-sm mt-1">12 Months</p>
+                    <div class="mt-4">
+                        <span class="text-4xl font-bold text-gray-900">₹2,999</span>
+                        <span class="text-gray-500 line-through ml-2">₹5,999</span>
+                    </div>
+                    <span class="inline-block mt-2 px-3 py-1 bg-green-50 text-green-700 rounded-full text-xs font-bold">50% OFF</span>
+                </div>
+                <ul class="mt-8 space-y-3">
+                    <li class="flex items-center text-sm text-gray-600"><i class="fas fa-check text-green-500 mr-3 w-4"></i>Everything in Gold</li>
+                    <li class="flex items-center text-sm text-gray-600"><i class="fas fa-check text-green-500 mr-3 w-4"></i>Unlimited Interests</li>
+                    <li class="flex items-center text-sm text-gray-600"><i class="fas fa-check text-green-500 mr-3 w-4"></i>Video Call Feature</li>
+                    <li class="flex items-center text-sm text-gray-600"><i class="fas fa-check text-green-500 mr-3 w-4"></i>Profile Boost (2x)</li>
+                    <li class="flex items-center text-sm text-gray-600"><i class="fas fa-check text-green-500 mr-3 w-4"></i>Relationship Manager</li>
+                    <li class="flex items-center text-sm text-gray-600"><i class="fas fa-check text-green-500 mr-3 w-4"></i>VIP Badge</li>
+                </ul>
+                <button class="w-full mt-8 py-3 gradient-bg text-white rounded-xl font-bold hover:opacity-90 transition-opacity shadow-lg">Get Platinum</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ SUCCESS STORIES ============ -->
+<section id="stories" class="py-20 gradient-bg hero-pattern relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="text-center mb-16" data-aos="fade-up">
+            <span class="inline-block px-4 py-1.5 bg-white/20 text-white rounded-full text-sm font-semibold mb-4">SUCCESS STORIES</span>
+            <h2 class="text-4xl lg:text-5xl font-bold text-white font-playfair mb-4">
+                Love Stories That <span class="text-gold-400">Inspire</span>
+            </h2>
+            <p class="text-xl text-white/80">Real couples who found their soulmate through Advaita Matrimony</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="glass-card rounded-3xl p-8 text-white" data-aos="fade-up">
+                <div class="flex items-center mb-4">
+                    <div class="flex -space-x-3">
+                        <div class="w-12 h-12 bg-rose-300 rounded-full border-2 border-white flex items-center justify-center"><i class="fas fa-user text-white text-sm"></i></div>
+                        <div class="w-12 h-12 bg-blue-300 rounded-full border-2 border-white flex items-center justify-center"><i class="fas fa-user text-white text-sm"></i></div>
+                    </div>
+                    <div class="ml-4">
+                        <p class="font-semibold">Priya & Rohit</p>
+                        <p class="text-sm text-white/60">Married in 2024</p>
+                    </div>
+                </div>
+                <p class="text-white/80 italic leading-relaxed">"We both have locomotor disability. Finding someone who truly understood was impossible until Advaita. Now we're happily married! Thank you for this beautiful platform."</p>
+                <div class="flex text-gold-400 mt-4">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-3xl p-8 text-white" data-aos="fade-up" data-aos-delay="100">
+                <div class="flex items-center mb-4">
+                    <div class="flex -space-x-3">
+                        <div class="w-12 h-12 bg-green-300 rounded-full border-2 border-white flex items-center justify-center"><i class="fas fa-user text-white text-sm"></i></div>
+                        <div class="w-12 h-12 bg-purple-300 rounded-full border-2 border-white flex items-center justify-center"><i class="fas fa-user text-white text-sm"></i></div>
+                    </div>
+                    <div class="ml-4">
+                        <p class="font-semibold">Anita & Suresh</p>
+                        <p class="text-sm text-white/60">Married in 2024</p>
+                    </div>
+                </div>
+                <p class="text-white/80 italic leading-relaxed">"Living with vitiligo, I always felt judged on other platforms. Advaita gave me a safe space where I was accepted for who I am. Found my soulmate here!"</p>
+                <div class="flex text-gold-400 mt-4">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-3xl p-8 text-white" data-aos="fade-up" data-aos-delay="200">
+                <div class="flex items-center mb-4">
+                    <div class="flex -space-x-3">
+                        <div class="w-12 h-12 bg-yellow-300 rounded-full border-2 border-white flex items-center justify-center"><i class="fas fa-user text-white text-sm"></i></div>
+                        <div class="w-12 h-12 bg-rose-300 rounded-full border-2 border-white flex items-center justify-center"><i class="fas fa-user text-white text-sm"></i></div>
+                    </div>
+                    <div class="ml-4">
+                        <p class="font-semibold">Deepak & Meena</p>
+                        <p class="text-sm text-white/60">Married in 2024</p>
+                    </div>
+                </div>
+                <p class="text-white/80 italic leading-relaxed">"Both of us are hearing impaired. The sign language filter and video chat feature made it so easy to connect. Advaita truly understands our community."</p>
+                <div class="flex text-gold-400 mt-4">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ DOWNLOAD APP CTA ============ -->
+<section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-gradient-to-r from-primary-700 via-accent-600 to-rose-600 rounded-3xl p-12 relative overflow-hidden" data-aos="fade-up">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+            <div class="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2"></div>
+
+            <div class="relative z-10 grid md:grid-cols-2 gap-12 items-center">
+                <div class="text-white">
+                    <h2 class="text-4xl font-bold font-playfair mb-4">Download Our App</h2>
+                    <p class="text-lg text-white/80 mb-8">Get the Advaita Matrimony app for a seamless matchmaking experience on the go. Available for Android & iOS.</p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#" class="inline-flex items-center px-6 py-3 bg-black rounded-xl hover:bg-gray-900 transition-colors">
+                            <i class="fab fa-google-play text-2xl mr-3 text-white"></i>
+                            <div>
+                                <p class="text-xs text-gray-400">GET IT ON</p>
+                                <p class="text-sm font-semibold text-white">Google Play</p>
+                            </div>
+                        </a>
+                        <a href="#" class="inline-flex items-center px-6 py-3 bg-black rounded-xl hover:bg-gray-900 transition-colors">
+                            <i class="fab fa-apple text-2xl mr-3 text-white"></i>
+                            <div>
+                                <p class="text-xs text-gray-400">Download on the</p>
+                                <p class="text-sm font-semibold text-white">App Store</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="hidden md:flex justify-center">
+                    <div class="w-48 h-80 bg-white/20 rounded-[2.5rem] border-4 border-white/30 backdrop-blur-sm flex items-center justify-center relative">
+                        <div class="absolute top-3 left-1/2 -translate-x-1/2 w-16 h-4 bg-black/30 rounded-full"></div>
+                        <div class="text-center text-white">
+                            <i class="fas fa-heart text-4xl mb-3 text-rose-300"></i>
+                            <p class="font-semibold text-sm">Advaita</p>
+                            <p class="text-xs text-white/70">Matrimony</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ CTA SECTION ============ -->
+<section class="py-20 bg-gray-50">
+    <div class="max-w-4xl mx-auto px-4 text-center" data-aos="fade-up">
+        <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 font-playfair mb-6">
+            Ready to Find Your <span class="text-gradient">Perfect Match?</span>
+        </h2>
+        <p class="text-xl text-gray-600 mb-10">Join thousands of happy couples. Registration is 100% FREE.</p>
+        <a href="register.html" class="inline-block px-10 py-4 gradient-bg text-white rounded-full font-bold text-lg shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300">
+            <i class="fas fa-heart mr-2 heartbeat"></i> Register Now - It's Free!
+        </a>
+        <p class="mt-6 text-gray-500 text-sm"><i class="fas fa-lock mr-1"></i> Your information is 100% secure and private</p>
+    </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="bg-gray-900 text-gray-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+            <div>
+                <div class="flex items-center space-x-3 mb-6">
+                    <div class="w-12 h-12 rounded-xl gradient-bg flex items-center justify-center">
+                        <span class="text-white font-bold text-xl font-playfair">A</span>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-bold text-white font-playfair">Advaita</span>
+                        <span class="block text-xs text-gray-400 -mt-1">Matrimony</span>
+                    </div>
+                </div>
+                <p class="text-gray-400 leading-relaxed mb-6">India's most inclusive matrimonial platform. We believe everyone deserves love, companionship, and a beautiful partnership.</p>
+                <div class="flex space-x-4">
+                    <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-primary-600 transition-colors"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-pink-600 transition-colors"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-blue-500 transition-colors"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-green-600 transition-colors"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-red-600 transition-colors"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="text-white font-semibold text-lg mb-6">Quick Links</h4>
+                <ul class="space-y-3">
+                    <li><a href="#" class="hover:text-primary-400 transition-colors"><i class="fas fa-chevron-right text-xs mr-2 text-primary-400"></i>About Us</a></li>
+                    <li><a href="#how-it-works" class="hover:text-primary-400 transition-colors"><i class="fas fa-chevron-right text-xs mr-2 text-primary-400"></i>How It Works</a></li>
+                    <li><a href="#stories" class="hover:text-primary-400 transition-colors"><i class="fas fa-chevron-right text-xs mr-2 text-primary-400"></i>Success Stories</a></li>
+                    <li><a href="#plans" class="hover:text-primary-400 transition-colors"><i class="fas fa-chevron-right text-xs mr-2 text-primary-400"></i>Membership Plans</a></li>
+                    <li><a href="#" class="hover:text-primary-400 transition-colors"><i class="fas fa-chevron-right text-xs mr-2 text-primary-400"></i>Contact Us</a></li>
+                    <li><a href="#" class="hover:text-primary-400 transition-colors"><i class="fas fa-chevron-right text-xs mr-2 text-primary-400"></i>FAQ</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-white font-semibold text-lg mb-6">Our Communities</h4>
+                <ul class="space-y-3">
+                    <li><a href="#" class="hover:text-primary-400 transition-colors"><i class="fas fa-heart text-xs mr-2 text-rose-400"></i>General Matrimony</a></li>
+                    <li><a href="#" class="hover:text-primary-400 transition-colors"><i class="fas fa-wheelchair text-xs mr-2 text-blue-400"></i>Divyangjan (PwD)</a></li>
+                    <li><a href="#" class="hover:text-primary-400 transition-colors"><i class="fas fa-sign-language text-xs mr-2 text-green-400"></i>Hearing & Speech Impaired</a></li>
+                    <li><a href="#" class="hover:text-primary-400 transition-colors"><i class="fas fa-star text-xs mr-2 text-purple-400"></i>Vitiligo Community</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-white font-semibold text-lg mb-6">Legal & Support</h4>
+                <ul class="space-y-3">
+                    <li><a href="#" class="hover:text-primary-400 transition-colors"><i class="fas fa-file-contract text-xs mr-2 text-primary-400"></i>Terms & Conditions</a></li>
+                    <li><a href="#" class="hover:text-primary-400 transition-colors"><i class="fas fa-shield-alt text-xs mr-2 text-primary-400"></i>Privacy Policy</a></li>
+                    <li><a href="#" class="hover:text-primary-400 transition-colors"><i class="fas fa-undo text-xs mr-2 text-primary-400"></i>Refund Policy</a></li>
+                </ul>
+                <div class="mt-6 p-4 bg-gray-800 rounded-xl">
+                    <p class="text-sm text-gray-400 mb-2">Need Help?</p>
+                    <p class="text-white font-semibold"><i class="fas fa-phone mr-2"></i>+91 XXXXX XXXXX</p>
+                    <p class="text-primary-400 text-sm mt-1"><i class="fas fa-envelope mr-2"></i>support@advaitamatrimony.com</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-500 text-sm">&copy; 2024 Advaita Matrimony. All rights reserved.</p>
+                <div class="flex items-center space-x-4 mt-4 md:mt-0">
+                    <span class="text-gray-500 text-sm">Secure Payments:</span>
+                    <span class="text-xs bg-blue-900/50 text-blue-300 px-2 py-1 rounded">Razorpay</span>
+                    <span class="text-xs bg-purple-900/50 text-purple-300 px-2 py-1 rounded">PhonePe</span>
+                    <span class="text-xs bg-green-900/50 text-green-300 px-2 py-1 rounded">UPI</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<script>
+    AOS.init({ duration: 800, easing: 'ease-out-cubic', once: true });
+
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+        const navbar = document.getElementById('navbar');
+        if (window.scrollY > 50) {
+            navbar.classList.add('bg-white/95', 'backdrop-blur-lg', 'shadow-lg');
+        } else {
+            navbar.classList.remove('bg-white/95', 'backdrop-blur-lg', 'shadow-lg');
+        }
+    });
+
+    // Mobile menu toggle
+    document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+        document.getElementById('mobileMenu').classList.toggle('hidden');
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                document.getElementById('mobileMenu')?.classList.add('hidden');
+            }
+        });
+    });
+</script>
+</body>
+</html>

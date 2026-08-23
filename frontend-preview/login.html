@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Advaita Matrimony</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #1e40af 0%, #7c3aed 50%, #c026d3 100%); }
+    </style>
+</head>
+<body class="min-h-screen gradient-bg flex items-center justify-center p-4">
+    <div class="w-full max-w-md">
+        <!-- Logo -->
+        <div class="text-center mb-8">
+            <div class="w-20 h-20 mx-auto bg-white rounded-2xl shadow-2xl flex items-center justify-center mb-4">
+                <span class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-purple-600">A</span>
+            </div>
+            <h1 class="text-3xl font-bold text-white">Welcome Back</h1>
+            <p class="text-white/70 mt-2">Sign in to find your perfect match</p>
+        </div>
+
+        <!-- Login Card -->
+        <div class="bg-white rounded-3xl shadow-2xl p-8">
+            <h2 class="text-xl font-semibold text-gray-900 mb-2">Login with Mobile OTP</h2>
+            <p class="text-sm text-gray-500 mb-6">Enter your registered mobile number</p>
+
+            <!-- Phone Input -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Mobile Number</label>
+                <div class="relative">
+                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium">+91</span>
+                    <input type="tel" maxlength="10" placeholder="Enter 10-digit mobile" 
+                        class="w-full pl-14 pr-4 py-3.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+                        id="phoneInput">
+                </div>
+            </div>
+
+            <!-- OTP Input (Hidden initially) -->
+            <div class="mb-4 hidden" id="otpSection">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Enter 6-digit OTP</label>
+                <div class="flex gap-2 justify-between">
+                    <input type="text" maxlength="1" class="w-12 h-14 text-center text-xl font-bold border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500" oninput="moveNext(this, 1)">
+                    <input type="text" maxlength="1" class="w-12 h-14 text-center text-xl font-bold border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500" oninput="moveNext(this, 2)">
+                    <input type="text" maxlength="1" class="w-12 h-14 text-center text-xl font-bold border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500" oninput="moveNext(this, 3)">
+                    <input type="text" maxlength="1" class="w-12 h-14 text-center text-xl font-bold border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500" oninput="moveNext(this, 4)">
+                    <input type="text" maxlength="1" class="w-12 h-14 text-center text-xl font-bold border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500" oninput="moveNext(this, 5)">
+                    <input type="text" maxlength="1" class="w-12 h-14 text-center text-xl font-bold border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="flex justify-between mt-3">
+                    <button class="text-sm text-blue-600 hover:underline" onclick="changeNumber()">Change Number</button>
+                    <button class="text-sm text-blue-600 hover:underline">Resend OTP</button>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button class="w-full py-3.5 bg-gradient-to-r from-blue-700 to-purple-600 text-white rounded-xl font-bold text-lg mt-4 hover:from-blue-800 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-[1.02]" 
+                    id="submitBtn" onclick="handleSubmit()">
+                Send OTP
+            </button>
+
+            <!-- Divider -->
+            <div class="flex items-center my-6">
+                <div class="flex-1 h-px bg-gray-200"></div>
+                <span class="px-4 text-sm text-gray-400">or login with</span>
+                <div class="flex-1 h-px bg-gray-200"></div>
+            </div>
+
+            <!-- Email Login -->
+            <button class="w-full py-3 border-2 border-gray-200 rounded-xl font-medium text-gray-700 hover:bg-gray-50 transition-colors flex items-center justify-center">
+                <i class="fas fa-envelope mr-2 text-gray-500"></i> Login with Email & Password
+            </button>
+        </div>
+
+        <!-- Register Link -->
+        <div class="text-center mt-6">
+            <p class="text-white/70">Don't have an account?</p>
+            <a href="register.html" class="text-white font-bold text-lg hover:underline">Register Free →</a>
+        </div>
+    </div>
+
+    <script>
+        let otpSent = false;
+
+        function handleSubmit() {
+            const phone = document.getElementById('phoneInput').value;
+            if (!otpSent) {
+                if (phone.length === 10) {
+                    document.getElementById('otpSection').classList.remove('hidden');
+                    document.getElementById('submitBtn').textContent = 'Verify & Login';
+                    document.getElementById('phoneInput').disabled = true;
+                    otpSent = true;
+                    alert('OTP Sent to +91 ' + phone + ' (Demo)');
+                } else {
+                    alert('Please enter a valid 10-digit mobile number');
+                }
+            } else {
+                alert('✅ Login Successful! (Demo)\nRedirecting to Dashboard...');
+                window.location.href = 'index.html';
+            }
+        }
+
+        function changeNumber() {
+            document.getElementById('otpSection').classList.add('hidden');
+            document.getElementById('submitBtn').textContent = 'Send OTP';
+            document.getElementById('phoneInput').disabled = false;
+            document.getElementById('phoneInput').focus();
+            otpSent = false;
+        }
+
+        function moveNext(el, index) {
+            if (el.value.length === 1) {
+                const inputs = el.parentElement.querySelectorAll('input');
+                if (inputs[index]) inputs[index].focus();
+            }
+        }
+    </script>
+</body>
+</html>

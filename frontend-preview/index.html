@@ -15,6 +15,7 @@
     *{-webkit-font-smoothing:antialiased}
     html{scroll-behavior:smooth}
     body{font-family:'Plus Jakarta Sans','Noto Sans Kannada',sans-serif;background:#faf8f5;overflow-x:hidden}
+    :root{--ink:#0a0a0f;--violet:#7567ff;--pink:#ff6ca8;--cyan:#65e4ff}
 
     /* LANGUAGE TOGGLE */
     .lang-en .kn{display:none}
@@ -38,11 +39,42 @@
     .profile-track-reverse{animation-direction:reverse}
 
     /* PROFILE CARD */
-    .pcard{flex-shrink:0;width:260px;transition:all .5s cubic-bezier(.22,1,.36,1)}
-    .pcard:hover{transform:translateY(-12px) scale(1.03);box-shadow:0 30px 60px -15px rgba(0,0,0,.18)}
+    .pcard{flex-shrink:0;width:260px;transition:all .5s cubic-bezier(.22,1,.36,1);transform-style:preserve-3d;perspective:900px}
+    .pcard:hover{transform:translateY(-12px) scale(1.03) rotateX(2deg) rotateY(-2deg);box-shadow:0 30px 60px -15px rgba(0,0,0,.18)}
+    .pcard>div:first-child{transform:translateZ(12px)}
 
-    /* VIDEO OVERLAY */
-    .video-overlay{background:linear-gradient(180deg,rgba(10,10,15,.3)0%,rgba(10,10,15,.7)100%)}
+    /* 3D HERO STAGE */
+    .hero-stage{background:#0b0b13 url('https://images.unsplash.com/photo-1519741497674-611481863552?w=2000&auto=format&fit=crop&q=85') center/cover no-repeat}
+    .hero-stage .hero-content{text-align:left;max-width:1180px;padding-left:clamp(24px,5vw,72px);padding-right:clamp(24px,5vw,72px)}
+    .hero-stage .hero-content h1{max-width:700px}
+    .hero-stage .hero-content p{max-width:570px;margin-left:0}
+    .hero-stage .hero-content .flex{justify-content:flex-start}
+    .hero-stage #heroVideo{opacity:.32;filter:saturate(.72) contrast(1.08);transform:scale(1.04)}
+    .hero-stage .video-overlay{background:radial-gradient(circle at 74% 42%,rgba(109,92,255,.24),transparent 28%),linear-gradient(90deg,rgba(7,7,14,.97) 0%,rgba(7,7,14,.76) 46%,rgba(7,7,14,.46) 100%)}
+    .hero-stage::before{content:'';position:absolute;inset:0;z-index:1;opacity:.25;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:72px 72px;mask-image:linear-gradient(90deg,black,transparent 78%);pointer-events:none}
+    .hero-scene{position:absolute;z-index:4;right:4vw;top:50%;width:min(47vw,680px);height:min(47vw,680px);max-height:680px;transform:perspective(1400px) rotateX(var(--scene-y,0deg)) rotateY(var(--scene-x,0deg));transform-style:preserve-3d;pointer-events:none;transition:transform .3s cubic-bezier(.22,1,.36,1)}
+    .hero-scene::before{content:'';position:absolute;inset:10%;border:1px solid rgba(255,255,255,.12);border-radius:50%;box-shadow:0 0 0 32px rgba(117,103,255,.025),0 0 100px rgba(117,103,255,.22);transform:translateZ(-100px) rotateX(67deg);}
+    .hero-scene::after{content:'';position:absolute;left:50%;top:50%;width:75%;height:75%;border-radius:50%;background:radial-gradient(circle,rgba(117,103,255,.28),transparent 61%);filter:blur(32px);transform:translate(-50%,-50%) translateZ(-140px)}
+    .hero-orbit{position:absolute;inset:11%;border:1px solid rgba(255,255,255,.15);border-radius:50%;transform:rotateX(69deg) rotateZ(-18deg) translateZ(20px);box-shadow:0 0 36px rgba(101,228,255,.12);animation:orbit-spin 18s linear infinite}
+    .hero-orbit::before,.hero-orbit::after{content:'';position:absolute;width:14px;height:14px;border-radius:50%;background:var(--cyan);box-shadow:0 0 24px var(--cyan);top:50%;left:-7px;transform:translateY(-50%)}
+    .hero-orbit::after{background:var(--pink);box-shadow:0 0 24px var(--pink);top:auto;left:auto;right:20%;bottom:-7px}
+    .hero-orbit.two{inset:18%;border-color:rgba(255,108,168,.16);transform:rotateX(58deg) rotateY(22deg) translateZ(45px);animation-duration:24s;animation-direction:reverse}
+    .hero-core{position:absolute;left:50%;top:50%;width:42%;aspect-ratio:1;transform:translate(-50%,-50%) translateZ(90px);transform-style:preserve-3d;animation:core-float 5s ease-in-out infinite}
+    .hero-core::before{content:'';position:absolute;inset:12%;border-radius:34% 66% 58% 42% / 42% 38% 62% 58%;background:linear-gradient(145deg,rgba(255,255,255,.95),rgba(211,204,255,.74) 36%,rgba(117,103,255,.8));box-shadow:inset -20px -24px 44px rgba(63,44,165,.3),inset 12px 10px 25px rgba(255,255,255,.82),0 30px 70px rgba(48,35,132,.35);transform:rotate(28deg) rotateX(22deg) rotateY(-24deg);}
+    .hero-core::after{content:'A';position:absolute;inset:0;display:grid;place-items:center;color:#4338ca;font:700 90px/1 'Instrument Serif',serif;transform:translateZ(35px) rotate(-8deg);text-shadow:0 6px 12px rgba(67,56,202,.2)}
+    .hero-node{position:absolute;display:flex;align-items:center;gap:10px;padding:9px 12px 9px 9px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);border-radius:18px;color:#fff;backdrop-filter:blur(18px);box-shadow:0 18px 42px rgba(0,0,0,.22);transform-style:preserve-3d;animation:node-float 5.5s ease-in-out infinite}
+    .hero-node img{width:40px;height:40px;border-radius:13px;object-fit:cover;border:1px solid rgba(255,255,255,.4)}
+    .hero-node strong{display:block;font-size:11px;letter-spacing:-.02em}.hero-node span{display:block;font-size:9px;color:rgba(255,255,255,.58);margin-top:2px}
+    .hero-node.one{left:3%;top:28%;transform:translateZ(120px) rotateY(12deg)}
+    .hero-node.two{right:1%;bottom:21%;transform:translateZ(145px) rotateY(-10deg);animation-delay:-2.2s}
+    .hero-node.three{left:17%;bottom:6%;transform:translateZ(55px) rotateY(8deg);animation-delay:-3.4s}
+    .hero-badge-3d{position:absolute;right:14%;top:14%;display:flex;align-items:center;gap:7px;padding:8px 11px;border-radius:999px;color:#dffbff;font-size:9px;letter-spacing:.08em;text-transform:uppercase;background:rgba(28,211,238,.1);border:1px solid rgba(101,228,255,.3);transform:translateZ(180px) rotateZ(5deg);box-shadow:0 10px 32px rgba(101,228,255,.12);animation:node-float 6s ease-in-out infinite -1s}
+    .hero-badge-3d i{color:var(--cyan);font-size:8px}
+    @keyframes orbit-spin{to{transform:rotateX(69deg) rotateZ(342deg) translateZ(20px)}}
+    @keyframes core-float{0%,100%{transform:translate(-50%,-50%) translateZ(90px) rotateZ(-2deg)}50%{transform:translate(-50%,-54%) translateZ(125px) rotateZ(3deg)}}
+    @keyframes node-float{0%,100%{margin-top:0}50%{margin-top:-12px}}
+    @media (max-width:1100px){.hero-scene{right:-9vw;width:58vw;height:58vw;opacity:.72}.hero-stage .hero-content{max-width:670px;margin-right:auto;margin-left:4vw;text-align:left}.hero-stage .hero-content .flex{justify-content:flex-start}}
+    @media (max-width:720px){.hero-scene{right:-26vw;top:38%;width:90vw;height:90vw;opacity:.32}.hero-stage .hero-content{margin:0 auto;text-align:center}.hero-stage .hero-content p{margin-left:auto;margin-right:auto}.hero-stage .hero-content .flex{justify-content:center}.hero-node{transform:scale(.86)!important}.hero-core::after{font-size:64px}.hero-stage::before{mask-image:linear-gradient(180deg,black,transparent 80%)}}
 
     /* GRADIENT TEXT */
     .gt{background:linear-gradient(135deg,#4f46e5,#7c3aed 50%,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
@@ -80,6 +112,8 @@
         *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
         .profile-track{animation:none!important;transform:none!important;flex-wrap:wrap}
         .profile-track .pcard:nth-child(n+7){display:none}
+        .hero-scene{transform:none!important;transition:none!important}
+        .hero-orbit,.hero-core,.hero-node,.hero-badge-3d{animation:none!important}
     }
     @media (max-width:640px){
         .pcard{width:235px}
@@ -141,13 +175,34 @@
 </header>
 
 <!-- ====== HERO WITH VIDEO ====== -->
-<section class="relative min-h-screen flex items-center justify-center overflow-hidden" id="hero">
+<section class="hero-stage relative min-h-screen flex items-center justify-center overflow-hidden" id="hero">
     <!-- Video Background -->
     <video id="heroVideo" autoplay muted loop playsinline preload="metadata" poster="https://images.unsplash.com/photo-1519741497674-611481863552?w=2000&auto=format&fit=crop&q=85" class="absolute inset-0 w-full h-full object-cover" aria-label="A cinematic wedding celebration background video">
         <source src="https://assets.mixkit.co/videos/1222/1222-720.mp4" type="video/mp4">
     </video>
     <div class="absolute inset-0 video-overlay"></div>
     <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60"></div>
+
+    <!-- Decorative 3D match constellation. It is intentionally non-interactive so content and controls remain accessible. -->
+    <div id="heroScene" class="hero-scene" aria-hidden="true">
+        <div class="hero-orbit"></div>
+        <div class="hero-orbit two"></div>
+        <div class="hero-core"></div>
+        <div class="hero-badge-3d"><i class="fas fa-sparkles"></i><span class="en">Human-first matching</span><span class="kn">ಮನುಷ್ಯ ಕೇಂದ್ರಿತ ಜೋಡಿ</span></div>
+        <div class="hero-node one">
+            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&h=120&fit=crop&crop=face&auto=format&q=80" alt="">
+            <div><strong>Priya · 92%</strong><span class="en">Values aligned</span><span class="kn">ಮೌಲ್ಯಗಳು ಹೊಂದಿವೆ</span></div>
+        </div>
+        <div class="hero-node two">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&h=120&fit=crop&crop=face&auto=format&q=80" alt="">
+            <div><strong>Aditya · 88%</strong><span class="en">Kindred energy</span><span class="kn">ಒಂದೇ ಮನಸ್ಸು</span></div>
+        </div>
+        <div class="hero-node three">
+            <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=120&h=120&fit=crop&crop=face&auto=format&q=80" alt="">
+            <div><strong>Sneha · 96%</strong><span class="en">Shared dreams</span><span class="kn">ಹಂಚಿಕೊಂಡ ಕನಸುಗಳು</span></div>
+        </div>
+    </div>
+
     <div class="absolute bottom-8 right-6 z-20 flex items-center gap-2">
         <button id="videoToggle" type="button" class="video-control w-10 h-10 rounded-full text-white flex items-center justify-center hover:bg-white/25 transition-all" aria-label="Pause background video" aria-pressed="false"><i class="fas fa-pause text-xs"></i></button>
         <span class="video-control rounded-full px-3 py-2 text-[10px] text-white/80 en">Cinematic preview</span>
@@ -155,7 +210,7 @@
     </div>
 
     <!-- Content -->
-    <div class="relative z-10 max-w-5xl mx-auto px-6 text-center pt-28 pb-20">
+    <div class="hero-content relative z-10 max-w-5xl mx-auto px-6 text-center pt-28 pb-20">
         <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full mb-8" data-r>
             <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
             <span class="text-xs font-medium text-white/80 en">Trusted by 10,000+ families across India</span>
@@ -428,10 +483,20 @@
 </footer>
 
 <script>
-// Cursor
-const cd=document.getElementById('cd'),cr=document.getElementById('cr');let mx=0,my=0,rx=0,ry=0;
+// Cursor + one shared animation loop for cursor easing and the hero's 3D parallax.
+const cd=document.getElementById('cd'),cr=document.getElementById('cr'),hero=document.getElementById('hero'),scene=document.getElementById('heroScene');let mx=0,my=0,rx=0,ry=0,sceneX=0,sceneY=0,targetSceneX=0,targetSceneY=0;
+const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const finePointer=window.matchMedia('(pointer: fine)').matches;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;if(cd){cd.style.left=mx-4+'px';cd.style.top=my-4+'px'}});
-(function loop(){if(cr){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;cr.style.left=rx+'px';cr.style.top=ry+'px'}requestAnimationFrame(loop)})();
+if(scene&&hero&&!reduceMotion&&finePointer){
+    hero.addEventListener('pointermove',e=>{const bounds=hero.getBoundingClientRect();targetSceneX=Math.max(-1,Math.min(1,(e.clientX-bounds.left)/bounds.width*2-1))*7;targetSceneY=Math.max(-1,Math.min(1,(e.clientY-bounds.top)/bounds.height*2-1))*-5});
+    hero.addEventListener('pointerleave',()=>{targetSceneX=0;targetSceneY=0});
+}
+(function loop(){
+    if(cr){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;cr.style.left=rx+'px';cr.style.top=ry+'px'}
+    if(scene&&!reduceMotion&&finePointer){sceneX+=(targetSceneX-sceneX)*.06;sceneY+=(targetSceneY-sceneY)*.06;scene.style.setProperty('--scene-x',sceneX.toFixed(2)+'deg');scene.style.setProperty('--scene-y',sceneY.toFixed(2)+'deg')}
+    requestAnimationFrame(loop)
+})();
 
 // Reveal
 const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');io.unobserve(e.target)}})},{threshold:.08,rootMargin:'0px 0px -40px 0px'});

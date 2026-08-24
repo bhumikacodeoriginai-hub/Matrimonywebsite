@@ -48,3 +48,24 @@ npm run dev
 Legacy `/login.html` and `/register.html` URLs redirect to the new routes. The hero video is read from the tracked `frontend-preview/media/advaithamatrimony.mp4` file through `/api/media/advaithamatrimony.mp4`. The media route supports starting the app from either the repository root or `advaita-matrimony-next`; for a separate deployment, set `ADVAITA_MEDIA_DIR` to the directory containing the tracked media files. Keep the repository layout intact when running the Next app locally.
 
 Copy `.env.example` to `.env.local` when API integration is enabled. The frontend uses the Laravel API through the Next BFF and stores the session in an httpOnly cookie.
+
+## Local preview login
+
+For a local UI review only, copy `.env.example` to `.env.local` and set:
+
+```text
+NEXT_PUBLIC_ENABLE_PREVIEW_LOGIN=true
+NEXT_PUBLIC_PREVIEW_LOGIN_EMAIL=preview@advaita.test
+NEXT_PUBLIC_PREVIEW_LOGIN_PASSWORD=Advaita2026!
+```
+
+The login page shows a clearly labelled preview shortcut only when `NODE_ENV` is not `production`. It still calls the real Laravel password-login endpoint; it is not a frontend bypass. Create the account through the Laravel local/testing seed:
+
+```powershell
+cd ..\advaita-matrimony-web
+php artisan migrate:fresh --seed
+```
+
+Then open `/login` and choose **Use preview credentials**. The seed is guarded to `local` and `testing` environments and must never be used as a production account.
+
+The public homepage uses the tracked `/media/hero-poster.svg` poster and `/api/media/advaithamatrimony.mp4` video when the media route is available. It remains public and does not require a session.

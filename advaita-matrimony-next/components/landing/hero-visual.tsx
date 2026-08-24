@@ -104,6 +104,32 @@ export function HeroVisual() {
       <div className={`${styles.visualGlow} motion-decoration`} aria-hidden="true" />
 
       <div ref={stageRef} className={`${styles.visualStack} motion-parallax`}>
+        <div className={styles.mediaFrame}>
+          <video
+            className={styles.mediaVideo}
+            autoPlay={!reducedMotion}
+            muted
+            loop
+            playsInline
+            preload={reducedMotion ? 'none' : 'metadata'}
+            poster="/media/hero-poster.svg"
+            aria-label="Abstract Advaita Matrimony visual preview"
+          >
+            <source src="/api/media/advaithamatrimony.mp4" type="video/mp4" />
+            <track
+              kind="captions"
+              src="/api/media/hero-video-description.vtt"
+              srcLang="en"
+              label="Visual description"
+            />
+          </video>
+          <div className={styles.mediaScrim} aria-hidden="true" />
+          <div className={styles.mediaLabel}>
+            <span className={styles.mediaLabelDot} aria-hidden="true" />
+            <span>Designed around consent</span>
+          </div>
+        </div>
+
         {cards.map((card) => (
           <div key={card.title} className={`${styles.floatCard} ${card.className}`}>
             <div className={styles.floatHead}>

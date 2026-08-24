@@ -145,5 +145,55 @@ class DatabaseSeeder extends Seeder
         foreach ($settings as $setting) {
             SiteSetting::create($setting);
         }
+
+        // Development-only member account for reviewing the real web login flow.
+        // Never seed this account in production, and never use it for live data.
+        if (app()->environment('local', 'testing')) {
+            $preview = User::updateOrCreate(
+                ['email' => 'preview@advaita.test'],
+                [
+                    'name' => 'Advaita Preview Member',
+                    'phone' => '9000000000',
+                    'password' => Hash::make('Advaita2026!'),
+                    'gender' => 'female',
+                    'date_of_birth' => '1994-06-12',
+                    'role' => 'user',
+                    'profile_status' => 'approved',
+                    'phone_verified_at' => now(),
+                    'email_verified_at' => now(),
+                    'last_active_at' => now(),
+                    'is_online' => false,
+                ],
+            );
+
+            $preview->profile()->updateOrCreate(
+                ['user_id' => $preview->id],
+                [
+                    'profile_category' => 'general',
+                    'religion' => 'Hindu',
+                    'mother_tongue' => 'Kannada',
+                    'marital_status' => 'never_married',
+                    'highest_education' => 'Masters',
+                    'employed_in' => 'private',
+                    'occupation' => 'Product designer',
+                    'country' => 'India',
+                    'state' => 'Karnataka',
+                    'city' => 'Bengaluru',
+                    'about_me' => 'A local preview profile for checking the real Advaita member experience.',
+                    'hobbies' => ['Reading', 'Travel', 'Music'],
+                    'languages_known' => ['Kannada', 'English', 'Hindi'],
+                ],
+            );
+
+            $preview->partnerPreferences()->updateOrCreate(
+                ['user_id' => $preview->id],
+                [
+                    'min_age' => 26,
+                    'max_age' => 38,
+                    'preferred_states' => ['Karnataka', 'Tamil Nadu'],
+                    'accepted_categories' => ['general'],
+                ],
+            );
+        }
     }
 }

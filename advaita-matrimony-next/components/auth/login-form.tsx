@@ -13,9 +13,10 @@
  *  • Password — POST /api/auth/login, proxying `auth/login`, which accepts an
  *    email or a phone number.
  *
- * There is no demo mode and no hard-coded credential. The previous version of this
- * screen shipped `demo@advaita.test` / `Advaita2026!` printed on the page and
- * navigated to a dashboard full of invented data; both are gone.
+ * Production has no hard-coded credential and always uses the real Laravel API. A
+ * clearly labelled local preview account can be enabled only in non-production
+ * builds with NEXT_PUBLIC_ENABLE_PREVIEW_LOGIN=true; its values come from local
+ * environment variables and must be created by the Laravel local/testing seeder.
  *
  * ACCOUNT RECOVERY — the honest version
  * -------------------------------------
@@ -54,6 +55,8 @@ export interface LoginFormProps {
   redirectTo: string;
   /** Set when the member was bounced here by an expired session. */
   sessionExpired?: boolean;
+  /** Local-only preview values, never passed in production. */
+  previewCredentials?: { login: string; password: string };
 }
 
 interface AuthRouteResponse {
@@ -63,7 +66,7 @@ interface AuthRouteResponse {
   phone?: string;
 }
 
-export function LoginForm({ redirectTo, sessionExpired = false }: LoginFormProps) {
+export function LoginForm({ redirectTo, sessionExpired = false, previewCredentials }: LoginFormProps) {
   const router = useRouter();
 
   const [method, setMethod] = useState<Method>('otp');
@@ -244,6 +247,32 @@ export function LoginForm({ redirectTo, sessionExpired = false }: LoginFormProps
         <Alert tone="warning" title="You were signed out">
           Your session ended, which usually means it was signed out on another device. Sign in again to
           continue.
+        </Alert>
+      )}
+
+      {previewCredentials?.login && previewCredentials.password && (
+        <Alert
+          tone="info"
+          title="Local preview account"
+          actions={
+            <Button
+              variant="secondary"
+              size="sm"
+              icon="sparkle"
+              onClick={() => {
+                setMethod('password');
+                setPhase('entry');
+                setIdentifier(previewCredentials.login);
+                setPassword(previewCredentials.password);
+                clearErrors();
+              }}
+            >
+              Use preview credentials
+            </Button>
+          }
+        >
+          Development-only shortcut. It is available only when enabled in a non-production build and still
+          signs in through the real Laravel password endpoint.
         </Alert>
       )}
 

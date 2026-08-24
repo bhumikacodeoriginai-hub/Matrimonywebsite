@@ -51,6 +51,20 @@ export default async function LoginPage({
   }
 
   const { next, reason } = await searchParams;
+  const previewEnabled =
+    process.env.NODE_ENV !== 'production' && process.env.NEXT_PUBLIC_ENABLE_PREVIEW_LOGIN === 'true';
+  const previewCredentials = previewEnabled
+    ? {
+        login: process.env.NEXT_PUBLIC_PREVIEW_LOGIN_EMAIL ?? '',
+        password: process.env.NEXT_PUBLIC_PREVIEW_LOGIN_PASSWORD ?? '',
+      }
+    : undefined;
 
-  return <LoginForm redirectTo={safeRedirect(next)} sessionExpired={reason === 'expired'} />;
+  return (
+    <LoginForm
+      redirectTo={safeRedirect(next)}
+      sessionExpired={reason === 'expired'}
+      previewCredentials={previewCredentials}
+    />
+  );
 }

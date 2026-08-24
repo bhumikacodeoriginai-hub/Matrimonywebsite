@@ -116,6 +116,100 @@
   }
 }
 
+.focusPanel {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(280px, 1fr);
+  gap: var(--space-5);
+  align-items: stretch;
+  padding: var(--space-5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: linear-gradient(135deg, var(--surface) 0%, var(--surface-sunken) 100%);
+  box-shadow: var(--shadow-sm);
+}
+
+.focusIntro {
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  gap: var(--space-2);
+  padding: var(--space-2);
+}
+
+.focusKicker {
+  margin: 0;
+  color: var(--brand-text);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-extrabold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.focusTitle {
+  margin: 0;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-tight);
+}
+
+.focusBody {
+  max-width: 38ch;
+  margin: 0 0 var(--space-2);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+}
+
+.focusMetrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+.focusMetric {
+  display: grid;
+  align-content: center;
+  gap: var(--space-1);
+  min-width: 0;
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+.focusMetricLabel,
+.focusMetricHint {
+  color: var(--text-muted);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-bold);
+}
+
+.focusMetricValue {
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-medium);
+  line-height: 1;
+}
+
+@media (max-width: 880px) {
+  .focusPanel {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .focusIntro {
+    padding: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .focusMetrics {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* -------- Two-column bento -------- */
 .split {
   display: grid;

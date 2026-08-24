@@ -134,6 +134,41 @@ export default async function DashboardPage() {
         </Alert>
       )}
 
+      <section className={styles.focusPanel} aria-labelledby="focus-heading">
+        <div className={styles.focusIntro}>
+          <p className={styles.focusKicker}>Your focus</p>
+          <h2 id="focus-heading" className={styles.focusTitle}>
+            One thoughtful next move.
+          </h2>
+          <p className={styles.focusBody}>
+            Complete the step that makes it easier for the right people to understand you.
+          </p>
+          {actions[0] && (
+            <ButtonLink href={actions[0].href} variant="secondary" size="sm" trailingIcon="arrow-right">
+              {actions[0].label}
+            </ButtonLink>
+          )}
+        </div>
+
+        <div className={styles.focusMetrics}>
+          <div className={styles.focusMetric}>
+            <span className={styles.focusMetricLabel}>Profile</span>
+            <strong className={styles.focusMetricValue}>{completion}%</strong>
+            <span className={styles.focusMetricHint}>complete</span>
+          </div>
+          <div className={styles.focusMetric}>
+            <span className={styles.focusMetricLabel}>Matches</span>
+            <strong className={styles.focusMetricValue}>{recommendations.length}</strong>
+            <span className={styles.focusMetricHint}>for you</span>
+          </div>
+          <div className={styles.focusMetric}>
+            <span className={styles.focusMetricLabel}>Interests</span>
+            <strong className={styles.focusMetricValue}>{pending.length}</strong>
+            <span className={styles.focusMetricHint}>awaiting reply</span>
+          </div>
+        </div>
+      </section>
+
       {/* ==================== Main split ==================== */}
       <div className={styles.split}>
         {/* ---------- Left column ---------- */}

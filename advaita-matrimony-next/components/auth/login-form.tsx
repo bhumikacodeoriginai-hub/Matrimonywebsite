@@ -55,8 +55,8 @@ export interface LoginFormProps {
   redirectTo: string;
   /** Set when the member was bounced here by an expired session. */
   sessionExpired?: boolean;
-  /** Local-only preview values, never passed in production. */
-  previewCredentials?: { login: string; password: string };
+  /** Local-only preview button, backed by server-only credentials. */
+  previewAvailable?: boolean;
 }
 
 interface AuthRouteResponse {
@@ -66,7 +66,7 @@ interface AuthRouteResponse {
   phone?: string;
 }
 
-export function LoginForm({ redirectTo, sessionExpired = false, previewCredentials }: LoginFormProps) {
+export function LoginForm({ redirectTo, sessionExpired = false, previewAvailable = false }: LoginFormProps) {
   const router = useRouter();
 
   const [method, setMethod] = useState<Method>('otp');
@@ -200,6 +200,24 @@ export function LoginForm({ redirectTo, sessionExpired = false, previewCredentia
     }
   };
 
+  const signInWithPreview = async () => {
+    clearErrors();
+    setPending(true);
+
+    try {
+      await authRoute<AuthRouteResponse>('/preview', { method: 'POST' });
+      if (!mounted.current) return;
+
+      setPhase('success');
+      window.setTimeout(() => router.replace(redirectTo), SUCCESS_HOLD_MS);
+    } catch (error) {
+      if (!mounted.current) return;
+      applyError(error);
+    } finally {
+      if (mounted.current) setPending(false);
+    }
+  };
+
   /* ----------------------------------------------------------------- Views */
 
   if (phase === 'success') {
@@ -253,7 +271,7 @@ export function LoginForm({ redirectTo, sessionExpired = false, previewCredentia
         </Alert>
       )}
 
-      {previewCredentials?.login && previewCredentials.password && (
+      {previewAvailable && (
         <Alert
           tone="info"
           title="Local preview account"
@@ -263,20 +281,14 @@ export function LoginForm({ redirectTo, sessionExpired = false, previewCredentia
               size="sm"
               loading={pending}
               icon="sparkle"
-              onClick={() => {
-                setMethod('password');
-                setPhase('entry');
-                setIdentifier(previewCredentials.login);
-                setPassword(previewCredentials.password);
-                void signInWithPassword(previewCredentials);
-              }}
+              onClick={() => void signInWithPreview()}
             >
               Use and sign in
             </Button>
           }
         >
-          Development-only shortcut. It is available only when enabled in a non-production build and still
-          signs in through the real Laravel password endpoint.
+          Development-only shortcut. It signs in with server-only local credentials through the real Laravel
+          password endpoint. The password is never sent to the browser.
         </Alert>
       )}
 

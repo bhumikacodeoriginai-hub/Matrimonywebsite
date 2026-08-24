@@ -56,11 +56,11 @@ For a local UI review only, copy `.env.example` to `.env.local` and set the serv
 ```text
 ADVAITA_API_BASE_URL=http://127.0.0.1:8000/api/v1
 NEXT_PUBLIC_ENABLE_PREVIEW_LOGIN=true
-NEXT_PUBLIC_PREVIEW_LOGIN_EMAIL=preview@advaita.test
-NEXT_PUBLIC_PREVIEW_LOGIN_PASSWORD=Advaita2026!
+ADVAITA_PREVIEW_LOGIN=preview@advaita.test
+ADVAITA_PREVIEW_PASSWORD=Advaita2026!
 ```
 
-The login page shows a clearly labelled preview shortcut only when `NODE_ENV` is not `production`. It still calls the real Laravel password-login endpoint; it is not a frontend bypass. The frontend must point to the same local Laravel instance that receives the seed.
+The login page shows a clearly labelled preview shortcut only when `NODE_ENV` is not `production`. The `ADVAITA_PREVIEW_LOGIN` and `ADVAITA_PREVIEW_PASSWORD` values are server-only; the shortcut calls the real Laravel password-login endpoint through a guarded Next route and stores the normal httpOnly session cookie. It is not a frontend bypass. The frontend must point to the same local Laravel instance that receives the seed.
 
 The backend must run with `APP_ENV=local` (or `testing`) so the guarded preview account is seeded. In `advaita-matrimony-web`, copy its `.env.example` to `.env`, configure a working local database, and then run:
 

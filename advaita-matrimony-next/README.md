@@ -51,21 +51,25 @@ Copy `.env.example` to `.env.local` when API integration is enabled. The fronten
 
 ## Local preview login
 
-For a local UI review only, copy `.env.example` to `.env.local` and set:
+For a local UI review only, copy `.env.example` to `.env.local` and set the server-only API base and preview values:
 
 ```text
+ADVAITA_API_BASE_URL=http://127.0.0.1:8000/api/v1
 NEXT_PUBLIC_ENABLE_PREVIEW_LOGIN=true
 NEXT_PUBLIC_PREVIEW_LOGIN_EMAIL=preview@advaita.test
 NEXT_PUBLIC_PREVIEW_LOGIN_PASSWORD=Advaita2026!
 ```
 
-The login page shows a clearly labelled preview shortcut only when `NODE_ENV` is not `production`. It still calls the real Laravel password-login endpoint; it is not a frontend bypass. Create the account through the Laravel local/testing seed:
+The login page shows a clearly labelled preview shortcut only when `NODE_ENV` is not `production`. It still calls the real Laravel password-login endpoint; it is not a frontend bypass. The frontend must point to the same local Laravel instance that receives the seed.
+
+The backend must run with `APP_ENV=local` (or `testing`) so the guarded preview account is seeded. In `advaita-matrimony-web`, copy its `.env.example` to `.env`, configure a working local database, and then run:
 
 ```powershell
-cd ..\advaita-matrimony-web
 php artisan migrate:fresh --seed
 ```
 
-Then open `/login` and choose **Use preview credentials**. The seed is guarded to `local` and `testing` environments and must never be used as a production account.
+The seed is guarded to `local` and `testing` environments and must never be used as a production account. Start Laravel with `php artisan serve` so the frontend can reach `http://127.0.0.1:8000/api/v1`.
+
+Then open `/login` and choose **Use and sign in**. The shortcut calls the real Laravel password-login endpoint; it is not a frontend bypass.
 
 The public homepage uses the tracked `/media/hero-poster.svg` poster and `/api/media/advaithamatrimony.mp4` video when the media route is available. It remains public and does not require a session.

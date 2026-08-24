@@ -438,13 +438,14 @@
 
 .visualStack {
   position: relative;
-  width: min(400px, 100%);
-  aspect-ratio: 1 / 1.06;
+  width: min(460px, 100%);
+  aspect-ratio: 1 / 1.3;
 }
 
 .mediaFrame {
   position: absolute;
-  inset: 4% 8%;
+  inset: 8% 14%;
+  z-index: 0;
   overflow: hidden;
   border: 1px solid color-mix(in srgb, var(--premium-border) 45%, var(--glass-border));
   border-radius: clamp(var(--radius-xl), 4vw, 32px);
@@ -474,7 +475,8 @@
   position: absolute;
   right: var(--space-4);
   bottom: var(--space-4);
-  left: var(--space-4);
+  left: 52%;
+  z-index: 1;
   display: flex;
   align-items: center;
   gap: var(--space-2);
@@ -482,7 +484,36 @@
   font-size: var(--text-2xs);
   font-weight: var(--weight-extrabold);
   letter-spacing: var(--tracking-wide);
+  line-height: 1.3;
   text-transform: uppercase;
+}
+
+.mediaAudioButton {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  z-index: 1;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid color-mix(in srgb, var(--text-inverse) 42%, transparent);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--surface-inverse) 48%, transparent);
+  color: var(--text-inverse);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-bold);
+  line-height: 1;
+  cursor: pointer;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.mediaAudioButton:hover,
+.mediaAudioButton:focus-visible {
+  background: color-mix(in srgb, var(--surface-inverse) 68%, transparent);
+}
+
+.mediaAudioButton:focus-visible {
+  outline: 2px solid var(--text-inverse);
+  outline-offset: 2px;
 }
 
 .mediaLabelDot {
@@ -495,9 +526,10 @@
 
 .floatCard {
   position: absolute;
+  z-index: 2;
   display: grid;
   gap: var(--space-3);
-  width: min(232px, 62%);
+  width: min(190px, 44%);
   padding: var(--space-4);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-xl);
@@ -530,15 +562,16 @@
 }
 
 .floatCardTwo {
-  top: 33%;
+  top: 35%;
   right: 0;
   --depth: -1;
   animation: float-y 8.5s var(--ease-in-out) -2.4s infinite;
 }
 
 .floatCardThree {
-  bottom: 1%;
-  left: 8%;
+  right: auto;
+  bottom: 0;
+  left: 4%;
   --depth: 0.7;
   animation: float-y 9.5s var(--ease-in-out) -4.8s infinite;
 }
@@ -587,6 +620,7 @@
 /* The central mark medallion the cards orbit. */
 .visualCore {
   position: absolute;
+  z-index: 1;
   top: 50%;
   left: 50%;
   translate: -50% -50%;

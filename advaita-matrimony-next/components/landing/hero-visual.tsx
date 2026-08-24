@@ -28,7 +28,7 @@
  * `prefers-reduced-motion` via the `.motion-parallax` class from base.css.
  */
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AdvaitaMark } from '../brand/advaita-mark';
 import { Icon, type IconName } from '../ui/icon';
 import { useHasFinePointer, useReducedMotion } from '../../lib/hooks/use-media';
@@ -41,6 +41,8 @@ const PARALLAX_RANGE = 14;
 export function HeroVisual() {
   const { copy } = useLanguage();
   const stageRef = useRef<HTMLDivElement | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [videoMuted, setVideoMuted] = useState(true);
   const hasFinePointer = useHasFinePointer();
   const reducedMotion = useReducedMotion();
 
@@ -77,6 +79,23 @@ export function HeroVisual() {
     };
   }, [parallaxEnabled]);
 
+  const toggleVideoSound = () => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const nextMuted = !video.muted;
+    video.muted = nextMuted;
+    video.volume = 1;
+    setVideoMuted(nextMuted);
+
+    if (!nextMuted) {
+      void video.play().catch(() => {
+        video.muted = true;
+        setVideoMuted(true);
+      });
+    }
+  };
+
   const cards: { icon: IconName; title: string; body: string; className: string }[] = [
     {
       icon: 'shield-check',
@@ -106,9 +125,10 @@ export function HeroVisual() {
       <div ref={stageRef} className={`${styles.visualStack} motion-parallax`}>
         <div className={styles.mediaFrame}>
           <video
+            ref={videoRef}
             className={styles.mediaVideo}
             autoPlay={!reducedMotion}
-            muted
+            muted={videoMuted}
             loop
             playsInline
             preload={reducedMotion ? 'none' : 'metadata'}
@@ -128,6 +148,15 @@ export function HeroVisual() {
             <span className={styles.mediaLabelDot} aria-hidden="true" />
             <span>Designed around consent</span>
           </div>
+          <button
+            type="button"
+            className={styles.mediaAudioButton}
+            onClick={toggleVideoSound}
+            aria-label={videoMuted ? 'Turn video sound on' : 'Mute video sound'}
+            aria-pressed={!videoMuted}
+          >
+            {videoMuted ? 'Sound off' : 'Sound on'}
+          </button>
         </div>
 
         {cards.map((card) => (

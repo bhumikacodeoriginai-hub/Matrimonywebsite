@@ -176,14 +176,17 @@ export function LoginForm({ redirectTo, sessionExpired = false, previewCredentia
 
   /* -------------------------------------------------------------- Password */
 
-  const signInWithPassword = async () => {
+  const signInWithPassword = async (credentials?: { login: string; password: string }) => {
+    const login = credentials?.login ?? identifier;
+    const passwordValue = credentials?.password ?? password;
+
     clearErrors();
     setPending(true);
 
     try {
       await authRoute<AuthRouteResponse>('/login', {
         method: 'POST',
-        body: { login: identifier, password },
+        body: { login, password: passwordValue },
       });
       if (!mounted.current) return;
 
@@ -258,16 +261,17 @@ export function LoginForm({ redirectTo, sessionExpired = false, previewCredentia
             <Button
               variant="secondary"
               size="sm"
+              loading={pending}
               icon="sparkle"
               onClick={() => {
                 setMethod('password');
                 setPhase('entry');
                 setIdentifier(previewCredentials.login);
                 setPassword(previewCredentials.password);
-                clearErrors();
+                void signInWithPassword(previewCredentials);
               }}
             >
-              Use preview credentials
+              Use and sign in
             </Button>
           }
         >
